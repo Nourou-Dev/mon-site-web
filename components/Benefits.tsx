@@ -55,28 +55,27 @@ export default function Benefits() {
   const [hovered, setHovered] = useState<number | null>(0);
 
   return (
-    <section className="scroll-mt-[5.5rem] px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24 bg-white border-y border-[#171717]/6">
-      <div className="mx-auto max-w-[1280px]">
+    <section className="scroll-mt-[5.5rem] px-4 py-20 sm:px-6 sm:py-28 lg:px-10 lg:py-32 bg-[#fbf9f5] border-b border-[#171717]/8">
+      <div className="mx-auto max-w-[1360px]">
         {/* En-tête typographique de style magazine / éditorial */}
         <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr] lg:items-end pb-12 border-b border-[#171717]/10">
           <div>
-            <span className="inline-flex items-center gap-2 rounded-full border border-[#171717]/10 bg-[#f4f6f8] px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-[#171717] shadow-sm">
-              <Sparkles className="h-3.5 w-3.5 text-[#0060c3]" />
-              Bénéfices concrets
+            <span className="text-xs font-mono font-bold uppercase tracking-[0.2em] text-[#6b7280]">
+              [ 06 / VALEUR AJOUTÉE &amp; RÉSULTATS ]
             </span>
-            <h2 className="mt-4 font-black tracking-[-0.07em] text-[#171717] text-[clamp(2.2rem,4.5vw,4.2rem)] leading-[1.02]">
-              Ce que vous gagnez avec un <span className="text-[#0060c3] italic font-serif">site professionnel</span>
+            <h2 className="mt-4 font-display font-black tracking-tight text-[#171717] text-3xl sm:text-4xl lg:text-5xl leading-[1.08]">
+              Ce que vous gagnez avec un <span className="italic font-serif underline decoration-[#171717]/20 decoration-2 underline-offset-8">site sur mesure</span>
             </h2>
           </div>
           <div className="flex flex-col justify-end">
-            <p className="text-base sm:text-lg leading-relaxed text-[#4b4b4b]">
+            <p className="text-sm sm:text-base leading-relaxed text-[#4b5563]">
               Un investissement stratégique mesurable qui valorise votre travail, rassure vos prospects et transforme durablement votre façon d’acquérir des clients.
             </p>
           </div>
         </div>
 
         {/* Lignes éditoriales audacieuses (Zero card grid) */}
-        <div className="mt-4 divide-y divide-[#171717]/10">
+        <div className="mt-6 divide-y divide-[#171717]/10">
           {benefits.map((item, index) => {
             const isSelected = hovered === index;
             const Icon = item.icon;
@@ -87,22 +86,22 @@ export default function Benefits() {
                 onClick={() => setHovered(index)}
                 className={`group relative transition-all duration-300 py-8 sm:py-10 px-4 sm:px-8 cursor-pointer rounded-2xl ${
                   isSelected
-                    ? "bg-[#f8f9fa] shadow-[0_10px_30px_rgba(23,23,23,0.04)]"
-                    : "hover:bg-[#f8f9fa]/60"
+                    ? "bg-white shadow-[0_10px_30px_rgba(23,23,23,0.04)]"
+                    : "hover:bg-white/60"
                 }`}
               >
                 <div className="grid gap-6 lg:grid-cols-[2.2fr_3fr_1.8fr] lg:items-center">
                   
                   {/* Colonne 1 : Numéro + Titre monumental */}
                   <div className="flex items-center gap-5 sm:gap-7">
-                    <span className="font-mono text-base sm:text-lg font-bold text-[#0060c3]">
+                    <span className="font-mono text-sm sm:text-base font-bold text-[#171717]">
                       {item.id}.
                     </span>
                     <div>
-                      <span className="inline-block text-[0.65rem] sm:text-xs font-bold uppercase tracking-wider text-[#171717]/60 mb-1">
+                      <span className="inline-block text-[10px] font-mono font-bold uppercase tracking-wider text-[#6b7280] mb-1">
                         {item.pill}
                       </span>
-                      <h3 className="font-black text-2xl sm:text-3xl lg:text-[2.2rem] tracking-tight text-[#171717] group-hover:text-[#0060c3] transition-colors leading-tight">
+                      <h3 className="font-display font-bold text-xl sm:text-2xl lg:text-3xl tracking-tight text-[#171717] group-hover:text-[#0052a3] transition-colors leading-tight">
                         {item.title}
                       </h3>
                     </div>

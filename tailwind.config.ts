@@ -30,9 +30,9 @@ const config: Config = {
       fontFamily: {
         display: [
           "var(--font-display)",
-          "ui-sans-serif",
-          "system-ui",
-          "sans-serif",
+          "Fraunces",
+          "Georgia",
+          "serif",
         ],
         body: [
           "var(--font-body)",

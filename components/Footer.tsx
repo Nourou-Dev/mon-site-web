@@ -40,21 +40,28 @@ const socialLinks = [
 
 export default function Footer() {
   return (
-    <footer className="mt-6 bg-white px-4 pb-6 sm:px-6 lg:px-8">
-      <div className="relative mx-auto max-w-[1280px] overflow-hidden rounded-[2rem] border border-[#171717]/8 bg-[#f8f9fa] pt-14 shadow-[0_15px_40px_rgba(17,17,17,0.04)]">
-        <div className="grid gap-10 px-6 sm:px-10 md:grid-cols-[1.2fr_1fr_1fr] lg:px-14">
+    <footer className="border-t border-[#171717]/10 bg-[#fbf9f5] px-4 pt-16 pb-12 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-[1280px]">
+        <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr]">
+          {/* Col 1: Studio Identity */}
           <div>
             <Link
               href="/"
-              className="inline-flex min-w-0 items-center gap-1.5 text-[1.15rem] sm:text-xl font-extrabold tracking-[-0.05em] text-[#171717] transition-opacity hover:opacity-85"
+              className="inline-flex items-center gap-1.5 font-display text-2xl font-normal tracking-[-0.03em] text-[#171717] transition-opacity hover:opacity-80"
             >
               <span>Nourou Dine</span>
-              <span className="text-[#0060c3]">AMANDOU</span>
+              <span className="font-light italic">AMANDOU</span>
             </Link>
-            <p className="mt-3 max-w-xs text-sm leading-relaxed text-[#4b4b4b]">
-              Sites et applications web sur mesure, pensés pour convertir et faciliter le suivi de votre projet, de bout en bout.
+            <p className="mt-4 max-w-sm text-sm text-[#4b4b4b] font-light leading-relaxed">
+              Atelier indépendant de design d&apos;interface et d&apos;ingénierie web sur mesure. Code propriétaire, performance garantie et accompagnement transparent de bout en bout.
             </p>
-            <div className="mt-5 flex flex-wrap gap-2.5">
+            
+            <div className="mt-6 flex items-center gap-2 text-xs font-mono text-[#737373]">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+              <span>Disponible pour de nouveaux projets</span>
+            </div>
+
+            <div className="mt-6 flex flex-wrap gap-2">
               {socialLinks.map((social) => (
                 <a
                   key={social.name}
@@ -62,7 +69,7 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={social.name}
-                  className="focus-ring flex h-10 w-10 items-center justify-center rounded-full bg-white border border-[#171717]/10 text-[#171717]/70 transition-all duration-200 hover:bg-[#0060c3] hover:border-[#0060c3] hover:text-white hover:-translate-y-0.5 shadow-sm"
+                  className="flex h-9 w-9 items-center justify-center rounded-full border border-[#171717]/15 bg-white text-[#171717] transition-all hover:bg-[#171717] hover:border-[#171717] hover:text-white hover:-translate-y-0.5 shadow-2xs"
                 >
                   {social.icon}
                 </a>
@@ -70,61 +77,86 @@ export default function Footer() {
             </div>
           </div>
 
+          {/* Col 2: Navigation */}
           <div>
-            <p className="font-semibold text-[#171717]">Navigation</p>
-            <ul className="mt-4 space-y-2.5">
+            <p className="text-xs font-mono uppercase tracking-widest text-[#737373]">[ EXPLORATION ]</p>
+            <ul className="mt-5 space-y-3">
               {navLinks.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="focus-ring rounded text-sm text-[#4b4b4b] hover:text-[#171717]">
+                  <Link 
+                    href={link.href} 
+                    className="text-sm text-[#4b4b4b] hover:text-[#171717] font-light transition-colors"
+                  >
                     {link.label}
                   </Link>
                 </li>
               ))}
+              <li>
+                <Link 
+                  href="/app" 
+                  className="text-sm text-[#171717] font-medium hover:underline transition-colors"
+                >
+                  Espace Client Privé →
+                </Link>
+              </li>
             </ul>
           </div>
 
+          {/* Col 3: Direct Contact */}
           <div>
-            <p className="font-semibold text-[#171717]">Contact</p>
-            <ul className="mt-4 space-y-3">
+            <p className="text-xs font-mono uppercase tracking-widest text-[#737373]">[ CONTACT DIRECT ]</p>
+            <ul className="mt-5 space-y-3">
               <li>
                 <a
                   href={`tel:${site.phone.replace(/\s/g, "")}`}
-                  className="focus-ring flex items-center gap-2.5 rounded text-sm text-[#4b4b4b] hover:text-[#171717]"
+                  className="flex items-center gap-3 text-sm text-[#4b4b4b] hover:text-[#171717] font-light transition-colors"
                 >
-                  <Phone className="h-4 w-4 text-[#0060c3]" />
-                  {site.phone}
+                  <Phone className="h-4 w-4 text-[#171717]" />
+                  <span>{site.phone}</span>
                 </a>
               </li>
               <li>
                 <a
                   href={`mailto:${site.email}`}
-                  className="focus-ring flex items-center gap-2.5 rounded text-sm text-[#4b4b4b] hover:text-[#171717]"
+                  className="flex items-center gap-3 text-sm text-[#4b4b4b] hover:text-[#171717] font-light transition-colors"
                 >
-                  <Mail className="h-4 w-4 text-[#0060c3]" />
-                  {site.email}
+                  <Mail className="h-4 w-4 text-[#171717]" />
+                  <span>{site.email}</span>
+                </a>
+              </li>
+              <li className="pt-2">
+                <a
+                  href={site.whatsapp}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-full border border-[#171717]/15 bg-white px-4 py-2 text-xs font-mono uppercase tracking-wider text-[#171717] hover:bg-[#171717] hover:text-white transition-all shadow-2xs"
+                >
+                  <span>Discussion WhatsApp</span>
+                  <span>→</span>
                 </a>
               </li>
             </ul>
           </div>
         </div>
 
-        <div className="mt-10 flex flex-col items-center justify-between gap-3 border-t border-[#171717]/5 px-5 py-5 text-xs text-[#4b4b4b] sm:flex-row sm:px-10 lg:px-14">
+        {/* Bottom Bar */}
+        <div className="mt-16 flex flex-col items-center justify-between gap-4 border-t border-[#171717]/10 pt-8 text-xs font-mono text-[#737373] sm:flex-row">
           <p>
-            © {new Date().getFullYear()} Nourou Dine AMANDOU — Tous droits réservés.
+            © {new Date().getFullYear()} Nourou Dine AMANDOU — Conception éditoriale &amp; code sur mesure.
           </p>
-          <div className="flex flex-wrap items-center gap-4 text-xs sm:gap-5">
-            <Link href="/mentions-legales" className="focus-ring rounded hover:text-[#0060c3] transition-colors">
+          <div className="flex flex-wrap items-center gap-4 text-xs sm:gap-6">
+            <Link href="/mentions-legales" className="hover:text-[#171717] transition-colors">
               Mentions légales
             </Link>
-            <Link href="/confidentialite" className="focus-ring rounded hover:text-[#0060c3] transition-colors">
+            <Link href="/confidentialite" className="hover:text-[#171717] transition-colors">
               Confidentialité
             </Link>
-            <span className="text-[#171717]/20">·</span>
-            <Link href="/app" className="focus-ring rounded hover:text-[#0060c3] transition-colors">
+            <span>·</span>
+            <Link href="/app" className="hover:text-[#171717] transition-colors">
               Espace Client
             </Link>
-            <Link href="/admin" className="focus-ring rounded hover:text-[#0060c3] transition-colors font-semibold">
-              Administration
+            <Link href="/admin" className="hover:text-[#171717] transition-colors">
+              Admin
             </Link>
           </div>
         </div>

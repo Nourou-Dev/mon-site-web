@@ -1,86 +1,97 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight, FolderKanban } from "lucide-react";
-
+import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { allProjects } from "@/lib/projectsData";
 
 export default function StatsBar() {
   const featuredProjects = allProjects.slice(0, 4);
 
   return (
-    <section id="realisations" className="scroll-mt-[5.5rem] bg-[#ffffff] px-4 py-12 sm:py-16 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-[1280px] rounded-[2rem] border border-white/20 bg-[#0054ab] p-5 text-white shadow-2xl sm:p-8 lg:p-10">
-        <div className="mb-8 flex items-center justify-between gap-3">
-          <span className="inline-flex items-center gap-2 rounded-full border border-[#171717]/10 bg-[#f4f6f8] px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-[#171717] shadow-sm">
-            <FolderKanban className="h-3.5 w-3.5 text-[#0060c3]" />
-            Mes réalisations
-          </span>
-          <Link
-            href="/realisations"
-            className="hidden sm:inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-bold text-[#0060c3] shadow-sm transition-all hover:bg-[#f5f9ff] hover:-translate-y-0.5"
-          >
-            Voir tous les projets
-            <ArrowRight className="h-4 w-4" strokeWidth={2.4} />
-          </Link>
+    <section id="realisations" className="relative w-full bg-[#fbf9f5] py-20 sm:py-28 lg:py-32 border-b border-[#171717]/8">
+      <div className="mx-auto max-w-[1360px] px-4 sm:px-6 lg:px-10">
+        
+        {/* En-tête de section */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-12 border-b border-[#171717]/10">
+          <div>
+            <span className="text-xs font-mono font-bold uppercase tracking-[0.2em] text-[#6b7280]">
+              [ 03 / ÉTUDES DE CAS &amp; RÉALISATIONS ]
+            </span>
+            <h2 className="mt-4 font-display text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-[#171717] max-w-[640px]">
+              Des réalisations pensées pour marquer les esprits et convaincre.
+            </h2>
+          </div>
+          <div className="flex flex-col items-start md:items-end gap-3">
+            <p className="max-w-[360px] text-sm text-[#4b5563] leading-relaxed md:text-right">
+              Chaque réalisation est pensée sur mesure pour inspirer confiance et répondre à des objectifs commerciaux précis.
+            </p>
+            <Link
+              href="/realisations"
+              className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.14em] text-[#171717] hover:text-[#0052a3] transition-colors"
+            >
+              <span>Voir tout le portfolio</span>
+              <ArrowRight className="h-3.5 w-3.5" />
+            </Link>
+          </div>
         </div>
 
-        <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
-          <h2 className="max-w-[420px] font-black tracking-[-0.07em] text-white">
-            Des projets pensés pour marquer les esprits
-          </h2>
-
-          <p className="max-w-[360px] text-[0.95rem] leading-relaxed text-white/95 sm:text-[1.05rem]">
-            Un travail sérieux, clair et premium, pensé pour donner de la crédibilité à votre activité.
-          </p>
-        </div>
-
-        <div className="mt-8 sm:mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {featuredProjects.map((project) => (
+        {/* Grille des projets façon monographie */}
+        <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-2">
+          {featuredProjects.map((project, index) => (
             <Link
               key={project.slug}
               href={`/realisations/${project.slug}`}
-              className="group block"
+              className="group flex flex-col overflow-hidden rounded-3xl border border-[#171717]/10 bg-white p-5 sm:p-7 shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
             >
-              <div className="relative h-64 overflow-hidden rounded-[1.8rem] bg-[#dfe7ed] shadow-[0_12px_24px_rgba(0,0,0,0.12)] transition-transform duration-300 group-hover:-translate-y-1">
-                <div className="absolute left-4 top-4 z-10 flex gap-2">
-                  <span className="rounded-full bg-white px-3 py-1.5 text-[0.65rem] font-bold text-[#171717] shadow-sm">
+              {/* Image d'aperçu */}
+              <div className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl bg-[#ebe7de]">
+                <Image
+                  src={project.image}
+                  alt={`Aperçu du projet ${project.title}`}
+                  fill
+                  sizes="(min-width: 1024px) 600px, (min-width: 640px) 500px, 350px"
+                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                />
+                <div className="absolute top-4 left-4 z-10">
+                  <span className="rounded-full border border-black/10 bg-white/95 px-3 py-1 text-[11px] font-mono font-semibold uppercase tracking-wider text-[#171717] shadow-sm backdrop-blur-sm">
                     {project.category}
                   </span>
                 </div>
-                <Image
-                  src={project.image}
-                  alt={project.title}
-                  width={800}
-                  height={600}
-                  className="h-full w-full object-cover transition-transform duration-300 ease-out group-hover:scale-[1.03]"
-                />
-                <span className="absolute bottom-3 right-3 flex h-12 w-12 items-center justify-center rounded-full bg-[#0060c3] text-white shadow-lg transition-transform duration-300 group-hover:rotate-[-10deg]">
-                  <ArrowUpRight className="h-5 w-5" strokeWidth={2} />
-                </span>
+                <div className="absolute top-4 right-4 z-10">
+                  <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-[#171717] shadow-md transition-transform duration-300 group-hover:bg-[#171717] group-hover:text-white group-hover:rotate-45">
+                    <ArrowUpRight className="h-4 w-4" />
+                  </span>
+                </div>
               </div>
 
-              <div className="flex items-center justify-between gap-4 px-1 pt-4">
-                <h3 className="font-black leading-none tracking-[-0.05em] text-white group-hover:text-white/90">
-                  {project.title}
-                </h3>
-                <span className="text-xs text-white/90 font-medium">
-                  {project.year}
-                </span>
+              {/* Fiche descriptive sous l'image */}
+              <div className="mt-6 flex flex-col justify-between flex-1">
+                <div>
+                  <div className="flex items-center justify-between text-xs font-mono text-[#6b7280]">
+                    <span>0{index + 1} / {project.client}</span>
+                    <span>{project.year}</span>
+                  </div>
+                  <h3 className="mt-2 font-display text-2xl font-bold tracking-tight text-[#171717] group-hover:text-[#0052a3] transition-colors">
+                    {project.title}
+                  </h3>
+                  <p className="mt-2 text-xs sm:text-sm text-[#4b5563] leading-relaxed line-clamp-2">
+                    {project.desc}
+                  </p>
+                </div>
+
+                {/* Métrique d'impact concrète */}
+                <div className="mt-5 pt-4 border-t border-[#171717]/8 flex items-center justify-between">
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 border border-emerald-500/20 px-2.5 py-1 rounded-full">
+                    {project.impact}
+                  </span>
+                  <span className="text-xs font-semibold text-[#171717] group-hover:underline">
+                    Lire l&apos;étude →
+                  </span>
+                </div>
               </div>
             </Link>
           ))}
         </div>
 
-        {/* Bouton visible uniquement sur mobile en bas des cartes */}
-        <div className="mt-8 flex justify-center sm:hidden">
-          <Link
-            href="/realisations"
-            className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-white px-6 py-3.5 text-sm font-bold text-[#0060c3] shadow-md transition-transform active:scale-95 text-center"
-          >
-            Voir tous les projets
-            <ArrowRight className="h-4 w-4" strokeWidth={2.4} />
-          </Link>
-        </div>
       </div>
     </section>
   );

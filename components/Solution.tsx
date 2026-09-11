@@ -1,73 +1,98 @@
-import {
-  Check,
-  TrendingUp,
-} from "lucide-react";
+import Link from "next/link";
+import { ArrowUpRight, CheckCircle2 } from "lucide-react";
 
-const solutionPoints = [
-  "présenter votre activité avec clarté ;",
-  "valoriser vos produits et services ;",
-  "inspirer confiance dès les premières secondes ;",
-  "vous différencier de vos concurrents ;",
-  "générer des demandes de devis ou de rendez-vous ;",
-  "recevoir des commandes directement via WhatsApp ;",
-  "améliorer votre visibilité sur Google ;",
-  "disposer d’un outil de communication que vous contrôlez.",
+const PILLARS = [
+  {
+    num: "01",
+    title: "Direction Artistique & UX",
+    desc: "Création d'une identité graphique exclusive, lisible et harmonieuse. Chaque couleur, marge et police est choisie pour sublimer votre offre.",
+  },
+  {
+    num: "02",
+    title: "Ingénierie & Performance",
+    desc: "Développé avec Next.js 14, TypeScript et TailwindCSS. Temps de chargement ultrarapide sous 1 seconde, zéro lenteur, consommation minimale de bande passante.",
+  },
+  {
+    num: "03",
+    title: "Référencement Naturel & SEO",
+    desc: "Balisage Schema.org, sitemap automatisé, balises OpenGraph et structure sémantique parfaite pour séduire à la fois Google et vos futurs clients.",
+  },
+  {
+    num: "04",
+    title: "Espace Client & Autonomie",
+    desc: "Accès à votre espace privé pour suivre l'avancement en temps réel, échanger des messages et récupérer vos livrables. Vous êtes 100% propriétaire de vos fichiers.",
+  },
 ];
 
 export default function Solution() {
   return (
-    <section id="solution" className="scroll-mt-[5.5rem] bg-white px-4 py-10 sm:px-6 sm:py-14 lg:px-8 lg:py-10">
-      <div className="mx-auto max-w-[1280px] overflow-hidden rounded-[2rem] bg-[#0060c3] text-white shadow-[0_25px_60px_rgba(0,96,195,0.25)] border border-[#0060c3]/30">
-        <div className="grid lg:grid-cols-[0.86fr_1.14fr]">
-          <div className="relative flex min-h-0 flex-col justify-between overflow-hidden p-5 sm:p-8 lg:min-h-[540px] lg:p-12">
-            <div className="relative">
-              <span className="inline-flex items-center gap-2 rounded-full border border-[#171717]/10 bg-[#f4f6f8] px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-[#171717] shadow-sm">
-                <TrendingUp className="h-3.5 w-3.5 text-[#0060c3]" />
-                Transformez votre site en véritable atout
-              </span>
-
-              <h2 className="mt-6 sm:mt-8 max-w-[460px] font-black tracking-[-0.07em] text-white">
-                Un site web conçu pour attirer, convaincre et faire agir
-              </h2>
-            </div>
-
-            <p className="relative mt-8 sm:mt-10 max-w-[430px] text-[0.98rem] sm:text-[1.02rem] leading-relaxed sm:leading-7 text-white/85">
-              Je vous accompagne dans la création d’une présence en ligne professionnelle, cohérente et orientée vers vos objectifs.
+    <section id="solution" className="relative w-full bg-[#fbf9f5] py-20 sm:py-28 lg:py-32 border-b border-[#171717]/8">
+      <div className="mx-auto max-w-[1360px] px-4 sm:px-6 lg:px-10">
+        
+        <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
+          
+          {/* Côté gauche : Note d'engagement */}
+          <div>
+            <span className="text-xs font-mono font-bold uppercase tracking-[0.2em] text-[#6b7280]">
+              [ 02 / ENGAGEMENT QUALITÉ ]
+            </span>
+            <h2 className="mt-4 font-display text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-[#171717]">
+              Chaque détail est pensé pour durer, sans compromis.
+            </h2>
+            <p className="mt-6 text-base leading-relaxed text-[#4b5563]">
+              Contrairement aux agences traditionnelles aux délais interminables ou aux freelances qui empilent des extensions WordPress instables, je vous livre un produit fini propre, robuste et totalement indépendant.
             </p>
-          </div>
 
-          <div className="bg-[#0054ab] p-5 sm:p-8 lg:p-12 lg:border-l lg:border-white/10">
-            <div className="flex flex-col gap-2 border-b border-white/20 pb-5 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
-              <p className="max-w-[22rem] text-[0.65rem] font-semibold uppercase leading-snug tracking-[0.12em] text-white/70 sm:text-[0.7rem] sm:tracking-[0.18em]">
-                Votre futur site pourra vous aider à
-              </p>
-              <span className="shrink-0 text-3xl font-black tracking-[-0.08em] text-white">08</span>
+            <div className="mt-8 flex flex-col gap-3">
+              <div className="flex items-center gap-2.5 text-sm font-semibold text-[#171717]">
+                <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
+                <span>Interlocuteur unique et direct du début à la fin</span>
+              </div>
+              <div className="flex items-center gap-2.5 text-sm font-semibold text-[#171717]">
+                <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
+                <span>Délais de livraison fermes et respectés</span>
+              </div>
+              <div className="flex items-center gap-2.5 text-sm font-semibold text-[#171717]">
+                <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
+                <span>Formation vidéo personnalisée pour la prise en main</span>
+              </div>
             </div>
 
-            <ul className="mt-2">
-              {solutionPoints.map((point, index) => (
-                <li
-                  key={point}
-                  className="group flex items-start gap-3 sm:gap-4 border-b border-white/15 py-3.5 sm:py-4 transition-colors hover:border-white"
-                >
-                  <span className="flex h-6 w-6 sm:h-7 sm:w-7 shrink-0 items-center justify-center rounded-full bg-white text-[#0060c3] shadow-sm">
-                    <Check className="h-3.5 w-3.5" strokeWidth={2.6} />
-                  </span>
-                  <span className="flex-1 text-[0.92rem] sm:text-[0.98rem] leading-relaxed sm:leading-7 text-white/95">{point}</span>
-                  <span className="pt-1 text-[0.68rem] font-semibold text-white/50">
-                    0{index + 1}
-                  </span>
-                </li>
-              ))}
-            </ul>
-
-            <div className="mt-8 border-l-2 border-white pl-5">
-              <p className="max-w-[480px] text-[0.98rem] sm:text-[1.02rem] leading-relaxed sm:leading-7 text-white/90">
-                L’objectif n’est pas de créer un site de plus. L’objectif est de créer un site utile au développement de votre activité.
-              </p>
+            <div className="mt-10">
+              <Link
+                href="/contact"
+                className="inline-flex items-center gap-2 rounded-full bg-[#171717] px-6 py-3 text-xs font-bold uppercase tracking-wider text-white shadow-sm hover:bg-[#2b2b2b] transition-all"
+              >
+                <span>Démarrer un projet ensemble</span>
+                <ArrowUpRight className="h-4 w-4" />
+              </Link>
             </div>
           </div>
+
+          {/* Côté droit : Les 4 piliers d'excellence */}
+          <div className="grid gap-4 sm:grid-cols-2">
+            {PILLARS.map((pillar) => (
+              <div
+                key={pillar.num}
+                className="flex flex-col justify-between rounded-2xl border border-[#171717]/8 bg-white p-6 shadow-sm hover:shadow-md transition-shadow"
+              >
+                <div>
+                  <span className="font-mono text-xs font-bold text-[#6b7280]">
+                    [ {pillar.num} ]
+                  </span>
+                  <h3 className="mt-3 font-display text-lg font-bold text-[#171717]">
+                    {pillar.title}
+                  </h3>
+                  <p className="mt-2 text-xs leading-relaxed text-[#4b5563]">
+                    {pillar.desc}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+
         </div>
+
       </div>
     </section>
   );

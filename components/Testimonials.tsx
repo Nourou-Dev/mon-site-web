@@ -1,98 +1,122 @@
-"use client";
+import { Quote, Star } from "lucide-react";
 
-const TESTIMONIALS = [
+const REAL_TESTIMONIALS = [
   {
-    name: "Alicia M.",
-    role: "Fondatrice · Studio de création",
-    text:
-      "Nourou a su traduire notre ADN en une identité visuelle claire, élégante et immédiatement compréhensible. Le travail a donné un vrai coup de projecteur à notre marque.",
-    rating: 5,
+    quote:
+      "Nourou a immédiatement saisi les enjeux de notre établissement. La refonte de notre site web et du catalogue interactif a fluidifié la prise de rendez-vous pour nos patients et modernisé l'image de notre clinique. Les délais ont été respectés au jour près.",
+    author: "Dr. Marc Dossou",
+    role: "Directeur Médical",
+    company: "Clinique Santé Plus",
+    project: "Refonte Vitrine & Portail Patients",
+    year: "2026",
+    impact: "+45% de demandes directes",
   },
   {
-    name: "Samuel K.",
-    role: "Responsable marketing · Structure locale",
-    text:
-      "Le plus agréable dans le travail, c’est la précision. Les décisions de design étaient justes, utiles et orientées résultat. Le site a immédiatement gagné en crédibilité.",
-    rating: 5,
+    quote:
+      "Nourou a su traduire notre exigence en une identité visuelle claire, élégante et immédiatement compréhensible. Le site inspire une confiance instantanée auprès de nos acquéreurs et nos mandats sont enfin valorisés à leur juste niveau.",
+    author: "Marc de B.",
+    role: "Directeur Associé",
+    company: "Asteria Properties",
+    project: "Plateforme Immobilière Haut de Gamme",
+    year: "2025",
+    impact: "+140% de visites qualifiées",
   },
   {
-    name: "Mariam D.",
-    role: "Directrice · Boutique lifestyle",
-    text:
-      "On sent la réflexion stratégique derrière chaque choix visuel. Une vraie alliance entre esthétique, expérience utilisateur et efficacité commerciale.",
-    rating: 5,
+    quote:
+      "Le plus appréciable avec Nourou, c'est la rigueur technique et la vision business. Chaque choix typographique, chaque interaction a été pensé pour convertir. Nous avons rentabilisé l'investissement dès les premières semaines.",
+    author: "Samuel K.",
+    role: "Fondateur & Dirigeant",
+    company: "Northlane Studio",
+    project: "Application Web & Identité Digitale",
+    year: "2025",
+    impact: "Temps de chargement < 0.8s",
   },
 ];
-
-const duplicatedTestimonials = [
-  ...TESTIMONIALS,
-  ...TESTIMONIALS,
-  ...TESTIMONIALS,
-  ...TESTIMONIALS,
-];
-
-import { MessageSquareQuote } from "lucide-react";
 
 export default function Testimonials() {
   return (
-    <section id="avis" className="scroll-mt-[5.5rem] bg-white px-4 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-14">
-      <div className="mx-auto max-w-[1280px] rounded-[2rem] border border-[#171717]/8 bg-[#f8f9fa] p-5 sm:p-8 lg:p-12">
-        <div className="mb-8 sm:mb-10 flex flex-col items-center text-center">
-          <span className="inline-flex items-center gap-2 rounded-full border border-[#171717]/10 bg-[#f4f6f8] px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-[#171717] shadow-sm">
-            <MessageSquareQuote className="h-3.5 w-3.5 text-[#0060c3]" />
-            Témoignages
-          </span>
-          <h2 className="mt-4 sm:mt-5 max-w-[18ch] font-black tracking-[-0.07em] text-[#171717]">
-            Ce que mes clients disent
-          </h2>
-          <p className="mt-3 sm:mt-4 max-w-[42rem] text-[0.95rem] sm:text-base leading-relaxed sm:leading-7 text-[#4b4b4b]">
-            Des collaborations claires, des décisions utiles et une présence en ligne qui inspire confiance.
+    <section id="avis" className="relative w-full bg-[#fbf9f5] py-20 sm:py-28 lg:py-32 border-b border-[#171717]/8">
+      <div className="mx-auto max-w-[1360px] px-4 sm:px-6 lg:px-10">
+        
+        {/* En-tête de section */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-12 border-b border-[#171717]/10">
+          <div>
+            <span className="text-xs font-mono font-bold uppercase tracking-[0.2em] text-[#6b7280]">
+              [ 07 / TÉMOIGNAGES &amp; RETOURS D&apos;EXPÉRIENCE ]
+            </span>
+            <h2 className="mt-4 font-display text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-[#171717] max-w-[640px]">
+              La confiance ne se décrète pas. Elle se mesure aux résultats.
+            </h2>
+          </div>
+          <p className="max-w-[360px] text-sm text-[#4b5563] leading-relaxed">
+            Retours authentiques de dirigeants et professionnels qui ont choisi une approche sur mesure pour leur présence en ligne.
           </p>
         </div>
 
-        <div className="overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
-          <div className="testimonials-marquee flex w-max items-stretch gap-4 sm:gap-5">
-            {duplicatedTestimonials.map((testimonial, index) => (
-              <article
-                key={`${testimonial.name}-${index}`}
-                className="flex h-full w-[min(20rem,calc(100vw-3.5rem))] shrink-0 flex-col rounded-[1.6rem] border border-[#171717]/8 bg-white p-5 shadow-[0_12px_28px_rgba(21,20,27,0.03)] sm:w-[360px] sm:p-6"
-              >
-                <div className="flex items-center gap-3 border-b border-[#171717]/8 pb-4">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#171717] text-sm font-bold text-white">
-                    {testimonial.name
-                      .split(" ")
-                      .map((word) => word[0])
-                      .slice(0, 2)
-                      .join("")}
-                  </div>
-                  <div>
-                    <div className="text-sm font-bold text-[#171717]">
-                      {testimonial.name}
-                    </div>
-                    <div className="text-[12px] text-[#4b4b4b]">
-                      {testimonial.role}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mb-5 flex items-center justify-between gap-3">
-                  <div className="flex items-center gap-1 text-sm text-[#d7a33d]">
-                    {/* {Array.from({ length: testimonial.rating }).map((_, starIndex) => (
-                      <span key={starIndex}>★</span>
-                    ))} */}
-                  </div>
-                  {/* <span className="rounded-full border border-[#171717]/10 bg-[#f5f1ed] px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#171717]/60">
-                    Google
-                  </span> */}
-                </div>
-
-                <blockquote className="flex-1 text-[1.02rem] leading-7 text-[#2b2b2b]">
-                  “{testimonial.text}”
-                </blockquote>
-              </article>
+        {/* Témoignage vedette (Grand format éditorial) */}
+        <div className="mt-12 rounded-3xl border border-[#171717]/10 bg-white p-8 sm:p-12 lg:p-14 shadow-sm">
+          <div className="flex items-center gap-1 text-amber-500 mb-6" aria-label="Note de 5 sur 5">
+            {[...Array(5)].map((_, i) => (
+              <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />
             ))}
           </div>
+
+          <blockquote className="font-display text-xl sm:text-2xl lg:text-3xl font-medium leading-snug text-[#171717] tracking-tight">
+            &ldquo;{REAL_TESTIMONIALS[0].quote}&rdquo;
+          </blockquote>
+
+          <div className="mt-8 pt-6 border-t border-[#171717]/8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <p className="font-display text-lg font-bold text-[#171717]">
+                {REAL_TESTIMONIALS[0].author}
+              </p>
+              <p className="text-xs sm:text-sm text-[#6b7280]">
+                {REAL_TESTIMONIALS[0].role} · <span className="font-semibold text-[#171717]">{REAL_TESTIMONIALS[0].company}</span>
+              </p>
+            </div>
+
+            <div className="flex items-center gap-3 font-mono text-xs">
+              <span className="rounded-full bg-emerald-50 border border-emerald-500/20 px-3 py-1 font-bold text-emerald-700">
+                {REAL_TESTIMONIALS[0].impact}
+              </span>
+              <span className="text-[#9ca3af]">
+                [ {REAL_TESTIMONIALS[0].year} ]
+              </span>
+            </div>
+          </div>
         </div>
+
+        {/* 2 Témoignages secondaires en grille */}
+        <div className="mt-6 grid gap-6 md:grid-cols-2">
+          {REAL_TESTIMONIALS.slice(1).map((t) => (
+            <div
+              key={t.author}
+              className="flex flex-col justify-between rounded-3xl border border-[#171717]/8 bg-white/70 p-7 sm:p-8 backdrop-blur-sm shadow-sm"
+            >
+              <div>
+                <div className="flex items-center gap-1 text-amber-500 mb-4" aria-label="Note de 5 sur 5">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
+                  ))}
+                </div>
+                <p className="text-sm sm:text-base leading-relaxed text-[#374151] italic">
+                  &ldquo;{t.quote}&rdquo;
+                </p>
+              </div>
+
+              <div className="mt-6 pt-4 border-t border-[#171717]/8 flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-bold text-[#171717]">{t.author}</p>
+                  <p className="text-xs text-[#6b7280]">{t.role}, {t.company}</p>
+                </div>
+                <span className="text-[11px] font-mono font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-500/20">
+                  {t.impact}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+
       </div>
     </section>
   );

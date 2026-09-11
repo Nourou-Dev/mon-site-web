@@ -77,26 +77,25 @@ export default function Differentiation() {
   const Icon = current.icon;
 
   return (
-    <section id="approche" className="scroll-mt-[5.5rem] px-4 py-14 sm:px-6 sm:py-20 lg:px-8 lg:py-24 bg-white">
-      <div className="mx-auto max-w-[1280px]">
-        {/* En-tête éditorial audacieux */}
-        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 pb-10 border-b border-[#171717]/10">
-          <div className="max-w-[560px]">
-            <span className="inline-flex items-center gap-2 rounded-full border border-[#171717]/10 bg-[#f4f6f8] px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-[#171717] shadow-sm">
-              <Compass className="h-3.5 w-3.5 text-[#0060c3]" />
-              Mon approche &amp; Vision
+    <section id="approche" className="scroll-mt-[5.5rem] px-4 py-20 sm:px-6 sm:py-28 lg:px-10 lg:py-32 bg-[#fbf9f5] border-b border-[#171717]/8">
+      <div className="mx-auto max-w-[1360px]">
+        {/* En-tête éditorial architectural */}
+        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 pb-12 border-b border-[#171717]/10">
+          <div>
+            <span className="text-xs font-mono font-bold uppercase tracking-[0.2em] text-[#6b7280]">
+              [ 05 / MÉTHODE &amp; ARCHITECTURE COMMERCIALE ]
             </span>
-            <h2 className="mt-4 max-w-[580px] font-black tracking-[-0.07em] text-[#171717] text-[clamp(2.2rem,4.5vw,4.2rem)] leading-[1.04]">
-              Un site pensé comme <span className="block italic font-serif text-[#0060c3]">un outil commercial</span>
+            <h2 className="mt-4 max-w-[680px] font-display text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-[#171717]">
+              Un site pensé comme un <span className="italic font-serif underline decoration-[#171717]/20 decoration-2 underline-offset-8">levier de conversion</span>, pas comme un simple décor.
             </h2>
           </div>
-          <p className="max-w-[440px] text-base sm:text-lg leading-relaxed text-[#4b4b4b]">
-            Je ne me limite pas à choisir des couleurs et des animations. Je construis une véritable architecture de conviction pour faire grandir votre activité.
+          <p className="max-w-[420px] text-sm sm:text-base leading-relaxed text-[#4b5563]">
+            Je ne me limite pas à choisir des polices et des couleurs. Je construis une véritable mécanique de conviction taillée sur mesure pour votre marché.
           </p>
         </div>
 
-        {/* Studio interactif à 2 volets (Non-card, structure asymétrique moderne) */}
-        <div className="mt-10 lg:mt-14 grid gap-8 lg:grid-cols-[1fr_1.25fr] items-stretch">
+        {/* Studio interactif à 2 volets */}
+        <div className="mt-12 grid gap-8 lg:grid-cols-[1fr_1.25fr] items-stretch">
 
           {/* Volet Gauche : Sélecteur de Piliers façon Studio */}
           <div className="flex flex-col justify-between gap-3">
@@ -110,23 +109,23 @@ export default function Differentiation() {
                     onClick={() => setActive(idx)}
                     className={`group relative flex items-center justify-between rounded-2xl p-4 sm:p-5 text-left transition-all duration-300 border bg-white ${
                       isActive
-                        ? "border-[#0060c3] shadow-lg shadow-[#0060c3]/12 ring-2 ring-[#0060c3] ring-offset-2 ring-offset-white translate-x-1 sm:translate-x-2"
-                        : "border-[#171717]/8 hover:border-[#171717]/25 hover:shadow-sm"
+                        ? "border-[#171717] shadow-lg shadow-black/5 ring-1 ring-[#171717] translate-x-1 sm:translate-x-2"
+                        : "border-[#171717]/8 hover:border-[#171717]/20 hover:shadow-sm"
                     }`}
                   >
                     <div className="flex items-center gap-4">
                       <span
-                        className={`font-mono text-sm font-black transition-colors ${
-                          isActive ? "text-[#0060c3]" : "text-[#171717]/40 group-hover:text-[#0060c3]"
+                        className={`font-mono text-xs font-bold transition-colors ${
+                          isActive ? "text-[#171717]" : "text-[#9ca3af] group-hover:text-[#171717]"
                         }`}
                       >
                         {pillar.number}
                       </span>
                       <div>
-                        <h3 className="font-black text-lg sm:text-xl tracking-tight text-[#171717]">
+                        <h3 className="font-display font-bold text-lg tracking-tight text-[#171717]">
                           {pillar.title}
                         </h3>
-                        <p className="text-xs sm:text-sm font-medium text-[#4b4b4b]">
+                        <p className="text-xs sm:text-sm font-medium text-[#6b7280]">
                           {pillar.subtitle}
                         </p>
                       </div>
@@ -134,19 +133,19 @@ export default function Differentiation() {
 
                     <div className="flex items-center gap-2">
                       <span
-                        className={`hidden sm:inline-block text-[0.68rem] uppercase font-bold tracking-wider px-2.5 py-1 rounded-full transition-colors ${
+                        className={`hidden sm:inline-block text-[10px] uppercase font-mono font-bold tracking-wider px-2.5 py-1 rounded-full transition-colors ${
                           isActive
-                            ? "bg-[#eef5fc] text-[#0060c3] border border-[#0060c3]/20"
-                            : "bg-[#f4f6f8] text-[#171717]/70 border border-[#171717]/5 group-hover:text-[#171717]"
+                            ? "bg-[#171717] text-white"
+                            : "bg-[#f4f6f8] text-[#6b7280] group-hover:text-[#171717]"
                         }`}
                       >
                         {pillar.tag}
                       </span>
                       <ChevronRight
-                        className={`h-5 w-5 transition-transform duration-300 ${
+                        className={`h-4 w-4 transition-transform duration-300 ${
                           isActive
-                            ? "text-[#0060c3] translate-x-1"
-                            : "text-[#171717]/30 group-hover:text-[#0060c3] group-hover:translate-x-0.5"
+                            ? "text-[#171717] translate-x-1"
+                            : "text-[#9ca3af] group-hover:text-[#171717] group-hover:translate-x-0.5"
                         }`}
                       />
                     </div>
@@ -156,73 +155,38 @@ export default function Differentiation() {
             </div>
 
             {/* Micro-guide de navigation */}
-            <div className="mt-4 flex items-center justify-between px-2 text-xs text-[#171717]/60">
+            <div className="mt-4 flex items-center justify-between px-2 text-xs text-[#6b7280]">
               <span className="flex items-center gap-1.5 font-medium">
-                <MousePointerClick className="h-4 w-4 text-[#0060c3]" />
+                <MousePointerClick className="h-4 w-4 text-[#171717]" />
                 Cliquez pour explorer chaque pilier
               </span>
-              <span className="font-mono text-[0.7rem] uppercase">
+              <span className="font-mono text-[11px] uppercase">
                 {active + 1} / {pillars.length}
               </span>
             </div>
           </div>
 
-          {/* Volet Droit : Grand Théâtre Visuel Immersif (Showcase qui alterne en couleur) */}
+          {/* Volet Droit : Grand Théâtre Visuel Immersif */}
           {(() => {
-            const isRightBlue = active % 2 === 0;
-
+            const isRightBlue = false;
             return (
-              <div
-                className={`relative flex flex-col justify-between overflow-hidden rounded-[2.5rem] p-7 sm:p-10 lg:p-12 shadow-2xl transition-all duration-500 border ${
-                  isRightBlue
-                    ? "bg-[#0060c3] text-white border-[#0060c3]/30 shadow-[0_25px_60px_rgba(0,96,195,0.28)]"
-                    : "bg-white text-[#171717] border-[#171717]/10 shadow-[0_25px_60px_rgba(23,23,23,0.08)]"
-                }`}
-              >
-                {/* Aura lumineuse en arrière-plan */}
-                <div
-                  className={`pointer-events-none absolute -right-20 -top-20 h-72 w-72 rounded-full blur-3xl transition-colors duration-500 ${
-                    isRightBlue ? "bg-white/10" : "bg-[#0060c3]/10"
-                  }`}
-                />
-                <div
-                  className={`pointer-events-none absolute -bottom-20 -left-20 h-64 w-64 rounded-full blur-3xl transition-colors duration-500 ${
-                    isRightBlue ? "bg-[#004a99]/40" : "bg-[#171717]/5"
-                  }`}
-                />
+              <div className="relative flex flex-col justify-between overflow-hidden rounded-3xl p-7 sm:p-10 lg:p-12 shadow-2xl transition-all duration-500 border border-[#171717]/12 bg-[#171717] text-white">
+            {/* Numéro filigrane monumental */}
+            <span className="pointer-events-none absolute right-6 top-4 font-display text-[clamp(6rem,12vw,10rem)] font-black leading-none select-none text-white/[0.04]">
+              {current.number}
+            </span>
 
-                {/* Numéro filigrane monumental */}
-                <span
-                  className={`pointer-events-none absolute right-6 top-4 font-serif text-[clamp(6rem,12vw,11rem)] font-black leading-none select-none transition-colors duration-500 ${
-                    isRightBlue ? "text-white/[0.08]" : "text-[#171717]/[0.05]"
-                  }`}
-                >
-                  {current.number}
-                </span>
-
-                <div className="relative z-10">
-                  {/* Badge & Contrôles */}
-                  <div className="flex items-center justify-between gap-4">
-                    <div className="flex items-center gap-2.5">
-                      <div
-                        className={`flex h-11 w-11 items-center justify-center rounded-2xl border transition-colors ${
-                          isRightBlue
-                            ? "bg-white/15 text-white border-white/20"
-                            : "bg-[#eef5fc] text-[#0060c3] border-[#0060c3]/20"
-                        }`}
-                      >
-                        <Icon className="h-5 w-5" strokeWidth={2.2} />
-                      </div>
-                      <span
-                        className={`rounded-full px-3.5 py-1 text-xs font-bold uppercase tracking-[0.14em] border transition-colors ${
-                          isRightBlue
-                            ? "bg-white/15 text-white border-white/20"
-                            : "bg-[#eef5fc] text-[#0060c3] border-[#0060c3]/20"
-                        }`}
-                      >
-                        {current.tag}
-                      </span>
-                    </div>
+            <div className="relative z-10">
+              {/* Badge & Contrôles */}
+              <div className="flex items-center justify-between gap-4">
+                <div className="flex items-center gap-2.5">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/20 bg-white/10 text-white">
+                    <Icon className="h-5 w-5" strokeWidth={2} />
+                  </div>
+                  <span className="rounded-full px-3 py-1 text-xs font-mono font-bold uppercase tracking-wider border border-white/20 bg-white/10 text-white">
+                    {current.tag}
+                  </span>
+                </div>
 
                     <div className="flex items-center gap-1.5">
                       <button

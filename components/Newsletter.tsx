@@ -55,35 +55,31 @@ export default function Newsletter() {
   };
 
   return (
-    <section className="bg-white px-4 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-14">
-      <div className="relative mx-auto max-w-[1280px] overflow-hidden rounded-[2rem] border border-[#0060c3]/30 bg-[#0060c3] px-6 py-12 text-white shadow-[0_25px_60px_rgba(0,96,195,0.28)] sm:px-12 sm:py-16 lg:px-16">
-        {/* Glow décoratif */}
-        <div className="absolute -left-20 -top-20 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
-        <div className="absolute -bottom-20 -right-20 h-64 w-64 rounded-full bg-[#004a99]/40 blur-3xl" />
+    <section className="bg-[#fbf9f5] px-4 py-16 sm:px-6 sm:py-20 lg:px-8 border-t border-[#171717]/10">
+      <div className="mx-auto max-w-[1280px] rounded-3xl border border-[#171717]/15 bg-[#f4efe6] px-6 py-12 sm:px-12 sm:py-16 lg:px-16 shadow-xs">
+        <div className="mx-auto max-w-3xl text-center">
+          <div className="inline-flex items-center gap-3 text-xs font-mono uppercase tracking-widest text-[#737373]">
+            <span className="text-[#171717] font-semibold">[ 11 / DISPATCH MENSUEL ]</span>
+            <span>—</span>
+            <span>Veille &amp; Stratégie</span>
+          </div>
 
-        <div className="relative z-10 mx-auto max-w-2xl text-center">
-          <span className="inline-flex items-center gap-2 rounded-full border border-[#171717]/10 bg-[#f4f6f8] px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-[#171717] shadow-sm">
-            <Mail className="h-3.5 w-3.5 text-[#0060c3]" />
-            Newsletter · Stratégie &amp; Design
-          </span>
-
-          <h2 className="mt-5 text-2xl font-black tracking-[-0.06em] text-white sm:text-3xl lg:text-4xl">
-            Recevez mes conseils pour faire de votre site une machine à convaincre
+          <h2 className="mt-4 font-display text-2xl sm:text-3xl lg:text-4xl font-light tracking-[-0.03em] text-[#171717]">
+            Des réflexions concrètes sur l&apos;ingénierie et le design, <span className="italic font-normal">directement dans votre boîte</span>
           </h2>
 
-          <p className="mt-4 text-[0.95rem] leading-relaxed text-white/95 sm:text-[1.05rem]">
-            Analyses de sites, retours d’expérience concrets et astuces d’optimisation
-            pour développer votre clientèle grâce à votre présence en ligne.
+          <p className="mt-4 text-sm sm:text-base text-[#4b4b4b] font-light leading-relaxed max-w-xl mx-auto">
+            Analyses de cas réels, retours d&apos;expérience sur la conversion et méthodologie de projet. Sans jargon commercial, ni promotion agressive.
           </p>
 
           <div className="mt-8">
             {submitted ? (
-              <div className="mx-auto flex max-w-lg flex-col items-center gap-3 rounded-2xl border border-white/30 bg-white/20 p-6 text-center text-white backdrop-blur-md">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#0060c3]">
-                  <CheckCircle2 className="h-6 w-6 shrink-0" />
+              <div className="mx-auto flex max-w-lg flex-col items-center gap-3 rounded-2xl border border-[#171717]/15 bg-white p-6 text-center text-[#171717] shadow-sm">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-100 text-emerald-800">
+                  <CheckCircle2 className="h-5 w-5 shrink-0" />
                 </div>
-                <p className="text-sm font-semibold leading-relaxed text-white">
-                  {feedbackMessage || "C'est noté ! Merci pour votre confiance, vos premiers conseils arrivent bientôt."}
+                <p className="text-sm font-medium leading-relaxed text-[#171717]">
+                  {feedbackMessage || "C'est noté ! Merci pour votre confiance, vos premières analyses arrivent bientôt."}
                 </p>
                 <button
                   type="button"
@@ -91,7 +87,7 @@ export default function Newsletter() {
                     setSubmitted(false);
                     setFeedbackMessage(null);
                   }}
-                  className="mt-2 text-xs font-semibold text-white/90 underline hover:text-white transition-colors"
+                  className="mt-2 text-xs font-mono uppercase tracking-wider text-[#737373] underline hover:text-[#171717] transition-colors"
                 >
                   Inscrire une autre adresse
                 </button>
@@ -99,8 +95,8 @@ export default function Newsletter() {
             ) : (
               <div className="mx-auto max-w-md">
                 {errorMessage && (
-                  <div className="mb-3 flex items-center justify-center gap-2 rounded-xl border border-red-200/50 bg-red-500/20 px-4 py-2.5 text-xs font-semibold text-white backdrop-blur-md">
-                    <AlertCircle className="h-4 w-4 shrink-0 text-red-200" />
+                  <div className="mb-3 flex items-center justify-center gap-2 rounded-xl border border-red-200 bg-red-50 px-4 py-2.5 text-xs font-medium text-red-800">
+                    <AlertCircle className="h-4 w-4 shrink-0 text-red-600" />
                     <span>{errorMessage}</span>
                   </div>
                 )}
@@ -135,29 +131,29 @@ export default function Newsletter() {
                   </div>
 
                   <div className="relative flex-1">
-                    <Mail className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-white/80" />
+                    <Mail className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#737373]" />
                     <input
                       type="email"
                       required
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder="Votre adresse e-mail..."
+                      placeholder="votre@email.com"
                       aria-label="Votre adresse e-mail pour la newsletter"
-                      className="w-full rounded-full border border-white/30 bg-white/15 px-11 py-3.5 text-sm text-white placeholder-white/75 backdrop-blur-sm transition-colors focus:border-white focus:bg-white/25 focus:outline-none"
+                      className="w-full rounded-full border border-[#171717]/20 bg-white px-11 py-3 text-sm text-[#171717] placeholder-[#737373] transition-colors focus:border-[#171717] focus:outline-none shadow-xs"
                     />
                   </div>
 
                   <button
                     type="submit"
                     disabled={loading}
-                    className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-6 py-3.5 text-sm font-bold text-[#0060c3] shadow-lg transition-transform hover:-translate-y-0.5 hover:bg-[#f5f9ff] active:scale-95 disabled:opacity-70"
+                    className="inline-flex items-center justify-center gap-2 rounded-full bg-[#171717] px-6 py-3 text-xs font-mono uppercase tracking-wider text-white shadow-sm transition-all hover:bg-black hover:shadow active:scale-95 disabled:opacity-70"
                   >
                     {loading ? (
                       "Inscription..."
                     ) : (
                       <>
-                        Rejoindre
-                        <ArrowUpRight className="h-4 w-4" strokeWidth={2.5} />
+                        <span>S&apos;inscrire</span>
+                        <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={2} />
                       </>
                     )}
                   </button>
@@ -166,12 +162,12 @@ export default function Newsletter() {
             )}
           </div>
 
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-4 text-center text-xs text-white/90 font-medium">
-            <span>✓ Gratuit &amp; sans engagement</span>
-            <span>•</span>
-            <span>✓ Désinscription en 1 clic</span>
-            <span>•</span>
-            <span>✓ 0% spam, 100% valeur</span>
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-4 text-center text-xs font-mono text-[#737373]">
+            <span>[ GRATUIT ]</span>
+            <span>·</span>
+            <span>[ 1 E-MAIL / 15 JOURS ]</span>
+            <span>·</span>
+            <span>[ 0 SPAM / DÉSINSCRIPTION EN 1 CLIC ]</span>
           </div>
         </div>
       </div>
