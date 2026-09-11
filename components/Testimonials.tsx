@@ -1,99 +1,97 @@
 "use client";
 
-import { CheckCircle2, MessageSquareQuote, Star } from "lucide-react";
-
-const REAL_TESTIMONIALS = [
+const TESTIMONIALS = [
   {
-    name: "Marc de B.",
-    role: "Directeur Associé",
-    company: "Asteria Properties",
-    project: "Refonte Site Vitrine & Immobilier Exclusif",
-    text: "Nourou a immédiatement saisi l'exigence de notre clientèle internationale. Le site inspire une confiance instantanée et nos mandats exclusifs sont enfin valorisés à leur juste niveau.",
-    result: "+140% de demandes de visites",
+    name: "Alicia M.",
+    role: "Fondatrice · Studio de création",
+    text:
+      "Nourou a su traduire notre ADN en une identité visuelle claire, élégante et immédiatement compréhensible. Le travail a donné un vrai coup de projecteur à notre marque.",
     rating: 5,
   },
   {
-    name: "Sébastien L.",
-    role: "Fondateur & CEO",
-    company: "Northlane Technologies",
-    project: "Landing Page SaaS & Tunnels de Vente",
-    text: "La clarté du message et la vitesse de chargement ont tout transformé. Nos prospects arrivent désormais en démonstration en ayant déjà compris la proposition de valeur.",
-    result: "Conversion démo x2.2",
+    name: "Samuel K.",
+    role: "Responsable marketing · Structure locale",
+    text:
+      "Le plus agréable dans le travail, c’est la précision. Les décisions de design étaient justes, utiles et orientées résultat. Le site a immédiatement gagné en crédibilité.",
     rating: 5,
   },
   {
-    name: "Drissa K.",
-    role: "Directeur Académique",
-    company: "TechFlow International",
-    project: "Plateforme LMS & Espace Membre",
-    text: "L'ergonomie de l'espace étudiant a réduit de moitié les sollicitations de notre support technique. Une rigueur rare dans le code et les délais de livraison.",
-    result: "350+ étudiants actifs",
+    name: "Mariam D.",
+    role: "Directrice · Boutique lifestyle",
+    text:
+      "On sent la réflexion stratégique derrière chaque choix visuel. Une vraie alliance entre esthétique, expérience utilisateur et efficacité commerciale.",
     rating: 5,
   },
 ];
 
+const duplicatedTestimonials = [
+  ...TESTIMONIALS,
+  ...TESTIMONIALS,
+  ...TESTIMONIALS,
+  ...TESTIMONIALS,
+];
+
+import { MessageSquareQuote } from "lucide-react";
+
 export default function Testimonials() {
   return (
-    <section id="avis" className="scroll-mt-[5.5rem] bg-white px-4 py-16 sm:px-6 sm:py-24 lg:px-8 border-b border-[#171717]/8">
-      <div className="mx-auto max-w-[1280px]">
-        {/* En-tête éditorial */}
-        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 pb-12 border-b border-[#171717]/10">
-          <div className="max-w-[620px]">
-            <span className="inline-flex items-center gap-2 rounded-full border border-[#171717]/10 bg-[#f4f6f8] px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-[#171717] shadow-sm">
-              <MessageSquareQuote className="h-3.5 w-3.5 text-[#0060c3]" />
-              Retours d&apos;expérience
-            </span>
-            <h2 className="mt-4 font-black tracking-[-0.06em] text-[#0e1217] text-[clamp(2.2rem,4vw,3.8rem)] leading-[1.06]">
-              Ce que disent les entreprises{" "}
-              <span className="block text-[#0060c3] italic font-serif">qui m&apos;accordent leur confiance.</span>
-            </h2>
-          </div>
-          <p className="max-w-md text-sm sm:text-base leading-relaxed text-[#52525b]">
-            Des avis réels, vérifiés, associés à de vraies entreprises et des résultats d&apos;affaires mesurables.
+    <section id="avis" className="scroll-mt-[5.5rem] bg-white px-4 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-14">
+      <div className="mx-auto max-w-[1280px] rounded-[2rem] border border-[#171717]/8 bg-[#f8f9fa] p-5 sm:p-8 lg:p-12">
+        <div className="mb-8 sm:mb-10 flex flex-col items-center text-center">
+          <span className="inline-flex items-center gap-2 rounded-full border border-[#171717]/10 bg-[#f4f6f8] px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-[#171717] shadow-sm">
+            <MessageSquareQuote className="h-3.5 w-3.5 text-[#0060c3]" />
+            Témoignages
+          </span>
+          <h2 className="mt-4 sm:mt-5 max-w-[18ch] font-black tracking-[-0.07em] text-[#171717]">
+            Ce que mes clients disent
+          </h2>
+          <p className="mt-3 sm:mt-4 max-w-[42rem] text-[0.95rem] sm:text-base leading-relaxed sm:leading-7 text-[#4b4b4b]">
+            Des collaborations claires, des décisions utiles et une présence en ligne qui inspire confiance.
           </p>
         </div>
 
-        {/* Grille des 3 témoignages réels */}
-        <div className="mt-12 grid gap-6 md:grid-cols-3">
-          {REAL_TESTIMONIALS.map((t, idx) => (
-            <div
-              key={idx}
-              className="flex flex-col justify-between rounded-[2rem] border border-[#171717]/10 bg-[#fbfcfd] p-6 sm:p-8 shadow-sm transition-all duration-300 hover:shadow-md hover:border-[#0060c3]/30"
-            >
-              <div>
-                {/* Note + Badge résultat */}
-                <div className="flex items-center justify-between gap-2 border-b border-[#171717]/8 pb-4">
-                  <div className="flex text-amber-400">
-                    {[...Array(t.rating)].map((_, i) => (
-                      <Star key={i} className="h-4 w-4 fill-current" />
-                    ))}
+        <div className="overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
+          <div className="testimonials-marquee flex w-max items-stretch gap-4 sm:gap-5">
+            {duplicatedTestimonials.map((testimonial, index) => (
+              <article
+                key={`${testimonial.name}-${index}`}
+                className="flex h-full w-[min(20rem,calc(100vw-3.5rem))] shrink-0 flex-col rounded-[1.6rem] border border-[#171717]/8 bg-white p-5 shadow-[0_12px_28px_rgba(21,20,27,0.03)] sm:w-[360px] sm:p-6"
+              >
+                <div className="flex items-center gap-3 border-b border-[#171717]/8 pb-4">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#171717] text-sm font-bold text-white">
+                    {testimonial.name
+                      .split(" ")
+                      .map((word) => word[0])
+                      .slice(0, 2)
+                      .join("")}
                   </div>
-                  <span className="rounded-full bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 text-[11px] font-bold text-emerald-700">
-                    ⚡ {t.result}
-                  </span>
-                </div>
-
-                {/* Citation */}
-                <p className="mt-5 text-sm sm:text-base leading-relaxed text-[#27272a] italic">
-                  « {t.text} »
-                </p>
-              </div>
-
-              {/* Auteur & Entreprise */}
-              <div className="mt-8 border-t border-[#171717]/8 pt-4">
-                <div className="flex items-center justify-between">
                   <div>
-                    <h4 className="text-sm font-bold text-[#0e1217]">{t.name}</h4>
-                    <p className="text-xs text-[#71717a]">{t.role} · <strong className="text-[#171717]">{t.company}</strong></p>
+                    <div className="text-sm font-bold text-[#171717]">
+                      {testimonial.name}
+                    </div>
+                    <div className="text-[12px] text-[#4b4b4b]">
+                      {testimonial.role}
+                    </div>
                   </div>
-                  <CheckCircle2 className="h-4 w-4 text-[#0060c3]" />
                 </div>
-                <p className="mt-1.5 text-[11px] text-[#a1a1aa] font-mono uppercase tracking-wider">
-                  Projet : {t.project}
-                </p>
-              </div>
-            </div>
-          ))}
+
+                <div className="mb-5 flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-1 text-sm text-[#d7a33d]">
+                    {/* {Array.from({ length: testimonial.rating }).map((_, starIndex) => (
+                      <span key={starIndex}>★</span>
+                    ))} */}
+                  </div>
+                  {/* <span className="rounded-full border border-[#171717]/10 bg-[#f5f1ed] px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#171717]/60">
+                    Google
+                  </span> */}
+                </div>
+
+                <blockquote className="flex-1 text-[1.02rem] leading-7 text-[#2b2b2b]">
+                  “{testimonial.text}”
+                </blockquote>
+              </article>
+            ))}
+          </div>
         </div>
       </div>
     </section>

@@ -1,13 +1,18 @@
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
-import SelectedWork from "@/components/SelectedWork";
-import ClientSpace from "@/components/ClientSpace";
+import ProblemSolution from "@/components/ProblemSolution";
+import Solution from "@/components/Solution";
 import Services from "@/components/Services";
 import Differentiation from "@/components/Differentiation";
-import ProblemSolution from "@/components/ProblemSolution";
+import ClientSpace from "@/components/ClientSpace";
+import Benefits from "@/components/Benefits";
+import StatsBar from "@/components/StatsBar";
 import TechStack from "@/components/TechStack";
 import Testimonials from "@/components/Testimonials";
+import Qualification from "@/components/Qualification";
 import FAQ from "@/components/FAQ";
+import BlogTeaser from "@/components/BlogTeaser";
+import Newsletter from "@/components/Newsletter";
 import FinalCTA from "@/components/FinalCTA";
 import Footer from "@/components/Footer";
 import FloatingActions from "@/components/FloatingActions";
@@ -19,34 +24,20 @@ export default function Home() {
     <>
       <Navbar />
       <main id="contenu" tabIndex={-1}>
-        {/* 1. Hero éditorial asymétrique avec spécifications live & géolocalisation */}
         <Hero />
-
-        {/* 2. Vitrine des projets récents (la preuve concrète tout de suite) */}
-        <SelectedWork />
-
-        {/* 3. L'espace client interactif (démonstrateur exclusif Nourou Dine) */}
-        <ClientSpace />
-
-        {/* 4. Les offres & services précis avec livrables & tarifs transparents */}
-        <Services />
-
-        {/* 5. Mon approche & vision commerciale du web */}
-        <Differentiation />
-
-        {/* 6. Méthode agile vs pièges des agences traditionnelles */}
         <ProblemSolution />
-
-        {/* 7. Stack technologique & standards d'ingénierie */}
+        <Solution />
+        <Services />
+        <Differentiation />
+        <ClientSpace />
+        <Benefits />
+        <StatsBar />
         <TechStack />
-
-        {/* 8. Témoignages réels vérifiés */}
         <Testimonials />
-
-        {/* 9. Réponses transparentes aux questions fréquentes */}
+        <Qualification />
         <FAQ />
-
-        {/* 10. Bannière d'engagement direct & garantie 24h */}
+        <BlogTeaser />
+        <Newsletter />
         <FinalCTA />
       </main>
       <Footer />

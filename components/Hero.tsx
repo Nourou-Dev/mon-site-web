@@ -1,181 +1,187 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowDown, ArrowRight, ArrowUpRight, CheckCircle2, Code2, Cpu, Eye, MessageCircle, ShieldCheck, Sparkles, Star, Zap } from "lucide-react";
-import { site } from "@/lib/data";
+import { ArrowRight, ArrowUpRight, MessageCircle, Palette } from "lucide-react";
+import { heroStats, site } from "@/lib/data";
 
-const keyMetrics = [
-  { label: "Temps de chargement moyen", value: "< 0.8s", detail: "Optimisé Google Core Web Vitals" },
-  { label: "Code propriétaire", value: "100%", detail: "Zéro thème préfabriqué, zéro dette" },
-  { label: "Portail client dédié", value: "Temps réel", detail: "Suivi des sprints, previews & contrats" },
-  { label: "Réactivité garantie", value: "< 2h", detail: "Échanges directs via WhatsApp & Dashboard" },
-];
-
-const coreBadges = [
-  "Next.js 15",
-  "TypeScript",
-  "Tailwind CSS",
-  "React",
-  "PostgreSQL",
-  "Figma",
-  "Architecture API",
+const brands = [
+  {
+    name: "adidas",
+    logo: (
+      <svg viewBox="0 0 120 40" className="h-10 w-auto" role="img" aria-label="Logo adidas">
+        <title>Logo adidas</title>
+        <g fill="#171717" opacity="0.8">
+          <path d="M6 28L22 6L30 6L18 28H6Z" />
+          <path d="M28 28L44 6L52 6L40 28H28Z" />
+          <path d="M50 28L66 6L74 6L62 28H50Z" />
+        </g>
+      </svg>
+    ),
+  },
+  {
+    name: "Pepsi",
+    logo: (
+      <svg viewBox="0 0 140 40" className="h-10 w-auto" role="img" aria-label="Logo Pepsi">
+        <title>Logo Pepsi</title>
+        <circle cx="20" cy="20" r="18" fill="#0b4dd8" />
+        <circle cx="20" cy="20" r="12" fill="#fff" opacity="0.18" />
+        <path d="M11 27C18 20 19 11 31 10C25 18 25 23 18 29C15 31 12 30 11 27Z" fill="#f44336" />
+        <path d="M31 10C36 11 42 12 47 17C41 17 35 17 29 22C26 18 28 13 31 10Z" fill="#f8d64e" />
+      </svg>
+    ),
+  },
+  {
+    name: "Spotify",
+    logo: (
+      <svg viewBox="0 0 140 40" className="h-10 w-auto" role="img" aria-label="Logo Spotify">
+        <title>Logo Spotify</title>
+        <circle cx="20" cy="20" r="18" fill="#1ed760" />
+        <path d="M13 17.5C18 16 25 15.5 32 16.5" stroke="#0f1a12" strokeWidth="2.2" strokeLinecap="round" fill="none" />
+        <path d="M12 22C18 20 26 19.5 34 20.8" stroke="#0f1a12" strokeWidth="2.2" strokeLinecap="round" fill="none" />
+        <path d="M13 26.5C20 24.8 28 24.2 36 25.5" stroke="#0f1a12" strokeWidth="2.2" strokeLinecap="round" fill="none" />
+      </svg>
+    ),
+  },
+  {
+    name: "Nike",
+    logo: (
+      <svg viewBox="0 0 140 40" className="h-10 w-auto" role="img" aria-label="Logo Nike">
+        <title>Logo Nike</title>
+        <path d="M9 27C19 22 29 16 42 13C49 11 56 12 64 15C55 18 47 22 39 26C31 29 22 31 9 27Z" fill="#171717" opacity="0.8"/>
+        <path d="M42 13C52 13 60 17 72 21C78 23 86 25 98 24C89 27 79 30 68 32C59 33 48 31 42 27C38 24 37 17 42 13Z" fill="#171717" opacity="0.8"/>
+      </svg>
+    ),
+  },
+  {
+    name: "Coca-Cola",
+    logo: (
+      <svg viewBox="0 0 180 40" className="h-10 w-auto" role="img" aria-label="Logo Coca-Cola">
+        <title>Logo Coca-Cola</title>
+        <rect x="4" y="8" width="30" height="24" rx="12" fill="#e61d2b" />
+        <path d="M16 12C20 12 23 13 25 15C22 16 20 18 18 21C16 24 15 27 13 29C11 27 10 24 10 20C10 16 13 12 16 12Z" fill="#fff" opacity="0.95"/>
+        <text x="42" y="28" fill="#d41722" fontSize="20" fontWeight="700" letterSpacing="-1">Coca-Cola</text>
+      </svg>
+    ),
+  },
+  {
+    name: "Uber",
+    logo: (
+      <svg viewBox="0 0 130 40" className="h-10 w-auto" role="img" aria-label="Logo Uber">
+        <title>Logo Uber</title>
+        <text x="0" y="27" fill="#171717" fontSize="24" fontWeight="800" letterSpacing="-1">Uber</text>
+      </svg>
+    ),
+  },
+  {
+    name: "Netflix",
+    logo: (
+      <svg viewBox="0 0 150 40" className="h-10 w-auto" role="img" aria-label="Logo Netflix">
+        <title>Logo Netflix</title>
+        <rect x="4" y="6" width="28" height="28" rx="6" fill="#e50914" />
+        <path d="M14 13L22 13L19 27L11 27L14 13Z" fill="#fff" />
+        <path d="M25 13L33 13L30 27L22 27L25 13Z" fill="#fff" />
+        <text x="42" y="28" fill="#171717" fontSize="22" fontWeight="800" letterSpacing="-1">Netflix</text>
+      </svg>
+    ),
+  },
+  {
+    name: "Microsoft",
+    logo: (
+      <svg viewBox="0 0 160 40" className="h-10 w-auto" role="img" aria-label="Logo Microsoft">
+        <title>Logo Microsoft</title>
+        <rect x="0" y="3" width="16" height="16" fill="#f25022" />
+        <rect x="20" y="3" width="16" height="16" fill="#7fba00" />
+        <rect x="0" y="23" width="16" height="16" fill="#00a4ef" />
+        <rect x="20" y="23" width="16" height="16" fill="#ffb900" />
+        <text x="46" y="27" fill="#171717" fontSize="22" fontWeight="700">Microsoft</text>
+      </svg>
+    ),
+  },
 ];
 
 export default function Hero() {
-  const whatsappUrl = `${site.whatsapp}?text=${encodeURIComponent(
-    "Bonjour Nourou, je souhaite échanger avec vous sur la création / refonte d'un site web..."
-  )}`;
-
   return (
-    <section id="accueil" className="relative w-full scroll-mt-[5.5rem] bg-white pt-24 sm:pt-28 pb-12 sm:pb-20">
-      {/* Filet architectural supérieur avec métadonnées géographiques & techniques */}
-      <div className="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#171717]/10 pb-4 text-[11px] font-mono uppercase tracking-[0.14em] text-[#71717a]">
-          <div className="flex items-center gap-2">
-            <span className="inline-block h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="font-bold text-[#171717]">Disponible · Nouveaux projets T1 2026</span>
-          </div>
-          <div className="hidden sm:flex items-center gap-4">
-            <span>6.4474° N, 2.3557° E (Abomey-Calavi)</span>
-            <span className="text-[#171717]/20">/</span>
-            <span>Remote Worldwide</span>
-          </div>
-          <div className="flex items-center gap-1.5 font-bold text-[#0060c3]">
-            <span>Nourou Dine AMANDOU</span>
-            <span className="rounded bg-[#0060c3]/10 px-1.5 py-0.5 text-[10px]">STUDIO</span>
-          </div>
-        </div>
+    <section id="accueil" className="w-full scroll-mt-[5.5rem] bg-white">
+      <div className="relative w-full bg-white px-0 pb-10 pt-[5.5rem] sm:pb-14 lg:pb-20">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(0,96,195,0.08),transparent_22%),radial-gradient(circle_at_bottom_right,_rgba(0,0,0,0.02),transparent_18%)]" />
 
-        {/* Cœur du Hero : Asymétrie éditoriale pure & humaine */}
-        <div className="mt-8 sm:mt-12 grid gap-12 lg:grid-cols-[1.18fr_0.82fr] lg:items-center">
-          
-          {/* Bloc texte principal */}
-          <div>
-            <div className="inline-flex items-center gap-2 rounded-full border border-[#0060c3]/20 bg-[#0060c3]/5 px-3.5 py-1.5 text-xs font-bold text-[#0060c3]">
-              <Sparkles className="h-3.5 w-3.5" />
-              <span>Conception web sur-mesure &amp; Architecture digitale</span>
-            </div>
-
-            <h1 className="mt-6 font-black tracking-[-0.055em] text-[#0e1217] text-[clamp(2.4rem,4.8vw,4.5rem)] leading-[1.05]">
-              L’exigence du sur-mesure.{" "}
-              <span className="block text-[#0060c3] italic font-serif">
-                L’efficacité du code propre.
+        <div className="relative mx-auto max-w-[1140px] px-4 sm:px-6 lg:px-8">
+          <div className="grid gap-6 md:grid-cols-[1.02fr_0.98fr] md:items-center">
+            <div>
+              <span className="inline-flex items-center gap-2 rounded-full border border-[#171717]/10 bg-[#f4f6f8] px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-[#171717] shadow-sm">
+                <Palette className="h-3.5 w-3.5 text-[#0060c3]" />
+                Graphiste &amp; Web Designer
               </span>
-            </h1>
 
-            <p className="mt-6 max-w-xl text-base sm:text-lg leading-relaxed text-[#3f3f46]">
-              Je conçois des sites web et des applications haute performance pour les entrepreneurs et entreprises qui refusent les templates préfabriqués, les promesses vagues et les lenteurs d’agences.
-            </p>
+              <h1 className="mt-7 max-w-[14ch] font-black tracking-[-0.07em] text-[#171717]">
+                Des sites qui font choisir votre marque
+              </h1>
 
-            {/* Actions directes */}
-            <div className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5">
-              <a
-                href={whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group inline-flex items-center justify-center gap-3 rounded-full bg-[#0060c3] px-8 py-4 text-sm font-bold text-white shadow-xl shadow-[#0060c3]/25 transition-all duration-200 hover:bg-[#0050a5] hover:-translate-y-0.5 active:scale-95"
-              >
-                <MessageCircle className="h-4 w-4" />
-                <span>Lancer votre projet sur WhatsApp</span>
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-              </a>
+              <p className="mt-6 max-w-[34rem] text-lg leading-7 text-[#4b4b4b] lg:max-w-[28rem]">
+                Des sites premium, clairs et convertisseurs pour les entrepreneurs qui veulent gagner en crédibilité.
+              </p>
 
-              <Link
-                href="#projets"
-                className="inline-flex items-center justify-center gap-2 rounded-full border border-[#171717]/15 bg-white px-7 py-4 text-sm font-bold text-[#171717] transition-all hover:bg-[#f8f9fa] hover:border-[#171717]/30 hover:-translate-y-0.5"
-              >
-                <span>Voir les réalisations</span>
-                <ArrowDown className="h-4 w-4 text-[#71717a]" />
-              </Link>
+              <div className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                <Link
+                  href="/contact"
+                  className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-full bg-[#0060c3] px-6 py-3.5 text-[0.95rem] font-semibold text-white shadow-lg shadow-[#0060c3]/25 transition-all duration-200 hover:bg-[#0050a5] hover:-translate-y-0.5 active:scale-95 text-center"
+                >
+                  Discutons de votre projet
+                  <ArrowUpRight className="h-4 w-4" strokeWidth={2.5} />
+                </Link>
+                <Link
+                  href="/realisations"
+                  className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-full border border-[#171717]/15 bg-white px-6 py-3.5 text-[0.95rem] font-semibold text-[#171717] transition-colors duration-200 hover:border-[#171717]/30 text-center"
+                >
+                  Voir mes réalisations
+                  <ArrowRight className="h-4 w-4" strokeWidth={2.2} />
+                </Link>
+              </div>
+
             </div>
 
-            {/* Fiche de spécifications techniques & garanties réelles */}
-            <div className="mt-12 rounded-2xl border border-[#171717]/10 bg-[#fbfcfd] p-5 sm:p-6 shadow-sm">
-              <div className="flex items-center justify-between border-b border-[#171717]/8 pb-3">
-                <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#171717]">
-                  Standards de livraison · Zéro compromis
-                </span>
-                <span className="flex items-center gap-1 text-[11px] font-bold text-emerald-600">
-                  <CheckCircle2 className="h-3.5 w-3.5" />
-                  Vérifié
-                </span>
-              </div>
-
-              <div className="mt-4 grid grid-cols-2 gap-4 sm:gap-6">
-                {keyMetrics.map((metric, idx) => (
-                  <div key={idx} className="border-l-2 border-[#0060c3] pl-3">
-                    <span className="block text-xl sm:text-2xl font-black text-[#0e1217]">
-                      {metric.value}
-                    </span>
-                    <span className="block text-xs font-bold text-[#171717]">
-                      {metric.label}
-                    </span>
-                    <span className="block text-[11px] text-[#71717a] mt-0.5">
-                      {metric.detail}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Colonne droite : Portrait d'artisan & Vignette de projet réel */}
-          <div className="relative flex flex-col items-center">
-            {/* Cadre de présentation du créateur */}
-            <div className="relative w-full max-w-md overflow-hidden rounded-[2.5rem] border border-[#171717]/10 bg-[#f4f6f8] p-4 shadow-lg sm:p-6">
-              <div className="flex items-center justify-between pb-3 border-b border-[#171717]/10 text-xs font-mono text-[#71717a]">
-                <span>NOUROU_DINE_PORTRAIT.RAW</span>
-                <span className="rounded bg-[#0060c3] px-2 py-0.5 font-bold text-white text-[10px]">
-                  ARCHITECTE
-                </span>
-              </div>
-
-              <div className="relative mt-4 flex items-end justify-center overflow-hidden rounded-2xl bg-gradient-to-b from-[#e2e8f0] to-[#cbd5e1] pt-6">
+            <div className="relative mx-auto flex w-full max-w-[28rem] flex-col items-center justify-center lg:mx-0 lg:pb-20">
+              <div className="relative flex flex-col items-center">
                 <Image
                   src="/media/nourou-portrait-transparent-2.png"
-                  alt="Nourou Dine AMANDOU, développeur web et architecte d'applications"
-                  width={680}
-                  height={800}
+                  alt="Portrait professionnel de Nourou Dine AMANDOU, développeur web freelance et créateur digital"
+                  width={760}
+                  height={950}
                   priority
-                  sizes="(min-width: 1024px) 440px, (min-width: 640px) 380px, 300px"
-                  className="relative z-10 h-[340px] sm:h-[400px] w-auto object-contain drop-shadow-[0_15px_25px_rgba(0,0,0,0.15)]"
+                  sizes="(min-width: 1024px) 450px, (min-width: 640px) 390px, 340px"
+                  className="relative z-10 h-[min(54vw,340px)] w-auto max-w-full object-contain drop-shadow-[0_22px_40px_rgba(0,0,0,0.12)] sm:h-[390px] lg:h-[450px]"
                 />
               </div>
 
-              {/* Métadonnées réelles au pied du portrait */}
-              <div className="mt-4 space-y-2">
-                <div className="flex items-center justify-between text-xs">
-                  <span className="font-bold text-[#171717]">Nourou Dine AMANDOU</span>
-                  <span className="text-[#71717a]">4+ ans d&apos;expérience</span>
+              <div className="relative z-20 mt-4 grid w-full max-w-[24rem] grid-cols-3 gap-1.5 sm:gap-3 lg:absolute lg:left-1/2 lg:top-[74%] lg:mt-0 lg:-translate-x-1/2">
+                <div className="flex min-h-[4.25rem] w-full flex-col items-center justify-center rounded-[1rem] sm:rounded-[1.1rem] border border-[#171717]/10 bg-white/95 px-1 py-1.5 sm:py-2 text-center shadow-[0_20px_40px_rgba(23,23,23,0.08)] backdrop-blur-sm sm:h-20">
+                  <span className="text-lg sm:text-2xl font-black tracking-[-0.06em] text-[#171717]">4+</span>
+                  <span className="mt-0.5 text-[8px] sm:text-[10px] uppercase leading-tight tracking-[0.04em] sm:tracking-[0.12em] text-[#1f2937] font-semibold">Expérience</span>
                 </div>
-                <div className="flex flex-wrap gap-1.5 pt-1">
-                  {coreBadges.map((badge) => (
-                    <span
-                      key={badge}
-                      className="rounded-md border border-[#171717]/10 bg-white px-2 py-0.5 text-[10px] font-bold text-[#171717]"
-                    >
-                      {badge}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
 
-            {/* Badge de réassurance live sur le portail client */}
-            <div className="relative z-20 -mt-6 w-full max-w-sm rounded-2xl border border-[#171717]/10 bg-white p-4 shadow-xl backdrop-blur-md">
-              <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#0060c3] text-white">
-                  <Eye className="h-5 w-5" />
+                <div className="flex min-h-[4.25rem] w-full flex-col items-center justify-center rounded-[1rem] sm:rounded-[1.1rem] border border-[#171717]/10 bg-white/95 px-1 py-1.5 sm:py-2 text-center shadow-[0_20px_40px_rgba(23,23,23,0.08)] backdrop-blur-sm sm:h-20">
+                  <span className="text-lg sm:text-2xl font-black tracking-[-0.06em] text-[#171717]">10+</span>
+                  <span className="mt-0.5 text-[8px] sm:text-[10px] uppercase leading-tight tracking-[0.04em] sm:tracking-[0.12em] text-[#1f2937] font-semibold">Projets livrés</span>
                 </div>
-                <div>
-                  <h3 className="text-xs font-bold text-[#171717]">Accès direct à votre espace client</h3>
-                  <p className="text-[11px] text-[#71717a]">
-                    Testez vos maquettes, suivez les tickets et validez chaque sprint en direct.
-                  </p>
+
+                <div className="flex min-h-[4.25rem] w-full flex-col items-center justify-center rounded-[1rem] sm:rounded-[1.1rem] border border-[#171717]/10 bg-[#0060c3] px-1 py-1.5 sm:py-2 text-center text-white shadow-[0_20px_40px_rgba(0,96,195,0.25)] sm:h-20">
+                  <span className="text-lg sm:text-2xl font-black tracking-[-0.06em]">92%</span>
+                  <span className="mt-0.5 text-[8px] sm:text-[10px] uppercase leading-tight tracking-[0.04em] sm:tracking-[0.12em] text-white font-semibold">Satisfaction</span>
                 </div>
               </div>
             </div>
           </div>
+        </div>
 
+        <div className="relative mt-8 w-full max-w-full overflow-hidden border-t-0 bg-white">
+          <div className="w-full max-w-full overflow-hidden">
+            <div className="brand-marquee flex min-w-max items-center gap-14 py-8 sm:gap-16 sm:py-9">
+              {[...brands, ...brands, ...brands, ...brands].map((brand, index) => (
+                <div key={`${brand.name}-${index}`} className="flex items-center justify-center opacity-80">
+                  {brand.logo}
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </section>
