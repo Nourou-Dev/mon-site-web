@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, ArrowUpRight } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { navLinks } from "@/lib/data";
 
 export default function Navbar() {
@@ -50,8 +50,8 @@ export default function Navbar() {
       <div
         className={`mx-auto w-full border-b transition-all duration-300 ${
           scrolled
-            ? "border-[#171717]/10 bg-[#fbf9f5]/95 shadow-[0_8px_30px_rgba(0,0,0,0.04)] backdrop-blur-md"
-            : "border-[#171717]/6 bg-[#fbf9f5]/80 backdrop-blur-sm"
+            ? "border-[#C9C4B8] bg-[#F6F4EF]/95 shadow-xs backdrop-blur-md"
+            : "border-[#C9C4B8]/60 bg-[#F6F4EF]/85 backdrop-blur-sm"
         }`}
       >
         <div className="mx-auto flex max-w-[1360px] items-center justify-between px-4 py-3.5 sm:px-6 lg:px-10">
@@ -61,17 +61,17 @@ export default function Navbar() {
             onClick={() => setOpen(false)}
             className="group flex flex-col focus:outline-none"
           >
-            <div className="flex items-center gap-2">
-              <span className="font-display text-lg sm:text-xl font-bold tracking-tight text-[#171717] group-hover:text-[#0052a3] transition-colors">
+            <div className="flex items-center gap-2.5">
+              <span className="font-display text-lg sm:text-xl font-normal tracking-tight text-[#1B1D22] group-hover:text-[#3D5AFE] transition-colors">
                 Nourou Dine AMANDOU
               </span>
-              <span className="hidden sm:inline-flex items-center gap-1.5 rounded-full border border-emerald-500/20 bg-emerald-50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-emerald-700">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="hidden sm:inline-flex items-center gap-1.5 rounded-full border border-[#C9C4B8] bg-white/60 px-2 py-0.5 text-xs text-[#1B1D22]">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#FF6B3D]" />
                 Disponible
               </span>
             </div>
-            <span className="text-[10px] uppercase tracking-[0.2em] text-[#6b7280]">
-              Studio Web &amp; Création Digitale
+            <span className="text-xs text-[#4B4D54] font-normal">
+              Design de systèmes &amp; ingénierie web
             </span>
           </Link>
 
@@ -86,15 +86,15 @@ export default function Navbar() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`group relative py-1 text-xs font-semibold uppercase tracking-[0.16em] transition-colors duration-200 ${
+                  className={`group relative py-1 text-sm font-medium transition-colors duration-200 ${
                     isActive
-                      ? "text-[#171717]"
-                      : "text-[#6b7280] hover:text-[#171717]"
+                      ? "text-[#1B1D22]"
+                      : "text-[#4B4D54] hover:text-[#3D5AFE]"
                   }`}
                 >
                   {link.label}
                   <span
-                    className={`absolute -bottom-1 left-0 h-[1.5px] bg-[#171717] transition-all duration-300 ${
+                    className={`absolute -bottom-1 left-0 h-[1.5px] bg-[#1B1D22] transition-all duration-300 ${
                       isActive ? "w-full" : "w-0 group-hover:w-full"
                     }`}
                   />
@@ -107,17 +107,16 @@ export default function Navbar() {
           <div className="flex items-center gap-3">
             <Link
               href="/app"
-              className="hidden xl:inline-flex text-[11px] font-semibold uppercase tracking-[0.16em] text-[#4b5563] hover:text-[#171717] transition-colors py-2 px-3 rounded-lg hover:bg-black/5"
+              className="hidden xl:inline-flex text-xs font-medium text-[#4B4D54] hover:text-[#1B1D22] transition-colors py-2 px-3 rounded-lg hover:bg-black/5"
             >
               Espace Client
             </Link>
 
             <Link
               href="/contact"
-              className="hidden sm:inline-flex items-center gap-2 rounded-full bg-[#171717] px-5 py-2.5 text-xs font-bold uppercase tracking-[0.12em] text-white shadow-sm transition-all hover:bg-[#2b2b2b] hover:-translate-y-0.5 active:scale-95"
+              className="hidden sm:inline-flex items-center justify-center rounded-full bg-[#1B1D22] px-5 py-2.5 text-xs font-medium text-[#F6F4EF] transition-all hover:bg-[#3D5AFE] active:scale-95"
             >
-              <span>Lancer un projet</span>
-              <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={2.4} />
+              <span>Discuter du projet</span>
             </Link>
 
             <button
@@ -125,7 +124,7 @@ export default function Navbar() {
               aria-label={open ? "Fermer le menu" : "Ouvrir le menu de navigation"}
               aria-expanded={open}
               onClick={() => setOpen((v) => !v)}
-              className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-[#171717]/10 bg-white p-2 text-[#171717] transition-all hover:bg-[#f4f6f8] active:scale-95 focus:outline-none focus:ring-2 focus:ring-[#171717] lg:hidden"
+              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-[#C9C4B8] bg-white p-2 text-[#1B1D22] transition-all hover:bg-[#F6F4EF] active:scale-95 focus:outline-none focus:ring-2 focus:ring-[#1B1D22] lg:hidden"
             >
               {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
@@ -174,12 +173,11 @@ export default function Navbar() {
                   onClick={() => setOpen(false)}
                   className={`min-h-[48px] flex items-center justify-between rounded-xl px-4 py-3 text-sm tracking-[0.06em] transition-all ${
                     isActive
-                      ? "bg-black/5 font-bold text-[#171717]"
-                      : "font-medium text-[#4b5563] hover:bg-black/5 hover:text-[#171717]"
+                      ? "bg-black/5 font-bold text-[#1B1D22]"
+                      : "font-medium text-[#1B1D22]/70 hover:bg-black/5 hover:text-[#1B1D22]"
                   }`}
                 >
                   <span>{link.label}</span>
-                  <span className="text-[10px] text-[#9ca3af]">→</span>
                 </Link>
               );
             })}
@@ -197,10 +195,9 @@ export default function Navbar() {
               <Link
                 href="/contact"
                 onClick={() => setOpen(false)}
-                className="mt-2 inline-flex min-h-[48px] items-center justify-center gap-2 rounded-full bg-[#171717] px-6 py-3.5 text-xs font-bold uppercase tracking-[0.14em] text-white shadow-md transition-transform active:scale-95 hover:bg-[#2b2b2b]"
+                className="mt-2 inline-flex min-h-[48px] items-center justify-center bg-[#1B1D22] px-6 py-3.5 text-xs font-mono text-white transition-colors hover:bg-[#3D5AFE]"
               >
                 <span>Lancer un projet</span>
-                <ArrowUpRight className="h-4 w-4" strokeWidth={2.4} />
               </Link>
             </div>
           </nav>

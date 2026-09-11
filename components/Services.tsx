@@ -70,20 +70,20 @@ const SERVICES_LIST = [
 
 export default function Services() {
   return (
-    <section id="services" className="relative w-full bg-[#fbf9f5] py-20 sm:py-28 lg:py-32 border-b border-[#171717]/8">
+    <section id="services" className="relative w-full bg-[#F6F4EF] py-20 sm:py-28 lg:py-32 border-b border-[#C9C4B8]">
       <div className="mx-auto max-w-[1360px] px-4 sm:px-6 lg:px-10">
         
         {/* En-tête de section */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-12 border-b border-[#171717]/10">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-12 border-b border-[#C9C4B8]">
           <div>
-            <span className="text-xs font-mono font-bold uppercase tracking-[0.2em] text-[#6b7280]">
-              [ 04 / SERVICES &amp; EXPERTISE ]
+            <span className="text-xs font-mono text-[#4B4D54]">
+              04 / Savoir-faire &amp; prestations
             </span>
-            <h2 className="mt-4 font-display text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-[#171717] max-w-[680px]">
+            <h2 className="mt-4 font-display text-3xl sm:text-4xl lg:text-5xl font-light tracking-tight text-[#1B1D22] max-w-[680px]">
               Des prestations précises, conçues pour accélérer votre croissance.
             </h2>
           </div>
-          <p className="max-w-[380px] text-sm text-[#4b5563] leading-relaxed">
+          <p className="max-w-[380px] text-sm text-[#4B4D54] leading-relaxed font-light">
             Pas de formules opaques ni de frais cachés. Chaque prestation répond à un objectif clair avec un tarif et un calendrier transparents.
           </p>
         </div>
@@ -93,37 +93,37 @@ export default function Services() {
           {SERVICES_LIST.map((service) => (
             <div
               key={service.num}
-              className="flex flex-col justify-between rounded-3xl border border-[#171717]/10 bg-white p-7 sm:p-9 shadow-sm hover:shadow-xl transition-all duration-300"
+              className="flex flex-col justify-between rounded-2xl border border-[#C9C4B8] bg-white p-7 sm:p-9 shadow-2xs hover:border-[#1B1D22]/40 transition-colors"
             >
               <div>
-                <div className="flex items-center justify-between pb-4 border-b border-[#171717]/8 text-xs font-mono">
-                  <span className="font-bold text-[#171717]">[ {service.num} ]</span>
-                  <span className="uppercase text-[#6b7280]">{service.tag}</span>
-                  <span className="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full font-semibold">
+                <div className="flex items-center justify-between pb-4 border-b border-[#C9C4B8]/50 text-xs font-mono">
+                  <span className="text-[#1B1D22] font-semibold">{service.num}</span>
+                  <span className="text-[#4B4D54]">{service.tag}</span>
+                  <span className="text-[#1B1D22] bg-[#F6F4EF] border border-[#C9C4B8] px-2 py-0.5 rounded-full font-mono text-[11px]">
                     {service.delay}
                   </span>
                 </div>
 
-                <h3 className="mt-5 font-display text-2xl sm:text-3xl font-bold tracking-tight text-[#171717]">
+                <h3 className="mt-5 font-display text-2xl sm:text-3xl font-light tracking-tight text-[#1B1D22]">
                   {service.title}
                 </h3>
-                <p className="mt-1 text-xs sm:text-sm font-medium text-[#0052a3]">
+                <p className="mt-1 text-xs sm:text-sm font-medium text-[#3D5AFE]">
                   {service.subtitle}
                 </p>
 
-                <p className="mt-4 text-xs sm:text-sm leading-relaxed text-[#4b5563]">
+                <p className="mt-4 text-xs sm:text-sm leading-relaxed text-[#4B4D54] font-light">
                   {service.desc}
                 </p>
 
                 {/* Livrables inclus */}
-                <div className="mt-6 pt-5 border-t border-[#171717]/8">
-                  <p className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#171717] mb-3">
+                <div className="mt-6 pt-5 border-t border-[#C9C4B8]/40">
+                  <p className="text-xs font-mono text-[#1B1D22] mb-3">
                     Inclus dans l&apos;accompagnement :
                   </p>
                   <ul className="space-y-2">
                     {service.deliverables.map((item) => (
-                      <li key={item} className="flex items-start gap-2.5 text-xs text-[#374151]">
-                        <Check className="h-3.5 w-3.5 text-emerald-600 mt-0.5 shrink-0" strokeWidth={2.5} />
+                      <li key={item} className="flex items-start gap-2.5 text-xs text-[#4B4D54]">
+                        <span className="h-1.5 w-1.5 rounded-full bg-[#3D5AFE] mt-1.5 shrink-0" />
                         <span>{item}</span>
                       </li>
                     ))}
@@ -131,16 +131,15 @@ export default function Services() {
                 </div>
               </div>
 
-              {/* Bouton d'action */}
-              <div className="mt-8 pt-5 border-t border-[#171717]/8 flex items-center justify-between">
+              {/* Bouton d'action sans flèche */}
+              <div className="mt-8 pt-5 border-t border-[#C9C4B8]/40 flex items-center justify-between">
                 <Link
                   href="/contact"
-                  className="inline-flex items-center gap-2 rounded-full bg-[#171717] px-6 py-3 text-xs font-bold uppercase tracking-wider text-white shadow-sm hover:bg-[#2b2b2b] transition-all"
+                  className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-[#1B1D22] px-6 py-2.5 text-xs font-medium text-[#F6F4EF] shadow-2xs hover:bg-[#3D5AFE] transition-all"
                 >
                   <span>{service.cta}</span>
-                  <ArrowUpRight className="h-3.5 w-3.5" />
                 </Link>
-                <span className="text-[11px] font-mono text-[#6b7280]">
+                <span className="text-xs font-mono text-[#4B4D54]">
                   Devis clair sous 24h
                 </span>
               </div>

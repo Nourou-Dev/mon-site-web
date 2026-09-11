@@ -5,11 +5,11 @@
 :root {
   --font-display: var(--font-display), "Fraunces", Georgia, "Times New Roman", serif;
   --font-body: var(--font-body), "Manrope", "Segoe UI", system-ui, -apple-system, sans-serif;
-  --site-primary: #171717;
-  --site-primary-strong: #0f0f0f;
-  --site-primary-soft: #f8fafc;
-  --site-accent: #0060c3;
-  --site-accent-soft: #dbeafe;
+  --site-paper: #F6F4EF;
+  --site-ink: #1B1D22;
+  --site-cobalt: #3D5AFE;
+  --site-coral: #FF6B3D;
+  --site-stone: #C9C4B8;
 
   --text-xs: 0.75rem;
   --text-sm: 0.875rem;
@@ -55,13 +55,28 @@ html {
 }
 
 body {
-  background: #fbf9f5;
-  color: #171717;
+  background: #F6F4EF;
+  color: #1B1D22;
   font-family: var(--font-body);
   font-size: var(--text-base);
   line-height: var(--leading-normal);
   overflow-x: hidden;
   max-width: 100vw;
+}
+
+/* Grille exposée : armature de direction artistique */
+.exposed-grid {
+  background-size: 80px 80px;
+  background-image: 
+    linear-gradient(to right, rgba(201, 196, 184, 0.45) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(201, 196, 184, 0.45) 1px, transparent 1px);
+}
+
+.exposed-grid-fine {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(201, 196, 184, 0.3) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(201, 196, 184, 0.3) 1px, transparent 1px);
 }
 
 h1,
@@ -168,15 +183,15 @@ footer {
 }
 
 ::selection {
-  background-color: #bfdbfe;
-  color: #171717;
+  background-color: #3D5AFE;
+  color: #ffffff;
 }
 
 .focus-ring {
   outline: none;
 }
 .focus-ring:focus-visible {
-  outline: 2px solid #0060c3;
+  outline: 2px solid #3D5AFE;
   outline-offset: 3px;
   border-radius: 0.5rem;
 }

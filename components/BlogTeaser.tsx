@@ -1,72 +1,66 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight, BookOpen } from "lucide-react";
-
 import { allArticles } from "@/lib/blogData";
 
 export default function BlogTeaser() {
   const teaserArticles = allArticles.slice(0, 4);
 
   return (
-    <section className="bg-[#fbf9f5] px-4 py-16 sm:px-6 sm:py-24 lg:px-8 border-t border-[#171717]/10">
-      <div className="mx-auto max-w-[1280px]">
+    <section className="bg-[#F6F4EF] px-4 py-20 sm:px-6 sm:py-28 lg:px-10 border-b border-[#C9C4B8]">
+      <div className="mx-auto max-w-[1360px]">
         {/* Header */}
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between border-b border-[#171717]/10 pb-10">
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between border-b border-[#C9C4B8] pb-10">
           <div>
-            <div className="flex items-center gap-3 text-xs font-mono uppercase tracking-widest text-[#737373]">
-              <span className="text-[#171717] font-semibold">[ 10 / PUBLICATIONS ]</span>
-              <span>—</span>
-              <span>Carnet de bord &amp; Méthode</span>
-            </div>
-            <h2 className="mt-4 font-display text-3xl sm:text-4xl lg:text-5xl font-light tracking-[-0.03em] text-[#171717]">
-              Analyses, guides et <span className="italic font-normal">retours d&apos;expérience</span>
+            <p className="text-xs font-mono text-[#1B1D22]/60">
+              Carnet d&apos;atelier · Méthode &amp; Retours d&apos;expérience
+            </p>
+            <h2 className="mt-4 font-serif text-3xl sm:text-4xl lg:text-5xl font-normal tracking-tight text-[#1B1D22]">
+              Analyses, guides et <span className="italic">retours d&apos;expérience</span>
             </h2>
           </div>
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-            <p className="max-w-md text-sm sm:text-base text-[#4b4b4b] font-light leading-relaxed">
-              Des réflexions transparentes sur le code, la conversion et la stratégie digitale pour éclairer vos prises de décision.
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
+            <p className="max-w-md text-sm text-[#1B1D22]/70 leading-relaxed font-sans">
+              Des réflexions transparentes sur le code, la conversion et la direction artistique pour éclairer vos décisions.
             </p>
             <Link
               href="/blog"
-              className="group inline-flex items-center gap-2 rounded-full border border-[#171717] bg-[#171717] px-6 py-3 text-xs font-mono uppercase tracking-wider text-white transition-all hover:bg-black hover:shadow-md"
+              className="inline-flex items-center justify-center bg-[#1B1D22] px-6 py-3 text-xs font-mono text-white transition-colors hover:bg-[#3D5AFE] shrink-0"
             >
-              <span>Tous les articles</span>
-              <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+              Tous les articles
             </Link>
           </div>
         </div>
 
-        {/* Grid Articles */}
-        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {/* Grid Articles - Architectural Layout */}
+        <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {teaserArticles.map((article) => (
             <Link
               key={article.slug}
               href={`/blog/${article.slug}`}
-              className="group flex flex-col overflow-hidden rounded-2xl border border-[#171717]/10 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#171717]/30 hover:shadow-md"
+              className="group flex flex-col border border-[#C9C4B8] bg-white transition-colors hover:border-[#1B1D22]"
             >
-              <div className="relative aspect-[16/10] overflow-hidden bg-[#ebe7df]">
+              <div className="relative aspect-[16/10] overflow-hidden bg-[#EAE6DD] border-b border-[#C9C4B8]">
                 <Image
                   src={article.image}
                   alt={article.title}
                   fill
                   sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
                 />
-                <span className="absolute left-3 top-3 rounded-full bg-white/90 backdrop-blur-sm border border-[#171717]/10 px-2.5 py-1 text-[10px] font-mono uppercase tracking-wider text-[#171717] shadow-xs">
+                <span className="absolute left-3 top-3 bg-[#F6F4EF] border border-[#C9C4B8] px-2.5 py-1 text-[10px] font-mono text-[#1B1D22]">
                   {article.category}
                 </span>
               </div>
 
               <div className="flex flex-1 flex-col p-6">
-                <h3 className="font-display text-lg font-medium leading-snug tracking-tight text-[#171717] group-hover:text-[#0052a3] transition-colors">
+                <h3 className="font-serif text-xl font-normal leading-snug tracking-tight text-[#1B1D22] group-hover:text-[#3D5AFE] transition-colors">
                   {article.title}
                 </h3>
-                <p className="mt-3 flex-1 text-xs leading-relaxed text-[#595959] line-clamp-3">
+                <p className="mt-3 flex-1 text-xs leading-relaxed text-[#1B1D22]/70 line-clamp-3 font-sans">
                   {article.excerpt}
                 </p>
-                <div className="mt-6 flex items-center justify-between border-t border-[#171717]/8 pt-4 text-[11px] font-mono uppercase tracking-wider text-[#737373] group-hover:text-[#171717]">
+                <div className="mt-6 flex items-center justify-between border-t border-[#C9C4B8] pt-4 text-xs font-mono text-[#1B1D22]/60 group-hover:text-[#3D5AFE] transition-colors">
                   <span>Lire l&apos;analyse</span>
-                  <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 </div>
               </div>
             </Link>

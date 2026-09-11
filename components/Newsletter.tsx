@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Mail, ArrowRight, ArrowUpRight, CheckCircle2, Sparkles, AlertCircle } from "lucide-react";
+import { Mail, CheckCircle2, AlertCircle } from "lucide-react";
 
 export default function Newsletter() {
   const [email, setEmail] = useState("");
@@ -55,30 +55,28 @@ export default function Newsletter() {
   };
 
   return (
-    <section className="bg-[#fbf9f5] px-4 py-16 sm:px-6 sm:py-20 lg:px-8 border-t border-[#171717]/10">
-      <div className="mx-auto max-w-[1280px] rounded-3xl border border-[#171717]/15 bg-[#f4efe6] px-6 py-12 sm:px-12 sm:py-16 lg:px-16 shadow-xs">
-        <div className="mx-auto max-w-3xl text-center">
-          <div className="inline-flex items-center gap-3 text-xs font-mono uppercase tracking-widest text-[#737373]">
-            <span className="text-[#171717] font-semibold">[ 11 / DISPATCH MENSUEL ]</span>
-            <span>—</span>
-            <span>Veille &amp; Stratégie</span>
-          </div>
+    <section className="bg-[#F6F4EF] px-4 py-20 sm:px-6 sm:py-28 lg:px-10 border-b border-[#C9C4B8]">
+      <div className="mx-auto max-w-[1100px] border border-[#C9C4B8] bg-white p-8 sm:p-14 lg:p-16">
+        <div className="mx-auto max-w-2xl text-center">
+          <p className="text-xs font-mono text-[#1B1D22]/60">
+            Dispatch mensuel · Veille &amp; Stratégie
+          </p>
 
-          <h2 className="mt-4 font-display text-2xl sm:text-3xl lg:text-4xl font-light tracking-[-0.03em] text-[#171717]">
-            Des réflexions concrètes sur l&apos;ingénierie et le design, <span className="italic font-normal">directement dans votre boîte</span>
+          <h2 className="mt-4 font-serif text-2xl sm:text-3xl lg:text-4xl font-normal tracking-tight text-[#1B1D22]">
+            Des réflexions concrètes sur l&apos;ingénierie et le design, <span className="italic">directement dans votre boîte</span>
           </h2>
 
-          <p className="mt-4 text-sm sm:text-base text-[#4b4b4b] font-light leading-relaxed max-w-xl mx-auto">
+          <p className="mt-4 text-sm sm:text-base text-[#1B1D22]/70 leading-relaxed font-sans max-w-xl mx-auto">
             Analyses de cas réels, retours d&apos;expérience sur la conversion et méthodologie de projet. Sans jargon commercial, ni promotion agressive.
           </p>
 
           <div className="mt-8">
             {submitted ? (
-              <div className="mx-auto flex max-w-lg flex-col items-center gap-3 rounded-2xl border border-[#171717]/15 bg-white p-6 text-center text-[#171717] shadow-sm">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-100 text-emerald-800">
+              <div className="mx-auto flex max-w-lg flex-col items-center gap-3 border border-[#C9C4B8] bg-[#F6F4EF] p-6 text-center text-[#1B1D22]">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#3D5AFE]/10 text-[#3D5AFE]">
                   <CheckCircle2 className="h-5 w-5 shrink-0" />
                 </div>
-                <p className="text-sm font-medium leading-relaxed text-[#171717]">
+                <p className="text-sm font-medium leading-relaxed font-sans">
                   {feedbackMessage || "C'est noté ! Merci pour votre confiance, vos premières analyses arrivent bientôt."}
                 </p>
                 <button
@@ -87,7 +85,7 @@ export default function Newsletter() {
                     setSubmitted(false);
                     setFeedbackMessage(null);
                   }}
-                  className="mt-2 text-xs font-mono uppercase tracking-wider text-[#737373] underline hover:text-[#171717] transition-colors"
+                  className="mt-2 text-xs font-mono text-[#3D5AFE] underline hover:text-[#1B1D22] transition-colors"
                 >
                   Inscrire une autre adresse
                 </button>
@@ -95,7 +93,7 @@ export default function Newsletter() {
             ) : (
               <div className="mx-auto max-w-md">
                 {errorMessage && (
-                  <div className="mb-3 flex items-center justify-center gap-2 rounded-xl border border-red-200 bg-red-50 px-4 py-2.5 text-xs font-medium text-red-800">
+                  <div className="mb-4 flex items-center justify-center gap-2 border border-red-300 bg-red-50 px-4 py-2.5 text-xs text-red-800">
                     <AlertCircle className="h-4 w-4 shrink-0 text-red-600" />
                     <span>{errorMessage}</span>
                   </div>
@@ -131,7 +129,7 @@ export default function Newsletter() {
                   </div>
 
                   <div className="relative flex-1">
-                    <Mail className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#737373]" />
+                    <Mail className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#1B1D22]/40" />
                     <input
                       type="email"
                       required
@@ -139,35 +137,28 @@ export default function Newsletter() {
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="votre@email.com"
                       aria-label="Votre adresse e-mail pour la newsletter"
-                      className="w-full rounded-full border border-[#171717]/20 bg-white px-11 py-3 text-sm text-[#171717] placeholder-[#737373] transition-colors focus:border-[#171717] focus:outline-none shadow-xs"
+                      className="w-full border border-[#C9C4B8] bg-white px-11 py-3 text-sm text-[#1B1D22] placeholder-[#1B1D22]/40 transition-colors focus:border-[#1B1D22] focus:outline-none"
                     />
                   </div>
 
                   <button
                     type="submit"
                     disabled={loading}
-                    className="inline-flex items-center justify-center gap-2 rounded-full bg-[#171717] px-6 py-3 text-xs font-mono uppercase tracking-wider text-white shadow-sm transition-all hover:bg-black hover:shadow active:scale-95 disabled:opacity-70"
+                    className="inline-flex items-center justify-center bg-[#1B1D22] px-7 py-3 text-xs font-mono text-white transition-colors hover:bg-[#3D5AFE] disabled:opacity-70 shrink-0"
                   >
-                    {loading ? (
-                      "Inscription..."
-                    ) : (
-                      <>
-                        <span>S&apos;inscrire</span>
-                        <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={2} />
-                      </>
-                    )}
+                    {loading ? "Inscription..." : "S'inscrire"}
                   </button>
                 </form>
               </div>
             )}
           </div>
 
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-4 text-center text-xs font-mono text-[#737373]">
-            <span>[ GRATUIT ]</span>
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-4 text-center text-xs font-mono text-[#1B1D22]/50">
+            <span>Gratuit</span>
             <span>·</span>
-            <span>[ 1 E-MAIL / 15 JOURS ]</span>
+            <span>Un email tous les 15 jours</span>
             <span>·</span>
-            <span>[ 0 SPAM / DÉSINSCRIPTION EN 1 CLIC ]</span>
+            <span>Désinscription immédiate</span>
           </div>
         </div>
       </div>

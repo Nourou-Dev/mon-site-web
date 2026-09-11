@@ -128,21 +128,21 @@ const TECH_DATA = [
 
 export default function TechStack() {
   return (
-    <section id="outils" className="relative w-full bg-[#fbf9f5] py-20 sm:py-28 lg:py-32 border-b border-[#171717]/8">
+    <section id="outils" className="relative w-full bg-[#F6F4EF] py-20 sm:py-28 lg:py-32 border-b border-[#C9C4B8]">
       <div className="mx-auto max-w-[1360px] px-4 sm:px-6 lg:px-10">
         
         {/* En-tête de section */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-12 border-b border-[#171717]/10">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-12 border-b border-[#C9C4B8]">
           <div>
-            <span className="text-xs font-mono font-bold uppercase tracking-[0.2em] text-[#6b7280]">
-              [ 09 / INGÉNIERIE &amp; TECHNOLOGIES ]
+            <span className="text-xs font-mono text-[#4B4D54]">
+              09 / Ingénierie &amp; technologies éprouvées
             </span>
-            <h2 className="mt-4 font-display text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-[#171717] max-w-[640px]">
+            <h2 className="mt-4 font-display text-3xl sm:text-4xl lg:text-5xl font-light tracking-tight text-[#1B1D22] max-w-[640px]">
               Une stack moderne, robuste et pérenne.
             </h2>
           </div>
-          <p className="max-w-[400px] text-sm text-[#4b5563] leading-relaxed">
-            Pas d&apos;outils gadgets ni d&apos;automatisation aveugle. Je sélectionne rigoureusement les technologies éprouvées par les leaders de l&apos;industrie pour assurer la longévité de votre investissement.
+          <p className="max-w-[400px] text-sm text-[#4B4D54] leading-relaxed font-light">
+            Pas d&apos;outils gadgets ni d&apos;artifice. Je sélectionne rigoureusement les technologies éprouvées pour assurer la rapidité et la longévité de votre investissement.
           </p>
         </div>
 
@@ -153,25 +153,25 @@ export default function TechStack() {
             return (
               <div
                 key={tech.name}
-                className="flex flex-col justify-between rounded-3xl border border-[#171717]/8 bg-white p-6 sm:p-8 shadow-sm hover:shadow-md transition-shadow"
+                className="flex flex-col justify-between rounded-2xl border border-[#C9C4B8] bg-white p-6 sm:p-8 shadow-2xs hover:border-[#1B1D22]/40 transition-colors"
               >
                 <div>
-                  <div className="flex items-center justify-between pb-4 border-b border-[#171717]/6">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#f8f9fa] border border-[#171717]/8 shadow-sm">
-                      <Logo className="h-8 w-8" />
+                  <div className="flex items-center justify-between pb-4 border-b border-[#C9C4B8]/40">
+                    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#F6F4EF] border border-[#C9C4B8]">
+                      <Logo className="h-7 w-7" />
                     </div>
-                    <span className="text-[10px] font-mono font-semibold uppercase tracking-wider text-[#6b7280]">
+                    <span className="text-xs font-mono text-[#4B4D54]">
                       {tech.category}
                     </span>
                   </div>
 
-                  <h3 className="mt-5 font-display text-xl font-bold text-[#171717]">
+                  <h3 className="mt-5 font-display text-xl font-medium text-[#1B1D22]">
                     {tech.name}
                   </h3>
-                  <p className="mt-1 text-xs font-medium text-[#0052a3]">
+                  <p className="mt-1 text-xs font-medium text-[#3D5AFE]">
                     {tech.role}
                   </p>
-                  <p className="mt-3 text-xs leading-relaxed text-[#4b5563]">
+                  <p className="mt-3 text-xs leading-relaxed text-[#4B4D54] font-light">
                     {tech.benefit}
                   </p>
                 </div>

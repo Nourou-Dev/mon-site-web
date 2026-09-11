@@ -35,52 +35,46 @@ const REAL_TESTIMONIALS = [
 
 export default function Testimonials() {
   return (
-    <section id="avis" className="relative w-full bg-[#fbf9f5] py-20 sm:py-28 lg:py-32 border-b border-[#171717]/8">
+    <section id="avis" className="relative w-full bg-[#F6F4EF] py-20 sm:py-28 lg:py-32 border-b border-[#C9C4B8]">
       <div className="mx-auto max-w-[1360px] px-4 sm:px-6 lg:px-10">
         
         {/* En-tête de section */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-12 border-b border-[#171717]/10">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-12 border-b border-[#C9C4B8]">
           <div>
-            <span className="text-xs font-mono font-bold uppercase tracking-[0.2em] text-[#6b7280]">
-              [ 07 / TÉMOIGNAGES &amp; RETOURS D&apos;EXPÉRIENCE ]
+            <span className="text-xs font-mono text-[#4B4D54]">
+              07 / Retours d&apos;expérience &amp; témoignages
             </span>
-            <h2 className="mt-4 font-display text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-[#171717] max-w-[640px]">
+            <h2 className="mt-4 font-display text-3xl sm:text-4xl lg:text-5xl font-light tracking-tight text-[#1B1D22] max-w-[640px]">
               La confiance ne se décrète pas. Elle se mesure aux résultats.
             </h2>
           </div>
-          <p className="max-w-[360px] text-sm text-[#4b5563] leading-relaxed">
+          <p className="max-w-[360px] text-sm text-[#4B4D54] leading-relaxed font-light">
             Retours authentiques de dirigeants et professionnels qui ont choisi une approche sur mesure pour leur présence en ligne.
           </p>
         </div>
 
         {/* Témoignage vedette (Grand format éditorial) */}
-        <div className="mt-12 rounded-3xl border border-[#171717]/10 bg-white p-8 sm:p-12 lg:p-14 shadow-sm">
-          <div className="flex items-center gap-1 text-amber-500 mb-6" aria-label="Note de 5 sur 5">
-            {[...Array(5)].map((_, i) => (
-              <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />
-            ))}
-          </div>
-
-          <blockquote className="font-display text-xl sm:text-2xl lg:text-3xl font-medium leading-snug text-[#171717] tracking-tight">
+        <div className="mt-12 rounded-2xl border border-[#C9C4B8] bg-white p-8 sm:p-12 lg:p-14 shadow-2xs">
+          <blockquote className="font-display text-xl sm:text-2xl lg:text-3xl font-light leading-snug text-[#1B1D22] tracking-tight">
             &ldquo;{REAL_TESTIMONIALS[0].quote}&rdquo;
           </blockquote>
 
-          <div className="mt-8 pt-6 border-t border-[#171717]/8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="mt-8 pt-6 border-t border-[#C9C4B8]/40 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <p className="font-display text-lg font-bold text-[#171717]">
+              <p className="font-display text-lg font-medium text-[#1B1D22]">
                 {REAL_TESTIMONIALS[0].author}
               </p>
-              <p className="text-xs sm:text-sm text-[#6b7280]">
-                {REAL_TESTIMONIALS[0].role} · <span className="font-semibold text-[#171717]">{REAL_TESTIMONIALS[0].company}</span>
+              <p className="text-xs sm:text-sm text-[#4B4D54]">
+                {REAL_TESTIMONIALS[0].role} · <span className="font-medium text-[#1B1D22]">{REAL_TESTIMONIALS[0].company}</span>
               </p>
             </div>
 
             <div className="flex items-center gap-3 font-mono text-xs">
-              <span className="rounded-full bg-emerald-50 border border-emerald-500/20 px-3 py-1 font-bold text-emerald-700">
+              <span className="rounded-full bg-[#F6F4EF] border border-[#C9C4B8] px-3 py-1 font-mono text-xs text-[#1B1D22]">
                 {REAL_TESTIMONIALS[0].impact}
               </span>
-              <span className="text-[#9ca3af]">
-                [ {REAL_TESTIMONIALS[0].year} ]
+              <span className="text-[#4B4D54]">
+                {REAL_TESTIMONIALS[0].year}
               </span>
             </div>
           </div>
@@ -91,25 +85,24 @@ export default function Testimonials() {
           {REAL_TESTIMONIALS.slice(1).map((t) => (
             <div
               key={t.author}
-              className="flex flex-col justify-between rounded-3xl border border-[#171717]/8 bg-white/70 p-7 sm:p-8 backdrop-blur-sm shadow-sm"
+              className="flex flex-col justify-between rounded-2xl border border-[#C9C4B8] bg-white p-7 sm:p-8 shadow-2xs"
             >
               <div>
-                <div className="flex items-center gap-1 text-amber-500 mb-4" aria-label="Note de 5 sur 5">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
-                  ))}
-                </div>
-                <p className="text-sm sm:text-base leading-relaxed text-[#374151] italic">
+                <blockquote className="text-sm sm:text-base leading-relaxed text-[#4B4D54] font-light">
                   &ldquo;{t.quote}&rdquo;
-                </p>
+                </blockquote>
               </div>
 
-              <div className="mt-6 pt-4 border-t border-[#171717]/8 flex items-center justify-between">
+              <div className="mt-6 pt-5 border-t border-[#C9C4B8]/40 flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-bold text-[#171717]">{t.author}</p>
-                  <p className="text-xs text-[#6b7280]">{t.role}, {t.company}</p>
+                  <p className="font-display text-base font-medium text-[#1B1D22]">
+                    {t.author}
+                  </p>
+                  <p className="text-xs text-[#4B4D54]">
+                    {t.role} · <span className="font-medium text-[#1B1D22]">{t.company}</span>
+                  </p>
                 </div>
-                <span className="text-[11px] font-mono font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-500/20">
+                <span className="text-xs font-mono text-[#3D5AFE]">
                   {t.impact}
                 </span>
               </div>

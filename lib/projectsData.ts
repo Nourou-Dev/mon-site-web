@@ -70,7 +70,7 @@ export const allProjects: ProjectItem[] = [
     desc: "Conception d'une landing page épurée pour le lancement d'une solution de gestion d'entreprise, optimisée pour la vitesse et la génération de démos.",
     image: "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1200&q=85",
     tags: ["Landing page", "Next.js", "Copywriting"],
-    tools: ["Next.js", "Figma", "Tailwind CSS", "Intelligence Artificielle"],
+    tools: ["Next.js", "Figma", "Tailwind CSS", "TypeScript"],
     challenge:
       "La proposition de valeur du logiciel était trop technique et complexe. Les décideurs B2B ne comprenaient pas en quoi la solution leur faisait gagner du temps et quittaient la page sans réserver de démo.",
     solution:
@@ -138,7 +138,7 @@ export const allProjects: ProjectItem[] = [
     desc: "Identité visuelle et site vitrine moderne reflétant l'audace et l'exigence esthétique d'un collectif de créatifs.",
     image: "https://images.unsplash.com/photo-1558655146-9f40138edfeb?auto=format&fit=crop&w=1200&q=85",
     tags: ["Direction artistique", "Web design", "Motion"],
-    tools: ["Figma", "Affinity", "CapCut", "Next.js"],
+    tools: ["Figma", "Affinity", "Tailwind CSS", "Next.js"],
     challenge:
       "L'agence voulait rompre avec les templates standards d'agences et affirmer une présence mémorable, audacieuse mais parfaitement accessible et lisible.",
     solution:

@@ -34,20 +34,20 @@ const PROCESS_STEPS = [
 
 export default function ClientSpace() {
   return (
-    <section id="process" className="relative w-full bg-[#fbf9f5] py-20 sm:py-28 lg:py-32 border-b border-[#171717]/8">
+    <section id="process" className="relative w-full bg-[#F6F4EF] py-20 sm:py-28 lg:py-32 border-b border-[#C9C4B8]">
       <div className="mx-auto max-w-[1360px] px-4 sm:px-6 lg:px-10">
         
         {/* En-tête de section */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-12 border-b border-[#171717]/10">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-12 border-b border-[#C9C4B8]">
           <div>
-            <span className="text-xs font-mono font-bold uppercase tracking-[0.2em] text-[#6b7280]">
-              [ 08 / PROCESSUS DE COLLABORATION ]
+            <span className="text-xs font-mono text-[#4B4D54]">
+              08 / Processus de collaboration &amp; suivi
             </span>
-            <h2 className="mt-4 font-display text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-[#171717] max-w-[640px]">
+            <h2 className="mt-4 font-display text-3xl sm:text-4xl lg:text-5xl font-light tracking-tight text-[#1B1D22] max-w-[640px]">
               Une méthode rigoureuse, sans mauvaise surprise.
             </h2>
           </div>
-          <p className="max-w-[380px] text-sm text-[#4b5563] leading-relaxed">
+          <p className="max-w-[380px] text-sm text-[#4B4D54] leading-relaxed font-light">
             De la première discussion jusqu&apos;à la mise en ligne, vous suivez chaque étape en toute transparence via votre espace client dédié.
           </p>
         </div>
@@ -57,29 +57,29 @@ export default function ClientSpace() {
           {PROCESS_STEPS.map((step) => (
             <div
               key={step.step}
-              className="flex flex-col justify-between rounded-3xl border border-[#171717]/10 bg-white p-7 shadow-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+              className="flex flex-col justify-between rounded-2xl border border-[#C9C4B8] bg-white p-7 shadow-2xs hover:border-[#1B1D22]/40 transition-colors"
             >
               <div>
-                <div className="flex items-center justify-between pb-4 border-b border-[#171717]/8 font-mono text-xs">
-                  <span className="font-bold text-[#171717]">[ {step.step} ]</span>
-                  <span className="text-[#6b7280]">{step.duration}</span>
+                <div className="flex items-center justify-between pb-4 border-b border-[#C9C4B8]/40 font-mono text-xs">
+                  <span className="text-[#1B1D22] font-medium">{step.step}</span>
+                  <span className="text-[#4B4D54]">{step.duration}</span>
                 </div>
 
-                <span className="mt-4 inline-block text-[10px] font-mono uppercase font-semibold text-[#0052a3]">
+                <span className="mt-4 inline-block text-xs font-mono text-[#3D5AFE]">
                   {step.phase}
                 </span>
 
-                <h3 className="mt-1 font-display text-lg font-bold text-[#171717] leading-snug">
+                <h3 className="mt-1 font-display text-lg font-medium text-[#1B1D22] leading-snug">
                   {step.title}
                 </h3>
 
-                <p className="mt-3 text-xs leading-relaxed text-[#4b5563]">
+                <p className="mt-3 text-xs leading-relaxed text-[#4B4D54] font-light">
                   {step.desc}
                 </p>
               </div>
 
-              <div className="mt-6 pt-4 border-t border-[#171717]/6 flex items-center gap-1.5 text-[11px] font-mono text-emerald-700">
-                <Check className="h-3.5 w-3.5" strokeWidth={2.5} />
+              <div className="mt-6 pt-4 border-t border-[#C9C4B8]/40 flex items-center gap-2 text-xs font-mono text-[#1B1D22]">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#3D5AFE]" />
                 <span>Validation conjointe</span>
               </div>
             </div>
@@ -87,31 +87,30 @@ export default function ClientSpace() {
         </div>
 
         {/* Bannière mise en avant Espace Client */}
-        <div className="mt-12 rounded-3xl border border-[#171717]/12 bg-[#171717] p-8 sm:p-12 text-white shadow-xl">
+        <div className="mt-12 rounded-2xl border border-[#1B1D22] bg-[#1B1D22] p-8 sm:p-12 text-[#F6F4EF]">
           <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
             <div>
-              <span className="text-xs font-mono font-bold uppercase tracking-widest text-emerald-400">
+              <span className="text-xs font-mono text-[#3D5AFE]">
                 Inclus avec chaque projet
               </span>
-              <h3 className="mt-2 font-display text-2xl sm:text-3xl font-bold text-white tracking-tight">
+              <h3 className="mt-2 font-display text-2xl sm:text-3xl font-light text-[#F6F4EF] tracking-tight">
                 Votre Espace Client Privé &amp; Sécurisé
               </h3>
-              <p className="mt-3 text-sm leading-relaxed text-white/80 max-w-[560px]">
+              <p className="mt-3 text-sm leading-relaxed text-[#F6F4EF]/80 max-w-[560px] font-light">
                 Accédez 24h/24 à votre portail dédié pour suivre l&apos;avancement de chaque jalon en direct, échanger par messagerie sécurisée, consulter vos livrables Figma et récupérer vos codes sources.
               </p>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-stretch lg:items-center justify-end gap-4">
+            <div className="flex flex-col sm:flex-row items-stretch lg:items-center justify-end gap-3.5">
               <Link
                 href="/app"
-                className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-xs font-bold uppercase tracking-wider text-[#171717] shadow-md transition-all hover:bg-[#f5f5f5] active:scale-95 text-center"
+                className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-white px-6 py-2.5 text-xs font-medium text-[#1B1D22] shadow-2xs hover:bg-[#F6F4EF] transition-all text-center"
               >
                 <span>Aperçu Espace Client</span>
-                <ArrowUpRight className="h-4 w-4 text-[#171717]" />
               </Link>
               <Link
                 href="/contact"
-                className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-6 py-3 text-xs font-bold uppercase tracking-wider text-white transition-all hover:bg-white/20 active:scale-95 text-center"
+                className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-white/20 bg-white/10 px-6 py-2.5 text-xs font-medium text-white hover:bg-white/20 transition-all text-center"
               >
                 <span>Lancer votre projet</span>
               </Link>
