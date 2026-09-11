@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowRight, ChevronDown } from "lucide-react";
+import { ArrowRight, ArrowUpRight, ChevronDown, HelpCircle } from "lucide-react";
 import { faqItems, site } from "@/lib/data";
 
 export default function FAQ() {
@@ -12,13 +12,14 @@ export default function FAQ() {
   };
 
   return (
-    <section id="faq" className="px-4 py-12 sm:px-6 sm:py-16 lg:px-8 lg:py-14">
-      <div className="mx-auto max-w-[1280px] rounded-[2rem] border border-[#171717]/5 bg-[#f3efe9] p-6 sm:p-8 lg:p-12">
+    <section id="faq" className="scroll-mt-[5.5rem] bg-white px-4 py-12 sm:px-6 sm:py-16 lg:px-8 lg:py-14">
+      <div className="mx-auto max-w-[1280px] rounded-[2rem] border border-[#171717]/8 bg-[#f8f9fa] p-6 sm:p-8 lg:p-12">
         <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
           <div className="flex flex-col justify-center">
             <div className="mx-auto w-full max-w-[440px] lg:mx-0">
-              <span className="inline-flex items-center rounded-full border border-[#171717]/10 bg-white/80 px-3.5 py-1.5 text-[0.7rem] font-medium uppercase tracking-[0.18em] text-[#171717] shadow-sm">
-                Questions & réponses
+              <span className="inline-flex items-center gap-2 rounded-full border border-[#171717]/10 bg-[#f4f6f8] px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-[#171717] shadow-sm">
+                <HelpCircle className="h-3.5 w-3.5 text-[#0060c3]" />
+                Questions &amp; Réponses
               </span>
 
               <h2 className="mt-6 max-w-[380px] font-black tracking-[-0.07em] text-[#171717]">
@@ -32,7 +33,7 @@ export default function FAQ() {
               </p>
             </div>
 
-            <div className="mt-8 rounded-[1.5rem] border border-[#171717]/8 bg-[#e9e2d8] p-5 sm:p-6">
+            <div className="mt-8 rounded-[1.5rem] border border-[#171717]/10 bg-white p-5 sm:p-6 shadow-sm">
               <p className="text-[0.7rem] font-medium uppercase tracking-[0.18em] text-[#171717]/65">
                 Encore une question ?
               </p>
@@ -42,10 +43,10 @@ export default function FAQ() {
               </p>
               <a
                 href={`mailto:${site.email}`}
-                className="focus-ring mt-6 inline-flex items-center gap-2 rounded-full bg-[#171717] px-5 py-3 text-sm font-semibold text-white transition-transform hover:-translate-y-0.5"
+                className="focus-ring mt-6 inline-flex items-center gap-2 rounded-full bg-[#0060c3] px-5 py-3 text-sm font-semibold text-white shadow-md shadow-[#0060c3]/20 transition-all hover:bg-[#0050a5] hover:-translate-y-0.5"
               >
                 Posez votre question
-                <ArrowRight className="h-4 w-4" />
+                <ArrowUpRight className="h-4 w-4" strokeWidth={2.5} />
               </a>
             </div>
           </div>
@@ -62,13 +63,13 @@ export default function FAQ() {
                     onClick={() => toggleItem(i)}
                     aria-expanded={isOpen}
                     aria-controls={panelId}
-                    className="focus-ring flex w-full items-center justify-between gap-4 px-5 py-4 text-left sm:px-6 sm:py-5"
+                    className="focus-ring flex w-full items-start justify-between gap-4 px-5 py-4 text-left sm:items-center sm:px-6 sm:py-5"
                   >
                     <span className="text-[1.02rem] font-semibold leading-7 text-[#171717] sm:text-[1.1rem]">
                       {item.question}
                     </span>
                     <span
-                      className={`flex h-8 w-8 items-center justify-center rounded-full border border-[#171717]/8 bg-[#f3efe9] text-[#171717] transition-all duration-300 ${
+                      className={`mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-[#171717]/8 bg-[#f4f6f8] text-[#171717] transition-all duration-300 ${
                         isOpen ? "rotate-180 bg-[#171717] text-white" : ""
                       }`}
                     >

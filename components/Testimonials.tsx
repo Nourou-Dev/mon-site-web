@@ -24,30 +24,38 @@ const TESTIMONIALS = [
   },
 ];
 
-const duplicatedTestimonials = [...TESTIMONIALS, ...TESTIMONIALS];
+const duplicatedTestimonials = [
+  ...TESTIMONIALS,
+  ...TESTIMONIALS,
+  ...TESTIMONIALS,
+  ...TESTIMONIALS,
+];
+
+import { MessageSquareQuote } from "lucide-react";
 
 export default function Testimonials() {
   return (
-    <section id="avis" className="px-4 py-12 sm:px-6 sm:py-16 lg:px-8 lg:py-14">
-      <div className="mx-auto max-w-[1280px] rounded-[2rem] border border-[#171717]/5 bg-[#f3efe9] p-6 sm:p-8 lg:p-12">
-        <div className="mb-10 flex flex-col items-center text-center">
-          <span className="inline-flex items-center rounded-full border border-[#171717]/10 bg-white/80 px-3.5 py-1.5 text-[0.7rem] font-medium uppercase tracking-[0.18em] text-[#171717] shadow-sm">
+    <section id="avis" className="scroll-mt-[5.5rem] bg-white px-4 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-14">
+      <div className="mx-auto max-w-[1280px] rounded-[2rem] border border-[#171717]/8 bg-[#f8f9fa] p-5 sm:p-8 lg:p-12">
+        <div className="mb-8 sm:mb-10 flex flex-col items-center text-center">
+          <span className="inline-flex items-center gap-2 rounded-full border border-[#171717]/10 bg-[#f4f6f8] px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-[#171717] shadow-sm">
+            <MessageSquareQuote className="h-3.5 w-3.5 text-[#0060c3]" />
             Témoignages
           </span>
-          <h2 className="mt-5 max-w-[18ch] font-black tracking-[-0.07em] text-[#171717]">
+          <h2 className="mt-4 sm:mt-5 max-w-[18ch] font-black tracking-[-0.07em] text-[#171717]">
             Ce que mes clients disent
           </h2>
-          <p className="mt-4 max-w-[42rem] text-base leading-7 text-[#4b4b4b]">
+          <p className="mt-3 sm:mt-4 max-w-[42rem] text-[0.95rem] sm:text-base leading-relaxed sm:leading-7 text-[#4b4b4b]">
             Des collaborations claires, des décisions utiles et une présence en ligne qui inspire confiance.
           </p>
         </div>
 
         <div className="overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
-          <div className="testimonials-marquee flex w-max items-stretch gap-5">
+          <div className="testimonials-marquee flex w-max items-stretch gap-4 sm:gap-5">
             {duplicatedTestimonials.map((testimonial, index) => (
               <article
                 key={`${testimonial.name}-${index}`}
-                className="flex h-full w-[320px] shrink-0 flex-col rounded-[1.6rem] border border-[#171717]/8 bg-white p-5 shadow-[0_12px_28px_rgba(21,20,27,0.03)] sm:w-[360px] sm:p-6"
+                className="flex h-full w-[min(20rem,calc(100vw-3.5rem))] shrink-0 flex-col rounded-[1.6rem] border border-[#171717]/8 bg-white p-5 shadow-[0_12px_28px_rgba(21,20,27,0.03)] sm:w-[360px] sm:p-6"
               >
                 <div className="flex items-center gap-3 border-b border-[#171717]/8 pb-4">
                   <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#171717] text-sm font-bold text-white">

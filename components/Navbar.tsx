@@ -1,12 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Menu, X, ArrowUpRight } from "lucide-react";
 import { navLinks, site } from "@/lib/data";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -15,8 +18,33 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Fermer automatiquement le menu si l'écran repasse en mode desktop
   useEffect(() => {
-    document.body.style.overflow = open ? "hidden" : "";
+    const onResize = () => {
+      if (window.innerWidth >= 1024) {
+        setOpen(false);
+      }
+    };
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
+  // Fermer le menu sur la touche Échap
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, []);
+
+  // Gestion propre du scroll du body
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
     return () => {
       document.body.style.overflow = "";
     };
@@ -25,74 +53,100 @@ export default function Navbar() {
   return (
     <header className="fixed inset-x-0 top-0 z-50">
       <div
-        className={`flex w-full items-center justify-between border-b border-[#171717]/10 bg-[#f4efe9] px-4 py-3.5 transition-all duration-200 sm:px-6 lg:px-8 ${
+        className={`flex w-full items-center justify-between border-b border-[#171717]/10 bg-white/95 backdrop-blur-md px-4 py-3.5 transition-all duration-200 sm:px-6 lg:px-8 ${
           scrolled ? "shadow-[0_12px_30px_-20px_rgba(23,23,23,0.25)]" : ""
         }`}
       >
-        <a
-          href="#accueil"
-          className="flex items-center gap-1 text-lg font-extrabold tracking-[-0.05em] text-[#171717]"
+        <Link
+          href="/"
+          onClick={() => setOpen(false)}
+          className="flex min-w-0 items-center gap-1 text-[0.95rem] font-extrabold tracking-[-0.05em] text-[#171717] sm:text-lg"
         >
-          <span>Nourou Dine</span>
-          <span className="text-[#f07a42]">AMANDOU</span>
-        </a>
+          <span className="truncate">Nourou Dine</span>
+          <span className="shrink-0 text-[#0060c3]">AMANDOU</span>
+        </Link>
 
-        <nav className="hidden items-center gap-8 lg:flex">
+        <nav className="hidden items-center gap-7 lg:flex">
           {navLinks.map((link) => (
-            <a
+            <Link
               key={link.href}
               href={link.href}
-              className="text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-[#171717]/70 transition-colors duration-200 hover:text-[#171717]"
+              className="group relative py-1 text-[0.74rem] font-bold uppercase tracking-[0.14em] text-[#171717] transition-colors duration-200"
             >
               {link.label}
-            </a>
+              <span className="absolute -bottom-1 left-0 h-[2px] w-0 rounded-full bg-[#0060c3] transition-all duration-300 ease-out group-hover:w-full" />
+            </Link>
           ))}
         </nav>
 
         <div className="flex items-center gap-2">
-          <a
-            href="#contact"
-            className="hidden items-center gap-2 rounded-full bg-[#171717] px-6 py-3.5 text-[0.95rem] font-semibold text-white transition-transform duration-200 hover:-translate-y-0.5 sm:inline-flex"
+          <Link
+            href="/contact"
+            className="hidden items-center gap-2 rounded-full bg-[#0060c3] px-6 py-3.5 text-[0.95rem] font-semibold text-white shadow-md shadow-[#0060c3]/20 transition-all duration-200 hover:bg-[#0050a5] hover:-translate-y-0.5 active:scale-95 lg:inline-flex"
           >
             Discutons de votre projet
             <ArrowUpRight className="h-4 w-4" strokeWidth={2.5} />
-          </a>
+          </Link>
           <button
             type="button"
             aria-label={open ? "Fermer le menu" : "Ouvrir le menu"}
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
-            className="border border-[#171717]/10 bg-white p-2.5 text-[#171717] lg:hidden"
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[#171717]/10 bg-white p-2 text-[#171717] transition-all hover:bg-[#f4f6f8] active:scale-95 lg:hidden"
           >
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
         </div>
       </div>
 
+      {/* Backdrop sombre fermant le menu au clic extérieur */}
       {open && (
-        <div className="w-full border-b border-[#171717]/10 bg-[#f4efe9] p-5 lg:hidden">
-          <nav className="flex flex-col gap-1">
-            {navLinks.map((link) => (
-              <a
+        <div
+          onClick={() => setOpen(false)}
+          className="fixed inset-0 top-[57px] z-40 bg-black/40 backdrop-blur-sm transition-opacity lg:hidden"
+          aria-hidden="true"
+        />
+      )}
+
+      {/* Tiroir menu mobile animé */}
+      <div
+        className={`relative z-50 w-full overflow-hidden border-b border-[#171717]/10 bg-white transition-all duration-300 ease-in-out lg:hidden ${
+          open
+            ? "max-h-[calc(100dvh-4rem)] opacity-100 shadow-2xl overflow-y-auto"
+            : "max-h-0 opacity-0 pointer-events-none"
+        }`}
+      >
+        <nav className="flex flex-col gap-1.5 p-5 pb-6">
+          {navLinks.map((link) => {
+            const isActive =
+              pathname === link.href ||
+              (link.href !== "/" && pathname.startsWith(link.href));
+
+            return (
+              <Link
                 key={link.href}
                 href={link.href}
                 onClick={() => setOpen(false)}
-                className="px-3 py-3 text-[0.8rem] font-semibold uppercase tracking-[0.14em] text-[#171717]/80 transition-colors hover:bg-white hover:text-[#171717]"
+                className={`rounded-xl px-4 py-3 text-[0.84rem] uppercase tracking-[0.14em] text-[#171717] transition-all ${
+                  isActive
+                    ? "bg-[#f4f6f8] font-extrabold shadow-sm border border-[#171717]/5"
+                    : "font-semibold hover:bg-[#f4f6f8]"
+                }`}
               >
                 {link.label}
-              </a>
-            ))}
-            <a
-              href="#contact"
-              onClick={() => setOpen(false)}
-              className="mt-2 inline-flex items-center justify-center gap-2 rounded-full bg-[#171717] px-6 py-3.5 text-[0.95rem] font-semibold text-white"
-            >
-              Discutons de votre projet
-              <ArrowUpRight className="h-4 w-4" strokeWidth={2.5} />
-            </a>
-          </nav>
-        </div>
-      )}
+              </Link>
+            );
+          })}
+          <Link
+            href="/contact"
+            onClick={() => setOpen(false)}
+            className="mt-3 inline-flex items-center justify-center gap-2 rounded-full bg-[#0060c3] px-6 py-3.5 text-[0.95rem] font-semibold text-white shadow-md shadow-[#0060c3]/20 transition-transform active:scale-95 hover:bg-[#0050a5]"
+          >
+            Discutons de votre projet
+            <ArrowUpRight className="h-4 w-4" strokeWidth={2.5} />
+          </Link>
+        </nav>
+      </div>
     </header>
   );
 }

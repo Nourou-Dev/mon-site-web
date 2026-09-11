@@ -1,5 +1,6 @@
 import Image from "next/image";
-import { ArrowUpRight, MessageCircle } from "lucide-react";
+import Link from "next/link";
+import { ArrowRight, ArrowUpRight, MessageCircle, Palette } from "lucide-react";
 import { heroStats, site } from "@/lib/data";
 
 const brands = [
@@ -91,47 +92,46 @@ const brands = [
 
 export default function Hero() {
   return (
-    <section id="accueil" className="w-full pt-0">
-      <div className="relative w-full bg-[#f5f1ed] px-0 py-10 sm:py-14 lg:py-20">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(215,107,69,0.08),transparent_22%),radial-gradient(circle_at_bottom_right,_rgba(0,0,0,0.02),transparent_18%)]" />
+    <section id="accueil" className="w-full scroll-mt-[5.5rem] bg-white">
+      <div className="relative w-full bg-white px-0 pb-10 pt-[5.5rem] sm:pb-14 lg:pb-20">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(0,96,195,0.08),transparent_22%),radial-gradient(circle_at_bottom_right,_rgba(0,0,0,0.02),transparent_18%)]" />
 
         <div className="relative mx-auto max-w-[1140px] px-4 sm:px-6 lg:px-8">
           <div className="grid gap-6 md:grid-cols-[1.02fr_0.98fr] md:items-center">
             <div>
-              <span className="inline-flex items-center gap-2 rounded-full border border-[#1a1a1a]/10 bg-white/80 px-3.5 py-1.5 text-[0.7rem] font-medium uppercase tracking-[0.18em] text-[#171717] shadow-sm">
-                {/* <span className="h-2 w-2 rounded-full bg-[#d76b45]" /> */}
-                GRAPHISTE & WEB DESIGNER
+              <span className="inline-flex items-center gap-2 rounded-full border border-[#171717]/10 bg-[#f4f6f8] px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-[#171717] shadow-sm">
+                <Palette className="h-3.5 w-3.5 text-[#0060c3]" />
+                Graphiste &amp; Web Designer
               </span>
 
               <h1 className="mt-7 max-w-[14ch] font-black tracking-[-0.07em] text-[#171717]">
                 Des sites qui font choisir votre marque
-                {/* <span className="block">qui font choisir</span>
-                <span className="block">votre marque</span> */}
               </h1>
 
               <p className="mt-6 max-w-[34rem] text-lg leading-7 text-[#4b4b4b] lg:max-w-[28rem]">
                 Des sites premium, clairs et convertisseurs pour les entrepreneurs qui veulent gagner en crédibilité.
               </p>
 
-              <div className="mt-8 flex flex-wrap items-center gap-3">
-                <a
-                  href="#contact"
-                  className="inline-flex items-center gap-2 rounded-full bg-[#171717] px-6 py-3.5 text-[0.95rem] font-semibold text-white transition-transform duration-200 hover:-translate-y-0.5"
+              <div className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                <Link
+                  href="/contact"
+                  className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-full bg-[#0060c3] px-6 py-3.5 text-[0.95rem] font-semibold text-white shadow-lg shadow-[#0060c3]/25 transition-all duration-200 hover:bg-[#0050a5] hover:-translate-y-0.5 active:scale-95 text-center"
                 >
                   Discutons de votre projet
                   <ArrowUpRight className="h-4 w-4" strokeWidth={2.5} />
-                </a>
-                <a
-                  href="#realisations"
-                  className="inline-flex items-center gap-2 rounded-full border border-[#171717]/15 bg-white px-6 py-3.5 text-[0.95rem] font-semibold text-[#171717] transition-colors duration-200 hover:border-[#171717]/30"
+                </Link>
+                <Link
+                  href="/realisations"
+                  className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-full border border-[#171717]/15 bg-white px-6 py-3.5 text-[0.95rem] font-semibold text-[#171717] transition-colors duration-200 hover:border-[#171717]/30 text-center"
                 >
                   Voir mes réalisations
-                </a>
+                  <ArrowRight className="h-4 w-4" strokeWidth={2.2} />
+                </Link>
               </div>
 
             </div>
 
-            <div className="relative mx-auto flex w-full max-w-[28rem] flex-col items-center justify-center lg:mx-0">
+            <div className="relative mx-auto flex w-full max-w-[28rem] flex-col items-center justify-center lg:mx-0 lg:pb-20">
               <div className="relative flex flex-col items-center">
                 <Image
                   src="/media/nourou-portrait-transparent-2.png"
@@ -139,34 +139,35 @@ export default function Hero() {
                   width={760}
                   height={950}
                   priority
-                  className="relative z-10 h-[340px] w-auto object-contain drop-shadow-[0_22px_40px_rgba(0,0,0,0.12)] sm:h-[400px] lg:h-[460px]"
+                  sizes="(min-width: 1024px) 450px, (min-width: 640px) 390px, 340px"
+                  className="relative z-10 h-[min(54vw,340px)] w-auto max-w-full object-contain drop-shadow-[0_22px_40px_rgba(0,0,0,0.12)] sm:h-[390px] lg:h-[450px]"
                 />
               </div>
 
-              <div className="relative z-20 mt-4 grid w-full max-w-[24rem] grid-cols-3 gap-2 sm:gap-3 md:absolute md:left-1/2 md:top-[75%] md:mt-0 md:-translate-x-1/2">
-                <div className="flex h-20 w-full flex-col items-center justify-center rounded-[1.1rem] border border-[#171717]/10 bg-white/90 text-center shadow-[0_20px_40px_rgba(23,23,23,0.08)] backdrop-blur-sm">
-                  <span className="text-2xl font-black tracking-[-0.06em] text-[#171717]">4+</span>
-                  <span className="mt-1 text-[7px] uppercase tracking-[0.18em] text-[#4b4b4b]">Ans d'expériences</span>
+              <div className="relative z-20 mt-4 grid w-full max-w-[24rem] grid-cols-3 gap-1.5 sm:gap-3 lg:absolute lg:left-1/2 lg:top-[74%] lg:mt-0 lg:-translate-x-1/2">
+                <div className="flex min-h-[4.25rem] w-full flex-col items-center justify-center rounded-[1rem] sm:rounded-[1.1rem] border border-[#171717]/10 bg-white/90 px-1 py-1.5 sm:py-2 text-center shadow-[0_20px_40px_rgba(23,23,23,0.08)] backdrop-blur-sm sm:h-20">
+                  <span className="text-lg sm:text-2xl font-black tracking-[-0.06em] text-[#171717]">4+</span>
+                  <span className="mt-0.5 text-[8px] sm:text-[10px] uppercase leading-tight tracking-[0.04em] sm:tracking-[0.12em] text-[#4b4b4b]">Expérience</span>
                 </div>
 
-                <div className="flex h-20 w-full flex-col items-center justify-center rounded-[1.1rem] border border-[#171717]/10 bg-white/90 text-center shadow-[0_20px_40px_rgba(23,23,23,0.08)] backdrop-blur-sm">
-                  <span className="text-2xl font-black tracking-[-0.06em] text-[#171717]">10+</span>
-                  <span className="mt-1 text-[7px] uppercase tracking-[0.18em] text-[#4b4b4b]">Projets réalisés</span>
+                <div className="flex min-h-[4.25rem] w-full flex-col items-center justify-center rounded-[1rem] sm:rounded-[1.1rem] border border-[#171717]/10 bg-white/90 px-1 py-1.5 sm:py-2 text-center shadow-[0_20px_40px_rgba(23,23,23,0.08)] backdrop-blur-sm sm:h-20">
+                  <span className="text-lg sm:text-2xl font-black tracking-[-0.06em] text-[#171717]">10+</span>
+                  <span className="mt-0.5 text-[8px] sm:text-[10px] uppercase leading-tight tracking-[0.04em] sm:tracking-[0.12em] text-[#4b4b4b]">Projets livrés</span>
                 </div>
 
-                <div className="flex h-20 w-full flex-col items-center justify-center rounded-[1.1rem] border border-[#171717]/10 bg-[#d76b45] text-center text-white shadow-[0_20px_40px_rgba(215,107,69,0.25)]">
-                  <span className="text-2xl font-black tracking-[-0.06em]">92%</span>
-                  <span className="mt-1 text-[7px] uppercase tracking-[0.18em] text-white/90">Confiance clients</span>
+                <div className="flex min-h-[4.25rem] w-full flex-col items-center justify-center rounded-[1rem] sm:rounded-[1.1rem] border border-[#171717]/10 bg-[#0060c3] px-1 py-1.5 sm:py-2 text-center text-white shadow-[0_20px_40px_rgba(0,96,195,0.25)] sm:h-20">
+                  <span className="text-lg sm:text-2xl font-black tracking-[-0.06em]">92%</span>
+                  <span className="mt-0.5 text-[8px] sm:text-[10px] uppercase leading-tight tracking-[0.04em] sm:tracking-[0.12em] text-white/90">Satisfaction</span>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="relative mt-8 w-full border-t-0 bg-white/80 backdrop-blur-sm">
+        <div className="relative mt-8 w-full border-t-0 bg-white">
           <div className="overflow-hidden">
             <div className="brand-marquee flex min-w-max items-center gap-14 py-8 sm:gap-16 sm:py-9">
-              {[...brands, ...brands].map((brand, index) => (
+              {[...brands, ...brands, ...brands, ...brands].map((brand, index) => (
                 <div key={`${brand.name}-${index}`} className="flex items-center justify-center opacity-80">
                   {brand.logo}
                 </div>

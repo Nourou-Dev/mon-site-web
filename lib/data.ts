@@ -5,7 +5,7 @@
 
 export const site = {
   name: "Nourou Dine AMANDOU",
-  brand: "Nourou Webdesign",
+  brand: "Nourou Dine AMANDOU",
   brandSuffix: "",
   tagline: "Développeur web freelance basé à Abomey-Calavi",
   phone: "+229 01 00 00 00 00",
@@ -14,12 +14,11 @@ export const site = {
 };
 
 export const navLinks = [
-  { label: "Accueil", href: "#accueil" },
-  { label: "Services", href: "#services" },
-  { label: "Réalisations", href: "#realisations" },
-  { label: "Process", href: "#process" },
-  { label: "Avis", href: "#avis" },
-  { label: "FAQ", href: "#faq" },
+  { label: "Accueil", href: "/" },
+  { label: "Services", href: "/services" },
+  { label: "Réalisations", href: "/realisations" },
+  { label: "Blog", href: "/blog" },
+  { label: "Contact", href: "/contact" },
 ];
 
 export const heroStats = [

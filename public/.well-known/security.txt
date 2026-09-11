@@ -1,0 +1,7 @@
+# Security Policy according to RFC 9116
+Contact: mailto:contact@nouroudineamandou.com
+Expires: 2027-12-31T23:59:59.000Z
+Preferred-Languages: fr, en
+Canonical: https://nouroudineamandou.com/.well-known/security.txt
+Policy: https://nouroudineamandou.com/confidentialite
+Acknowledgments: https://nouroudineamandou.com/

@@ -1,11 +1,12 @@
-import { ArrowUpRight } from "lucide-react";
+import Link from "next/link";
+import { ArrowUpRight, Layers } from "lucide-react";
 
 const cards = [
   {
     level: "Site vitrine",
     title: "Site vitrine",
     text: "Présentez votre activité, vos services et votre expertise avec un site professionnel qui inspire confiance et transforme vos visiteurs en prospects.",
-    palette: "bg-[#e7d36a]",
+    palette: "bg-[#f8f9fa]",
     visual: "portrait",
     cta: "Créer un site vitrine",
   },
@@ -13,7 +14,7 @@ const cards = [
     level: "Landing page",
     title: "Landing page",
     text: "Lancez une offre, une formation ou un événement avec une page stratégique conçue pour attirer l’attention et encourager vos visiteurs à agir.",
-    palette: "bg-[#f38a3d]",
+    palette: "bg-[#f8f9fa]",
     visual: "ai",
     cta: "Créer ma landing page",
   },
@@ -21,7 +22,7 @@ const cards = [
     level: "Catalogue produits",
     title: "Catalogue",
     text: "Présentez vos produits dans un catalogue clair et professionnel, avec des fiches détaillées et un contact direct pour recevoir les commandes.",
-    palette: "bg-[#c8b4ea]",
+    palette: "bg-[#f8f9fa]",
     visual: "notebook",
     cta: "Présenter mes produits",
   },
@@ -29,7 +30,7 @@ const cards = [
     level: "Refonte de site web",
     title: "Refonte de site",
     text: "Modernisez votre site, une nouvelle structure, un design plus convaincant et expérience adaptée aux attentes de vos visiteurs et clients.",
-    palette: "bg-[#8bc494]",
+    palette: "bg-[#f8f9fa]",
     visual: "laptop",
     cta: "Repenser mon site",
   },
@@ -37,45 +38,46 @@ const cards = [
 
 export default function Services() {
   return (
-    <section id="services" className="px-4 py-12 sm:px-6 sm:py-16 lg:px-8 lg:py-14">
+    <section id="services" className="scroll-mt-[5.5rem] bg-white px-4 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-14">
       <div className="mx-auto max-w-[1280px]">
-        <div className="mb-10 text-center">
-          <span className="inline-flex items-center rounded-full border border-[#171717]/10 bg-white/80 px-3.5 py-1.5 text-[0.7rem] font-medium uppercase tracking-[0.18em] text-[#171717] shadow-sm">
+        <div className="mb-8 sm:mb-10 text-center">
+          <span className="inline-flex items-center gap-2 rounded-full border border-[#171717]/10 bg-[#f4f6f8] px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-[#171717] shadow-sm">
+            <Layers className="h-3.5 w-3.5 text-[#0060c3]" />
             Ce que je peux créer pour vous
           </span>
-          <h2 className="mx-auto mt-5 max-w-[750px] text-[clamp(2.2rem,4vw,4rem)] font-black leading-[0.96] tracking-[-0.06em] text-[#171717]">
+          <h2 className="mx-auto mt-4 sm:mt-5 max-w-[750px] text-[clamp(1.75rem,3.8vw,3.6rem)] font-black leading-[1.04] tracking-[-0.06em] text-[#171717]">
             Des solutions web pensées pour convaincre, vendre et faire grandir votre activité.
           </h2>
         </div>
 
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-5 sm:gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {cards.map((card) => (
             <div
               key={card.title}
-              className={`flex min-h-[460px] flex-col rounded-[2rem] border border-[#171717]/10 ${card.palette} p-5 shadow-[0_18px_35px_rgba(17,17,17,0.04)] sm:min-h-[500px] lg:min-h-[560px]`}
+              className="flex min-h-0 flex-col rounded-[2rem] border border-[#171717]/10 bg-[#f8f9fa] p-5 shadow-[0_12px_28px_rgba(21,20,27,0.03)] sm:min-h-[480px] lg:min-h-[520px] transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(21,20,27,0.07)]"
             >
-              <h3 className="mt-2 max-w-[12ch] font-black tracking-[-0.06em] text-[#171717] leading-[0.95] text-[1.7rem] sm:text-[1.9rem] lg:text-[2.1rem]">
+              <h3 className="mt-2 font-black tracking-[-0.06em] text-[#171717] leading-[1] text-[1.45rem] sm:text-[1.65rem] lg:text-[1.75rem] break-words">
                 {card.title}
               </h3>
 
-              <p className="mt-4 text-[1rem] leading-[1.55] text-[#171717]/80">
+              <p className="mt-3.5 text-[0.92rem] sm:text-[0.98rem] leading-relaxed text-[#171717]/80">
                 {card.text}
               </p>
 
-              <div className="mt-6 flex-1">
+              <div className="mt-5 sm:mt-6 flex-1">
                 {card.visual === "portrait" && <PortraitVisual />}
                 {card.visual === "ai" && <AiVisual />}
                 {card.visual === "notebook" && <NotebookVisual />}
                 {card.visual === "laptop" && <LaptopVisual />}
               </div>
 
-              <button
-                type="button"
-                className="mt-5 inline-flex w-fit items-center gap-2 self-start rounded-full border border-[#171717]/30 bg-white/60 px-5 py-2.5 text-sm font-semibold text-[#171717] backdrop-blur-sm transition-transform duration-200 hover:-translate-y-0.5"
+              <Link
+                href="/contact"
+                className="mt-5 inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-full border border-[#171717]/15 bg-white px-5 py-2.5 text-xs sm:text-sm font-semibold text-[#171717] shadow-sm transition-all duration-200 hover:bg-[#0060c3] hover:text-white hover:border-[#0060c3] hover:-translate-y-0.5 active:scale-95 text-center"
               >
-                {card.cta}
-                <ArrowUpRight className="h-4 w-4" strokeWidth={2.5} />
-              </button>
+                <span>{card.cta}</span>
+                <ArrowUpRight className="h-4 w-4 shrink-0" strokeWidth={2.5} />
+              </Link>
             </div>
           ))}
         </div>

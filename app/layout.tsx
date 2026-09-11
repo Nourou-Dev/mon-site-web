@@ -1,15 +1,28 @@
 import type { Metadata, Viewport } from "next";
+import { Fraunces, Manrope } from "next/font/google";
 import "./globals.css";
+import CookieConsent from "@/components/CookieConsent";
+
+const fraunces = Fraunces({
+  subsets: ["latin"],
+  variable: "--font-display",
+  display: "swap",
+});
+
+const manrope = Manrope({
+  subsets: ["latin"],
+  variable: "--font-body",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://exemple-yk-dev.vercel.app"),
-  title: "YK.dev — Développeur web freelance",
+  title: "Nourou Dine AMANDOU — Développeur Web Freelance & Créateur Digital",
   description:
-    "Yann conçoit des sites et applications web sur mesure : sites vitrines, e-commerce et outils métier, avec un espace client pour suivre chaque projet en temps réel.",
+    "Nourou Dine AMANDOU conçoit des sites vitrines, boutiques e-commerce et applications web modernes, performantes et sur mesure.",
   openGraph: {
-    title: "YK.dev — Développeur web freelance",
+    title: "Nourou Dine AMANDOU — Développeur Web Freelance & Créateur Digital",
     description:
-      "Sites vitrines, e-commerce et applications web sur mesure, avec un espace client en temps réel.",
+      "Conception de sites vitrines, e-commerce et applications web sur mesure avec une expérience utilisateur soignée.",
     type: "website",
     locale: "fr_FR",
   },
@@ -27,7 +40,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="fr">
+    <html lang="fr" className={`${manrope.variable} ${fraunces.variable}`}>
       <body className="font-body antialiased">
         <a
           href="#contenu"
@@ -36,6 +49,7 @@ export default function RootLayout({
           Aller au contenu
         </a>
         {children}
+        <CookieConsent />
       </body>
     </html>
   );
