@@ -11,6 +11,14 @@ import {
 
 const SESSION_COOKIE = "nd_session";
 
+// Détermine si le cookie doit porter le drapeau Secure (HTTPS en production, mais JAMAIS sur localhost HTTP)
+function getCookieSecurity(request: Request): boolean {
+  const host = request.headers.get("host") || "";
+  const isLocalhost = host.includes("localhost") || host.includes("127.0.0.1");
+  const isHttps = request.url.startsWith("https://") || request.headers.get("x-forwarded-proto") === "https";
+  return Boolean(isHttps && !isLocalhost);
+}
+
 // Vérifie si un identifiant ou mot de passe correspond à l'administrateur
 function isAuthorizedAdmin(emailOrLogin: string, password?: string): boolean {
   const cleanLogin = emailOrLogin.trim().toLowerCase();
@@ -44,16 +52,25 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
     const { action } = body;
+    const isSecureCookie = getCookieSecurity(request);
 
     // 1. OBTENIR L'UTILISATEUR ACTUELLEMENT CONNECTÉ
     if (action === "me") {
       const cookieHeader = request.headers.get("cookie") || "";
-      const match = cookieHeader.match(new RegExp(`${SESSION_COOKIE}=([^;]+)`));
-      if (!match) {
+      let rawToken = (request as any).cookies?.get?.(SESSION_COOKIE)?.value;
+
+      if (!rawToken) {
+        const match = cookieHeader.match(new RegExp(`${SESSION_COOKIE}=([^;]+)`));
+        if (match) {
+          rawToken = match[1];
+        }
+      }
+
+      if (!rawToken) {
         return NextResponse.json({ authenticated: false, user: null });
       }
 
-      const session = decodeSession(match[1]);
+      const session = decodeSession(rawToken);
       if (!session) {
         return NextResponse.json({ authenticated: false, user: null });
       }
@@ -129,7 +146,7 @@ export async function POST(request: Request) {
 
       res.cookies.set(SESSION_COOKIE, sessionToken, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
+        secure: isSecureCookie,
         sameSite: "lax",
         path: "/",
         maxAge: 7 * 24 * 3600,
@@ -179,7 +196,7 @@ export async function POST(request: Request) {
 
         res.cookies.set(SESSION_COOKIE, sessionToken, {
           httpOnly: true,
-          secure: process.env.NODE_ENV === "production",
+          secure: isSecureCookie,
           sameSite: "lax",
           path: "/",
           maxAge: 7 * 24 * 3600,
@@ -220,7 +237,7 @@ export async function POST(request: Request) {
 
       res.cookies.set(SESSION_COOKIE, sessionToken, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
+        secure: isSecureCookie,
         sameSite: "lax",
         path: "/",
         maxAge: 7 * 24 * 3600,
@@ -281,7 +298,7 @@ export async function POST(request: Request) {
 
       res.cookies.set(SESSION_COOKIE, sessionToken, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
+        secure: isSecureCookie,
         sameSite: "lax",
         path: "/",
         maxAge: 7 * 24 * 3600,

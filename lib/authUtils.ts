@@ -14,15 +14,39 @@ export function encodeSession(user: AppUser): string {
     company: user.company,
     exp: Date.now() + 7 * 24 * 3600 * 1000, // 7 jours
   };
-  return Buffer.from(JSON.stringify(payload)).toString("base64");
+  // Utilisation de base64url : aucun caractère =, +, /, %3D
+  return Buffer.from(JSON.stringify(payload)).toString("base64url");
 }
 
 export function decodeSession(cookieValue: string): (Partial<AppUser> & { exp: number }) | null {
+  if (!cookieValue || typeof cookieValue !== "string") return null;
+
   try {
-    const json = Buffer.from(cookieValue, "base64").toString("utf-8");
-    const payload = JSON.parse(json);
-    if (payload.exp < Date.now()) return null;
-    return payload;
+    // 1. Nettoyage des éventuels encodages d'URL (%3D, etc.)
+    let cleanVal = decodeURIComponent(cookieValue).trim();
+    if (cleanVal.startsWith('"') && cleanVal.endsWith('"')) {
+      cleanVal = cleanVal.slice(1, -1);
+    }
+
+    // 2. Décodage base64url (format standard sécurisé sans padding)
+    try {
+      const json = Buffer.from(cleanVal, "base64url").toString("utf-8");
+      const payload = JSON.parse(json);
+      if (payload && typeof payload === "object" && payload.exp && payload.exp >= Date.now()) {
+        return payload;
+      }
+    } catch {}
+
+    // 3. Fallback sur base64 classique (avec ou sans =)
+    try {
+      const json = Buffer.from(cleanVal, "base64").toString("utf-8");
+      const payload = JSON.parse(json);
+      if (payload && typeof payload === "object" && payload.exp && payload.exp >= Date.now()) {
+        return payload;
+      }
+    } catch {}
+
+    return null;
   } catch {
     return null;
   }

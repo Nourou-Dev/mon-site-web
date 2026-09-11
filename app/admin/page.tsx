@@ -53,8 +53,8 @@ export default function AdminPortalPage() {
 
       setSuccessMessage("Connexion réussie. Redirection vers votre tableau de bord...");
       setTimeout(() => {
-        window.location.href = "/app";
-      }, 500);
+        window.location.replace("/app");
+      }, 300);
     } catch (err: any) {
       setErrorMessage(err.message || "Erreur de connexion.");
       setLoading(false);
