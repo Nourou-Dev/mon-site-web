@@ -1,10 +1,6 @@
-# YK.dev — site vitrine (inspiré de la vidéo, Next.js)
+# Site vitrine Nourou Dine AMANDOU
 
-Site vitrine pour développeur web freelance, **inspiré** de l'UI montrée dans
-la vidéo (header flottant, hero en dégradé, cartes "espace client", stack
-technique en arbre, témoignages en carrousel, FAQ en accordéon, CTA final,
-footer avec logo en filigrane) mais avec une identité, un contenu et des
-illustrations originaux.
+Site vitrine pour webdesigner freelance
 
 ## Démarrer en local
 
