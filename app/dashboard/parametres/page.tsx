@@ -12,20 +12,21 @@ import {
   AlertCircle,
   Save,
   KeyRound,
+  Shield,
   Sparkles,
 } from "lucide-react";
 
-interface CurrentUser {
+interface AdminProfile {
   id: string;
   name: string;
   email: string;
-  role: "admin" | "client";
+  role: string;
   company?: string;
   phone?: string;
 }
 
-export default function ParametresPage() {
-  const [user, setUser] = useState<CurrentUser | null>(null);
+export default function AdminParametresPage() {
+  const [profile, setProfile] = useState<AdminProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [savingProfile, setSavingProfile] = useState(false);
   const [savingPassword, setSavingPassword] = useState(false);
@@ -53,14 +54,14 @@ export default function ParametresPage() {
         const res = await fetch("/api/app/profile");
         const data = await res.json();
         if (data.success && data.user) {
-          setUser(data.user);
-          setName(data.user.name || "");
-          setEmail(data.user.email || "");
-          setCompany(data.user.company || "");
-          setPhone(data.user.phone || "");
+          setProfile(data.user);
+          setName(data.user.name || "Nourou Dine AMANDOU");
+          setEmail(data.user.email || "contact@nouroudineamandou.com");
+          setCompany(data.user.company || "Studio Webdesign & Développement");
+          setPhone(data.user.phone || "+229 01 61 38 07 98");
         }
       } catch (err) {
-        console.error("Erreur chargement profil:", err);
+        console.error("Erreur chargement profil admin:", err);
       } finally {
         setLoading(false);
       }
@@ -68,12 +69,6 @@ export default function ParametresPage() {
 
     loadProfile();
   }, []);
-
-  useEffect(() => {
-    if (user?.role === "admin") {
-      window.location.replace("/dashboard/parametres");
-    }
-  }, [user]);
 
   const handleUpdateProfile = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -98,9 +93,9 @@ export default function ParametresPage() {
         throw new Error(data.error || "Impossible d'enregistrer vos modifications.");
       }
 
-      setProfileSuccess("Vos coordonnées ont été enregistrées avec succès !");
+      setProfileSuccess("Vos informations administrateur ont été enregistrées avec succès !");
       if (data.user) {
-        setUser(data.user);
+        setProfile(data.user);
       }
     } catch (err: any) {
       setProfileError(err.message || "Erreur lors de la mise à jour.");
@@ -141,7 +136,7 @@ export default function ParametresPage() {
         throw new Error(data.error || "Impossible de modifier le mot de passe.");
       }
 
-      setPwdSuccess("Votre mot de passe a été modifié avec succès !");
+      setPwdSuccess("Votre mot de passe administrateur a été mis à jour avec succès !");
       setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
@@ -156,8 +151,8 @@ export default function ParametresPage() {
     return (
       <div className="flex h-[60vh] items-center justify-center">
         <div className="flex flex-col items-center gap-3">
-          <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#0060c3] border-t-transparent" />
-          <p className="text-sm font-semibold text-[#4b4b4b]">Chargement de vos paramètres...</p>
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#4338ca] border-t-transparent" />
+          <p className="text-sm font-semibold text-[#4b4b4b]">Chargement des paramètres administrateur...</p>
         </div>
       </div>
     );
@@ -169,27 +164,28 @@ export default function ParametresPage() {
       <div className="min-w-0">
         <div className="flex flex-wrap items-center gap-2">
           <h1 className="text-xl sm:text-2xl font-black tracking-tight text-[#171717] lg:text-3xl">
-            Paramètres du Compte
+            Paramètres Administrateur
           </h1>
-          <span className="shrink-0 rounded-full bg-[#0060c3]/10 px-2.5 py-0.5 text-xs font-bold text-[#0060c3]">
-            Profil Client
+          <span className="shrink-0 inline-flex items-center gap-1 rounded-full bg-[#eef2ff] px-2.5 py-0.5 text-xs font-bold text-[#312e81] border border-[#c7d2fe]">
+            <ShieldCheck className="h-3 w-3" />
+            Superviseur Plateforme
           </span>
         </div>
         <p className="mt-1 text-sm text-[#4b4b4b]">
-          Modifiez vos informations personnelles, les coordonnées de votre marque et mettez à jour votre mot de passe de connexion.
+          Gérez vos coordonnées d&apos;artisan du web, votre adresse de contact client et votre mot de passe maître d&apos;accès au Dashboard.
         </p>
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:gap-8 lg:grid-cols-2 min-w-0">
-        {/* SECTION 1 : Coordonnées du profil */}
+        {/* SECTION 1 : Coordonnées de l'Administrateur */}
         <div className="min-w-0 rounded-2xl sm:rounded-3xl border border-[#171717]/10 bg-white p-5 sm:p-7 shadow-sm">
           <div className="flex items-center gap-3 border-b border-[#171717]/10 pb-4">
-            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#0060c3]/10 text-[#0060c3]">
+            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#eef2ff] text-[#4338ca]">
               <User className="h-5 w-5" />
             </div>
             <div>
-              <h2 className="text-base font-extrabold text-[#171717]">Informations Générales</h2>
-              <p className="text-xs text-[#7b7b7b]">Coordonnées visibles par votre interlocuteur</p>
+              <h2 className="text-base font-extrabold text-[#171717]">Identité &amp; Contact</h2>
+              <p className="text-xs text-[#7b7b7b]">Informations présentées dans les échanges clients</p>
             </div>
           </div>
 
@@ -208,7 +204,7 @@ export default function ParametresPage() {
             )}
 
             <div>
-              <label className="block text-xs font-bold text-[#171717]">Nom Complet</label>
+              <label className="block text-xs font-bold text-[#171717]">Nom de l&apos;Administrateur</label>
               <div className="relative mt-1">
                 <User className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#7b7b7b]" />
                 <input
@@ -216,14 +212,14 @@ export default function ParametresPage() {
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="Votre nom"
-                  className="w-full rounded-xl border border-[#171717]/15 bg-[#f8f9fa] py-2.5 pl-10 pr-3 text-xs sm:text-sm text-[#171717] focus:border-[#0060c3] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0060c3]/20"
+                  placeholder="Nourou Dine AMANDOU"
+                  className="w-full rounded-xl border border-[#171717]/15 bg-[#f8f9fa] py-2.5 pl-10 pr-3 text-xs sm:text-sm text-[#171717] focus:border-[#4338ca] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#4338ca]/20"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-[#171717]">Adresse E-mail</label>
+              <label className="block text-xs font-bold text-[#171717]">Email Principal</label>
               <div className="relative mt-1">
                 <Mail className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#7b7b7b]" />
                 <input
@@ -231,36 +227,36 @@ export default function ParametresPage() {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="votre.email@exemple.com"
-                  className="w-full rounded-xl border border-[#171717]/15 bg-[#f8f9fa] py-2.5 pl-10 pr-3 text-xs sm:text-sm text-[#171717] focus:border-[#0060c3] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0060c3]/20"
+                  placeholder="contact@nouroudineamandou.com"
+                  className="w-full rounded-xl border border-[#171717]/15 bg-[#f8f9fa] py-2.5 pl-10 pr-3 text-xs sm:text-sm text-[#171717] focus:border-[#4338ca] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#4338ca]/20"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-[#171717]">Entreprise / Organisation</label>
+              <label className="block text-xs font-bold text-[#171717]">Studio / Marque</label>
               <div className="relative mt-1">
                 <Building className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#7b7b7b]" />
                 <input
                   type="text"
                   value={company}
                   onChange={(e) => setCompany(e.target.value)}
-                  placeholder="Nom de votre marque ou société"
-                  className="w-full rounded-xl border border-[#171717]/15 bg-[#f8f9fa] py-2.5 pl-10 pr-3 text-xs sm:text-sm text-[#171717] focus:border-[#0060c3] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0060c3]/20"
+                  placeholder="Studio Webdesign & Développement"
+                  className="w-full rounded-xl border border-[#171717]/15 bg-[#f8f9fa] py-2.5 pl-10 pr-3 text-xs sm:text-sm text-[#171717] focus:border-[#4338ca] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#4338ca]/20"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-[#171717]">Téléphone / WhatsApp</label>
+              <label className="block text-xs font-bold text-[#171717]">Téléphone &amp; WhatsApp</label>
               <div className="relative mt-1">
                 <Phone className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#7b7b7b]" />
                 <input
                   type="tel"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  placeholder="+229 01 00 00 00"
-                  className="w-full rounded-xl border border-[#171717]/15 bg-[#f8f9fa] py-2.5 pl-10 pr-3 text-xs sm:text-sm text-[#171717] focus:border-[#0060c3] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0060c3]/20"
+                  placeholder="+229 01 61 38 07 98"
+                  className="w-full rounded-xl border border-[#171717]/15 bg-[#f8f9fa] py-2.5 pl-10 pr-3 text-xs sm:text-sm text-[#171717] focus:border-[#4338ca] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#4338ca]/20"
                 />
               </div>
             </div>
@@ -268,23 +264,23 @@ export default function ParametresPage() {
             <button
               type="submit"
               disabled={savingProfile}
-              className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#0060c3] py-2.5 text-xs font-bold text-white shadow-md transition hover:bg-[#004ca3] disabled:opacity-60"
+              className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#4338ca] py-2.5 text-xs font-bold text-white shadow-md transition hover:bg-[#3730a3] disabled:opacity-60 active:scale-95"
             >
               <Save className="h-3.5 w-3.5" />
-              {savingProfile ? "Enregistrement..." : "Enregistrer mes coordonnées"}
+              {savingProfile ? "Enregistrement..." : "Enregistrer les modifications"}
             </button>
           </form>
         </div>
 
-        {/* SECTION 2 : Sécurité & Mot de passe */}
+        {/* SECTION 2 : Mot de passe Administrateur */}
         <div className="min-w-0 rounded-2xl sm:rounded-3xl border border-[#171717]/10 bg-white p-5 sm:p-7 shadow-sm">
           <div className="flex items-center gap-3 border-b border-[#171717]/10 pb-4">
             <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-amber-500/10 text-amber-600">
               <KeyRound className="h-5 w-5" />
             </div>
             <div>
-              <h2 className="text-base font-extrabold text-[#171717]">Identifiants de Connexion</h2>
-              <p className="text-xs text-[#7b7b7b]">Mettez à jour votre mot de passe d&apos;accès</p>
+              <h2 className="text-base font-extrabold text-[#171717]">Accès Tableau de Bord</h2>
+              <p className="text-xs text-[#7b7b7b]">Mettez à jour le mot de passe d&apos;accès /dashboard</p>
             </div>
           </div>
 
@@ -312,7 +308,7 @@ export default function ParametresPage() {
                   value={currentPassword}
                   onChange={(e) => setCurrentPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full rounded-xl border border-[#171717]/15 bg-[#f8f9fa] py-2.5 pl-10 pr-3 text-xs sm:text-sm text-[#171717] focus:border-[#0060c3] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0060c3]/20"
+                  className="w-full rounded-xl border border-[#171717]/15 bg-[#f8f9fa] py-2.5 pl-10 pr-3 text-xs sm:text-sm text-[#171717] focus:border-[#4338ca] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#4338ca]/20"
                 />
               </div>
             </div>
@@ -327,7 +323,7 @@ export default function ParametresPage() {
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
                   placeholder="Au moins 6 caractères"
-                  className="w-full rounded-xl border border-[#171717]/15 bg-[#f8f9fa] py-2.5 pl-10 pr-3 text-xs sm:text-sm text-[#171717] focus:border-[#0060c3] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0060c3]/20"
+                  className="w-full rounded-xl border border-[#171717]/15 bg-[#f8f9fa] py-2.5 pl-10 pr-3 text-xs sm:text-sm text-[#171717] focus:border-[#4338ca] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#4338ca]/20"
                 />
               </div>
             </div>
@@ -342,7 +338,7 @@ export default function ParametresPage() {
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="Retapez le nouveau mot de passe"
-                  className="w-full rounded-xl border border-[#171717]/15 bg-[#f8f9fa] py-2.5 pl-10 pr-3 text-xs sm:text-sm text-[#171717] focus:border-[#0060c3] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0060c3]/20"
+                  className="w-full rounded-xl border border-[#171717]/15 bg-[#f8f9fa] py-2.5 pl-10 pr-3 text-xs sm:text-sm text-[#171717] focus:border-[#4338ca] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#4338ca]/20"
                 />
               </div>
             </div>
@@ -350,10 +346,10 @@ export default function ParametresPage() {
             <button
               type="submit"
               disabled={savingPassword}
-              className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#171717] py-2.5 text-xs font-bold text-white shadow-md transition hover:bg-black disabled:opacity-60"
+              className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#171717] py-2.5 text-xs font-bold text-white shadow-md transition hover:bg-black disabled:opacity-60 active:scale-95"
             >
               <ShieldCheck className="h-3.5 w-3.5 text-emerald-400" />
-              {savingPassword ? "Mise à jour..." : "Modifier mon mot de passe"}
+              {savingPassword ? "Mise à jour..." : "Mettre à jour le mot de passe"}
             </button>
           </form>
         </div>

@@ -1,9 +1,25 @@
 import fs from "fs/promises";
 import path from "path";
 import crypto from "crypto";
-import { hashPassword, encodeSession, decodeSession, touchSession } from "./authUtils";
+import {
+  hashPassword,
+  encodeSession,
+  decodeSession,
+  touchSession,
+  ADMIN_SESSION_COOKIE,
+  CLIENT_SESSION_COOKIE,
+  LEGACY_SESSION_COOKIE,
+} from "./authUtils";
 
-export { hashPassword, encodeSession, decodeSession, touchSession };
+export {
+  hashPassword,
+  encodeSession,
+  decodeSession,
+  touchSession,
+  ADMIN_SESSION_COOKIE,
+  CLIENT_SESSION_COOKIE,
+  LEGACY_SESSION_COOKIE,
+};
 
 const DATA_DIR = path.join(process.cwd(), "data");
 const USERS_FILE = path.join(DATA_DIR, "users.json");
@@ -162,6 +178,54 @@ export async function registerClientUser(data: {
 
   users.push(newUser);
   await writeJson(USERS_FILE, users);
+
+  // Initialisation automatique du projet et du canal de messagerie du client
+  try {
+    const projects = await readJson<ProjectRecord[]>(PROJECTS_FILE, []);
+    const projId = `prj_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+    const newProject: ProjectRecord = {
+      id: projId,
+      title: newUser.company ? `Projet Digital - ${newUser.company}` : `Projet Web - ${newUser.name}`,
+      clientId: newUser.id,
+      clientName: newUser.name,
+      clientEmail: newUser.email,
+      category: "Site Web & Stratégie Digitale",
+      status: "cadrage",
+      progress: 15,
+      budget: "À définir",
+      paidAmount: "0 FCFA",
+      startDate: new Date().toISOString().split("T")[0],
+      targetDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
+      milestones: [
+        { id: "m1", title: "Cadrage initial des besoins & Objectifs", targetDate: new Date().toISOString().split("T")[0], completed: true },
+        { id: "m2", title: "Création des maquettes graphiques & UX", targetDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split("T")[0], completed: false },
+        { id: "m3", title: "Développement Front-End & Intégration", targetDate: new Date(Date.now() + 18 * 24 * 60 * 60 * 1000).toISOString().split("T")[0], completed: false },
+        { id: "m4", title: "Recette, Sécurité & Tests Mobile", targetDate: new Date(Date.now() + 25 * 24 * 60 * 60 * 1000).toISOString().split("T")[0], completed: false },
+        { id: "m5", title: "Mise en ligne & Accompagnement", targetDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split("T")[0], completed: false },
+      ],
+      deliverables: [],
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    projects.push(newProject);
+    await writeJson(PROJECTS_FILE, projects);
+
+    const messages = await readJson<MessageRecord[]>(MESSAGES_FILE, []);
+    messages.push({
+      id: `msg_${Date.now()}_welcome`,
+      projectId: projId,
+      senderId: "usr_admin_nourou",
+      senderName: "Nourou Dine AMANDOU",
+      senderRole: "admin",
+      content: `Bienvenue sur votre espace sécurisé, ${newUser.name} ! Je suis ravi de collaborer avec vous. Posez-moi vos questions ou partagez vos remarques directement ici.`,
+      createdAt: new Date().toISOString(),
+      read: false,
+    });
+    await writeJson(MESSAGES_FILE, messages);
+  } catch (err) {
+    console.warn("Notice: initialisation projet client différée:", err);
+  }
+
   return newUser;
 }
 

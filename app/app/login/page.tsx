@@ -74,6 +74,18 @@ export default function AppLoginPage() {
         throw new Error(data.error || "Impossible de créer le compte.");
       }
 
+      // Sauvegarde résiliente locale pour synchronisation automatique
+      try {
+        if (data.user) {
+          const rawLocal = localStorage.getItem("nd_registered_clients");
+          const list = rawLocal ? JSON.parse(rawLocal) : [];
+          if (!list.some((c: any) => c.email?.toLowerCase() === data.user.email?.toLowerCase())) {
+            list.push(data.user);
+            localStorage.setItem("nd_registered_clients", JSON.stringify(list));
+          }
+        }
+      } catch {}
+
       window.location.href = "/app";
     } catch (err: any) {
       setErrorMessage(err.message || "Erreur d'inscription.");

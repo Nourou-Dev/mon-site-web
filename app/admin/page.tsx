@@ -18,13 +18,17 @@ export default function AdminPortalPage() {
         const res = await fetch("/api/app/auth", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ action: "me" }),
+          body: JSON.stringify({ action: "me", scope: "admin" }),
         });
         const data = await res.json();
         if (data.authenticated && data.user?.role === "admin") {
-          window.location.replace("/app");
+          window.location.replace("/dashboard");
+        } else {
+          window.location.replace("/dashboard/login");
         }
-      } catch {}
+      } catch {
+        window.location.replace("/dashboard/login");
+      }
     }
     checkCurrentSession();
   }, []);
@@ -53,7 +57,7 @@ export default function AdminPortalPage() {
 
       setSuccessMessage("Connexion réussie. Redirection vers votre tableau de bord...");
       setTimeout(() => {
-        window.location.replace("/app");
+        window.location.replace("/dashboard");
       }, 300);
     } catch (err: any) {
       setErrorMessage(err.message || "Erreur de connexion.");

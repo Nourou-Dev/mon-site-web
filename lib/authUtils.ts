@@ -1,6 +1,9 @@
 import crypto from "crypto";
 import {
   SESSION_INACTIVITY_TIMEOUT_MS,
+  ADMIN_SESSION_COOKIE,
+  CLIENT_SESSION_COOKIE,
+  LEGACY_SESSION_COOKIE,
   SessionPayload,
   encodeSession,
   touchSession,
@@ -9,6 +12,9 @@ import {
 
 export {
   SESSION_INACTIVITY_TIMEOUT_MS,
+  ADMIN_SESSION_COOKIE,
+  CLIENT_SESSION_COOKIE,
+  LEGACY_SESSION_COOKIE,
   encodeSession,
   touchSession,
   decodeSession,

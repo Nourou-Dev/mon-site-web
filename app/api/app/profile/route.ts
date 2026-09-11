@@ -1,13 +1,33 @@
 import { NextResponse } from "next/server";
-import { findUserById, updateUser, hashPassword, encodeSession, decodeSession, AppUser, getUsers } from "@/lib/appStorage";
-
-const SESSION_COOKIE = "nd_session";
+import {
+  findUserById,
+  updateUser,
+  hashPassword,
+  encodeSession,
+  decodeSession,
+  AppUser,
+  getUsers,
+  ADMIN_SESSION_COOKIE,
+  CLIENT_SESSION_COOKIE,
+  LEGACY_SESSION_COOKIE,
+} from "@/lib/appStorage";
 
 function getSessionUser(request: Request): (Partial<AppUser> & { exp: number }) | null {
   const cookieHeader = request.headers.get("cookie") || "";
-  const match = cookieHeader.match(/nd_session=([^;]+)/);
-  if (!match) return null;
-  return decodeSession(match[1]);
+  const referer = request.headers.get("referer") || "";
+  const isDashboard = referer.includes("/dashboard") || referer.includes("/admin");
+
+  const primaryCookie = isDashboard ? ADMIN_SESSION_COOKIE : CLIENT_SESSION_COOKIE;
+  const secondaryCookie = isDashboard ? CLIENT_SESSION_COOKIE : ADMIN_SESSION_COOKIE;
+
+  const extract = (name: string) => {
+    const match = cookieHeader.match(new RegExp(`${name}=([^;]+)`));
+    return match ? match[1] : null;
+  };
+
+  const token = extract(primaryCookie) || extract(secondaryCookie) || extract(LEGACY_SESSION_COOKIE);
+  if (!token) return null;
+  return decodeSession(token);
 }
 
 export async function GET(request: Request) {
@@ -137,12 +157,26 @@ export async function PATCH(request: Request) {
       },
     });
 
-    res.cookies.set(SESSION_COOKIE, sessionToken, {
+    const host = request.headers.get("host") || "";
+    const isLocalhost = host.includes("localhost") || host.includes("127.0.0.1");
+    const isHttps = request.url.startsWith("https://") || request.headers.get("x-forwarded-proto") === "https";
+    const isSecure = Boolean(isHttps && !isLocalhost);
+
+    const targetCookie = updatedUser.role === "admin" ? ADMIN_SESSION_COOKIE : CLIENT_SESSION_COOKIE;
+
+    res.cookies.set(targetCookie, sessionToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: isSecure,
       sameSite: "lax",
       path: "/",
-      maxAge: 7 * 24 * 3600,
+      maxAge: 3600,
+    });
+    res.cookies.set(LEGACY_SESSION_COOKIE, sessionToken, {
+      httpOnly: true,
+      secure: isSecure,
+      sameSite: "lax",
+      path: "/",
+      maxAge: 3600,
     });
 
     return res;

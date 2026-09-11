@@ -7,10 +7,12 @@ import {
   encodeSession,
   decodeSession,
   touchSession,
+  ADMIN_SESSION_COOKIE,
+  CLIENT_SESSION_COOKIE,
+  LEGACY_SESSION_COOKIE,
   AppUser,
 } from "@/lib/appStorage";
 
-const SESSION_COOKIE = "nd_session";
 const SESSION_MAX_AGE_SEC = 3600; // 1 heure d'inactivité
 
 // Détermine si le cookie doit porter le drapeau Secure (HTTPS en production, mais JAMAIS sur localhost HTTP)
@@ -58,14 +60,35 @@ export async function POST(request: Request) {
 
     // 1. OBTENIR L'UTILISATEUR ACTUELLEMENT CONNECTÉ & TOUCH SESSION
     if (action === "me") {
+      const { scope } = body; // "admin" | "client" | undefined
       const cookieHeader = request.headers.get("cookie") || "";
-      let rawToken = (request as any).cookies?.get?.(SESSION_COOKIE)?.value;
+      const referer = request.headers.get("referer") || "";
+      const isDashboardContext = scope === "admin" || referer.includes("/dashboard") || referer.includes("/admin");
+
+      // Chercher en priorité le cookie adapté au contexte
+      const primaryCookie = isDashboardContext ? ADMIN_SESSION_COOKIE : CLIENT_SESSION_COOKIE;
+      const secondaryCookie = isDashboardContext ? CLIENT_SESSION_COOKIE : ADMIN_SESSION_COOKIE;
+
+      const extractToken = (name: string) => {
+        let val = (request as any).cookies?.get?.(name)?.value;
+        if (!val) {
+          const match = cookieHeader.match(new RegExp(`${name}=([^;]+)`));
+          if (match) val = match[1];
+        }
+        return val;
+      };
+
+      let activeCookieName = primaryCookie;
+      let rawToken = extractToken(primaryCookie);
 
       if (!rawToken) {
-        const match = cookieHeader.match(new RegExp(`${SESSION_COOKIE}=([^;]+)`));
-        if (match) {
-          rawToken = match[1];
-        }
+        rawToken = extractToken(secondaryCookie);
+        if (rawToken) activeCookieName = secondaryCookie;
+      }
+
+      if (!rawToken) {
+        rawToken = extractToken(LEGACY_SESSION_COOKIE);
+        if (rawToken) activeCookieName = LEGACY_SESSION_COOKIE;
       }
 
       if (!rawToken) {
@@ -76,8 +99,13 @@ export async function POST(request: Request) {
       if (!session) {
         // Session expirée ou invalide (> 1h)
         const res = NextResponse.json({ authenticated: false, user: null, reason: "expired" });
-        res.cookies.set(SESSION_COOKIE, "", { path: "/", maxAge: 0, expires: new Date(0) });
+        res.cookies.set(activeCookieName, "", { path: "/", maxAge: 0, expires: new Date(0) });
         return res;
+      }
+
+      // Si le contexte est explicitement Dashboard et que la session n'est pas admin
+      if (isDashboardContext && session.role !== "admin") {
+        return NextResponse.json({ authenticated: false, user: null, reason: "unauthorized_role" });
       }
 
       // Renouveler la session glissante (1h à partir de cette activité)
@@ -93,7 +121,7 @@ export async function POST(request: Request) {
         },
       });
 
-      res.cookies.set(SESSION_COOKIE, refreshedToken, {
+      res.cookies.set(activeCookieName, refreshedToken, {
         httpOnly: true,
         secure: isSecureCookie,
         sameSite: "lax",
@@ -104,7 +132,7 @@ export async function POST(request: Request) {
       return res;
     }
 
-    // 2. CONNEXION ADMINISTRATEUR STRICTE (/admin : Email + Mot de passe OBLIGATOIRES)
+    // 2. CONNEXION ADMINISTRATEUR STRICTE (/dashboard/login ou /admin : Email + Mot de passe OBLIGATOIRES)
     if (action === "admin_login") {
       const { login, password } = body;
 
@@ -164,7 +192,15 @@ export async function POST(request: Request) {
         },
       });
 
-      res.cookies.set(SESSION_COOKIE, sessionToken, {
+      // Cookie admin dédié
+      res.cookies.set(ADMIN_SESSION_COOKIE, sessionToken, {
+        httpOnly: true,
+        secure: isSecureCookie,
+        sameSite: "lax",
+        path: "/",
+        maxAge: SESSION_MAX_AGE_SEC,
+      });
+      res.cookies.set(LEGACY_SESSION_COOKIE, sessionToken, {
         httpOnly: true,
         secure: isSecureCookie,
         sameSite: "lax",
@@ -214,7 +250,14 @@ export async function POST(request: Request) {
           },
         });
 
-        res.cookies.set(SESSION_COOKIE, sessionToken, {
+        res.cookies.set(ADMIN_SESSION_COOKIE, sessionToken, {
+          httpOnly: true,
+          secure: isSecureCookie,
+          sameSite: "lax",
+          path: "/",
+          maxAge: SESSION_MAX_AGE_SEC,
+        });
+        res.cookies.set(LEGACY_SESSION_COOKIE, sessionToken, {
           httpOnly: true,
           secure: isSecureCookie,
           sameSite: "lax",
@@ -255,7 +298,15 @@ export async function POST(request: Request) {
         },
       });
 
-      res.cookies.set(SESSION_COOKIE, sessionToken, {
+      // Cookie client dédié
+      res.cookies.set(CLIENT_SESSION_COOKIE, sessionToken, {
+        httpOnly: true,
+        secure: isSecureCookie,
+        sameSite: "lax",
+        path: "/",
+        maxAge: SESSION_MAX_AGE_SEC,
+      });
+      res.cookies.set(LEGACY_SESSION_COOKIE, sessionToken, {
         httpOnly: true,
         secure: isSecureCookie,
         sameSite: "lax",
@@ -316,7 +367,14 @@ export async function POST(request: Request) {
         },
       });
 
-      res.cookies.set(SESSION_COOKIE, sessionToken, {
+      res.cookies.set(CLIENT_SESSION_COOKIE, sessionToken, {
+        httpOnly: true,
+        secure: isSecureCookie,
+        sameSite: "lax",
+        path: "/",
+        maxAge: SESSION_MAX_AGE_SEC,
+      });
+      res.cookies.set(LEGACY_SESSION_COOKIE, sessionToken, {
         httpOnly: true,
         secure: isSecureCookie,
         sameSite: "lax",
@@ -327,15 +385,26 @@ export async function POST(request: Request) {
       return res;
     }
 
-    // 5. DÉCONNEXION COMPLÈTE
+    // 5. DÉCONNEXION COMPLÈTE OU CIBLÉE
     if (action === "logout") {
+      const { scope } = body; // "admin" | "client" | undefined
       const res = NextResponse.json({ success: true, message: "Déconnecté avec succès." });
-      res.cookies.set(SESSION_COOKIE, "", {
-        httpOnly: true,
-        path: "/",
-        maxAge: 0,
-        expires: new Date(0),
-      });
+
+      const cookiesToClear =
+        scope === "admin"
+          ? [ADMIN_SESSION_COOKIE, LEGACY_SESSION_COOKIE]
+          : scope === "client"
+          ? [CLIENT_SESSION_COOKIE, LEGACY_SESSION_COOKIE]
+          : [ADMIN_SESSION_COOKIE, CLIENT_SESSION_COOKIE, LEGACY_SESSION_COOKIE];
+
+      for (const cookieName of cookiesToClear) {
+        res.cookies.set(cookieName, "", {
+          httpOnly: true,
+          path: "/",
+          maxAge: 0,
+          expires: new Date(0),
+        });
+      }
       return res;
     }
 

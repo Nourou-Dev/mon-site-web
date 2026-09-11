@@ -60,58 +60,78 @@ export function middleware(request: NextRequest) {
   }
 
   // 3. Détection de sous-domaine
-  const isAppSubdomain =
-    host.startsWith("app.") ||
-    host.startsWith("dashboard.") ||
-    host.includes("app.localhost");
+  const isDashboardSubdomain = host.startsWith("dashboard.");
+  const isAppSubdomain = host.startsWith("app.") || host.includes("app.localhost");
 
-  // Déterminer le chemin logique de l'application
+  // Déterminer le chemin logique
   let targetPath = pathname;
-  if (isAppSubdomain && !pathname.startsWith("/api") && !pathname.startsWith("/_next")) {
+  if (isDashboardSubdomain && !pathname.startsWith("/api") && !pathname.startsWith("/_next")) {
+    targetPath = pathname === "/" ? "/dashboard" : `/dashboard${pathname.startsWith("/dashboard") ? pathname.slice(10) : pathname}`;
+  } else if (isAppSubdomain && !pathname.startsWith("/api") && !pathname.startsWith("/_next")) {
     targetPath = pathname === "/" ? "/app" : `/app${pathname.startsWith("/app") ? pathname.slice(4) : pathname}`;
   }
 
-  // 4. VÉRIFICATION D'AUTHENTIFICATION CÔTÉ SERVEUR (Espace Client & Admin)
-  const isProtectedAppRoute =
-    targetPath.startsWith("/app") &&
-    !targetPath.startsWith("/app/login") &&
-    !targetPath.startsWith("/app/admin");
+  // 4. RÉCUPÉRATION DES SESSIONS (Cookies isolés Client & Admin)
+  const adminCookie = request.cookies.get("nd_admin_session")?.value || request.cookies.get("nd_session")?.value;
+  const clientCookie = request.cookies.get("nd_client_session")?.value || request.cookies.get("nd_session")?.value;
 
-  const isLoginPage = targetPath === "/app/login";
-  const isAdminLoginPage = targetPath === "/admin" || targetPath === "/app/admin";
+  const adminSession = adminCookie ? decodeSession(adminCookie) : null;
+  const clientSession = clientCookie ? decodeSession(clientCookie) : null;
 
-  const rawCookie = request.cookies.get(SESSION_COOKIE)?.value;
-  const session = rawCookie ? decodeSession(rawCookie) : null;
-  const isAuthenticated = Boolean(session && session.id);
+  const isAdminAuthenticated = Boolean(adminSession && adminSession.role === "admin");
+  const isClientAuthenticated = Boolean(clientSession && clientSession.id);
 
-  // A. Accès à une page protégée de l'espace (/app, /app/projets, /app/messages, etc.)
-  if (isProtectedAppRoute) {
-    if (!isAuthenticated) {
-      // Redirection immédiate côté serveur vers la page de login
-      const loginUrl = request.nextUrl.clone();
-      loginUrl.pathname = isAppSubdomain ? "/login" : "/app/login";
-      loginUrl.searchParams.set("reason", "session_expired");
-      
-      const redirectRes = NextResponse.redirect(loginUrl);
-      // Supprimer tout cookie périmé
-      redirectRes.cookies.set(SESSION_COOKIE, "", { path: "/", maxAge: 0 });
-      return redirectRes;
+  // A. Redirection de l'ancienne URL /admin vers le nouvel espace /dashboard
+  if (targetPath === "/admin" || targetPath === "/app/admin") {
+    const dashUrl = request.nextUrl.clone();
+    dashUrl.pathname = isAdminAuthenticated ? "/dashboard" : "/dashboard/login";
+    return NextResponse.redirect(dashUrl);
+  }
+
+  // B. ESPACE ADMINISTRATEUR : /dashboard/*
+  if (targetPath.startsWith("/dashboard")) {
+    const isDashboardLogin = targetPath === "/dashboard/login";
+
+    if (isDashboardLogin) {
+      if (isAdminAuthenticated) {
+        const dashUrl = request.nextUrl.clone();
+        dashUrl.pathname = isDashboardSubdomain ? "/" : "/dashboard";
+        return NextResponse.redirect(dashUrl);
+      }
+      // Autoriser l'accès au formulaire de connexion admin
+    } else {
+      if (!isAdminAuthenticated) {
+        // Rediriger vers la page de login admin
+        const loginUrl = request.nextUrl.clone();
+        loginUrl.pathname = isDashboardSubdomain ? "/login" : "/dashboard/login";
+        loginUrl.searchParams.set("reason", "session_expired");
+        const res = NextResponse.redirect(loginUrl);
+        res.cookies.set("nd_admin_session", "", { path: "/", maxAge: 0 });
+        return res;
+      }
     }
   }
 
-  // B. Visite de la page de login alors qu'on est déjà connecté
-  if (isLoginPage && isAuthenticated) {
-    // Redirection directe vers le tableau de bord
-    const appUrl = request.nextUrl.clone();
-    appUrl.pathname = isAppSubdomain ? "/" : "/app";
-    return NextResponse.redirect(appUrl);
-  }
+  // C. ESPACE CLIENT : /app/*
+  if (targetPath.startsWith("/app")) {
+    const isClientLogin = targetPath === "/app/login";
 
-  // C. Visite de la page /admin alors qu'on est déjà connecté en tant qu'admin
-  if (isAdminLoginPage && isAuthenticated && session?.role === "admin") {
-    const appUrl = request.nextUrl.clone();
-    appUrl.pathname = isAppSubdomain ? "/" : "/app";
-    return NextResponse.redirect(appUrl);
+    if (isClientLogin) {
+      if (isClientAuthenticated || isAdminAuthenticated) {
+        const appUrl = request.nextUrl.clone();
+        appUrl.pathname = isAppSubdomain ? "/" : "/app";
+        return NextResponse.redirect(appUrl);
+      }
+    } else {
+      if (!isClientAuthenticated && !isAdminAuthenticated) {
+        const loginUrl = request.nextUrl.clone();
+        loginUrl.pathname = isAppSubdomain ? "/login" : "/app/login";
+        loginUrl.searchParams.set("reason", "session_expired");
+        const res = NextResponse.redirect(loginUrl);
+        res.cookies.set("nd_client_session", "", { path: "/", maxAge: 0 });
+        return res;
+      }
+    }
   }
 
   // 5. Réécriture transparente pour le sous-domaine

@@ -1,6 +1,11 @@
 // Durée maximale d'inactivité autorisée : 1 heure (3600 secondes)
 export const SESSION_INACTIVITY_TIMEOUT_MS = 60 * 60 * 1000;
 
+// Noms des cookies dédiés pour isoler totalement l'espace Client (/app) et Admin (/dashboard)
+export const ADMIN_SESSION_COOKIE = "nd_admin_session";
+export const CLIENT_SESSION_COOKIE = "nd_client_session";
+export const LEGACY_SESSION_COOKIE = "nd_session";
+
 export interface SessionPayload {
   id: string;
   name: string;
