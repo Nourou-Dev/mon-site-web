@@ -62,7 +62,7 @@ export default function CookieConsent() {
     return () => window.removeEventListener("nd_open_cookie_modal", handleOpenModal);
   }, []);
 
-  const applyPreferences = (prefs: CookiePreferences) => {
+  const applyPreferences = (prefs: CookiePreferences, choice: "accepted_all" | "refused_all" | "customized" = "customized") => {
     try {
       localStorage.setItem(COOKIE_STORAGE_KEY, JSON.stringify(prefs));
       setBrowserCookie("nd_cookie_consent", JSON.stringify(prefs));
@@ -78,6 +78,17 @@ export default function CookieConsent() {
       } else {
         deleteBrowserCookie("nd_prefs_allowed");
       }
+
+      // Envoi de l'événement anonymisé pour le tableau de bord administrateur
+      fetch("/api/app/cookies", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          choice,
+          analytics: prefs.analytics,
+          experience: prefs.preferences,
+        }),
+      }).catch(() => {});
     } catch (e) {
       console.error("Erreur enregistrement cookies:", e);
     }
@@ -92,7 +103,7 @@ export default function CookieConsent() {
       preferences: true,
     };
     setPreferences(allAccepted);
-    applyPreferences(allAccepted);
+    applyPreferences(allAccepted, "accepted_all");
   };
 
   const handleRejectAll = () => {
@@ -102,11 +113,11 @@ export default function CookieConsent() {
       preferences: false,
     };
     setPreferences(onlyNecessary);
-    applyPreferences(onlyNecessary);
+    applyPreferences(onlyNecessary, "refused_all");
   };
 
   const handleSaveCustom = () => {
-    applyPreferences(preferences);
+    applyPreferences(preferences, "customized");
   };
 
   if (!isOpen) return null;

@@ -1,0 +1,42 @@
+[
+  {
+    "id": "prj_demo_1",
+    "title": "Refonte Site Web & Catalogue Interactif",
+    "clientId": "usr_client_demo",
+    "clientName": "Clinique Santé Plus",
+    "clientEmail": "direction@cliniquesanteplus.com",
+    "category": "Site Vitrine & Système de Devis",
+    "status": "developpement",
+    "progress": 75,
+    "budget": "450 000 FCFA",
+    "paidAmount": "300 000 FCFA",
+    "startDate": "2026-09-01",
+    "targetDate": "2026-09-28",
+    "milestones": [
+      {
+        "title": "Cadrage & Stratégie de Marque",
+        "targetDate": "2026-09-05",
+        "completed": true,
+        "id": "m1"
+      }
+    ],
+    "deliverables": [
+      {
+        "id": "d1",
+        "title": "Maquettes UI Figma",
+        "url": "https://figma.com",
+        "type": "figma"
+      },
+      {
+        "id": "d2",
+        "title": "Aperçu de Pré-production",
+        "url": "https://staging.exemple.com",
+        "type": "preview"
+      }
+    ],
+    "createdAt": "2026-09-11T06:46:13.161Z",
+    "updatedAt": "2026-09-11T07:32:42.301Z",
+    "completed": false,
+    "milestoneId": "m1"
+  }
+]

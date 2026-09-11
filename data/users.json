@@ -1,0 +1,12 @@
+[
+  {
+    "id": "usr_admin_nourou",
+    "name": "Nourou Dine AMANDOU",
+    "email": "contact@nouroudineamandou.com",
+    "passwordHash": "bb37f0c3c04ea5c34ef22c7fe20922bfccf1a712ae2ab5e9fecc1a4ee6799469",
+    "role": "admin",
+    "company": "Studio Webdesign",
+    "phone": "+229 01 00 00 00",
+    "createdAt": "2026-09-11T06:46:12.391Z"
+  }
+]

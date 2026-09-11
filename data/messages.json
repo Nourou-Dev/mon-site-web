@@ -1,0 +1,72 @@
+[
+  {
+    "id": "msg_1",
+    "projectId": "prj_demo_1",
+    "senderId": "usr_client_demo",
+    "senderName": "Clinique Santé Plus",
+    "senderRole": "client",
+    "content": "Bonjour Nourou, nous avons bien examiné les maquettes Figma, les retours de l'équipe médicale sont très positifs !",
+    "createdAt": "2026-09-09T06:46:13.409Z",
+    "read": true
+  },
+  {
+    "id": "msg_2",
+    "projectId": "prj_demo_1",
+    "senderId": "usr_admin_nourou",
+    "senderName": "Nourou Dine AMANDOU",
+    "senderRole": "admin",
+    "content": "Parfait ! J'ai intégré les derniers ajustements de typographie et j'attaque le développement responsive avec le module de prise de rendez-vous en ligne.",
+    "createdAt": "2026-09-10T06:46:13.409Z",
+    "read": true
+  },
+  {
+    "id": "msg_1789109173410_5hsg",
+    "projectId": "prj_demo_1",
+    "senderId": "usr_anonymous",
+    "senderName": "Nourou Dine AMANDOU",
+    "senderRole": "admin",
+    "content": "Test direct : tout fonctionne parfaitement dans le nouveau tableau de bord et la messagerie !",
+    "createdAt": "2026-09-11T06:46:13.410Z",
+    "read": false
+  },
+  {
+    "id": "msg_1789109218384_0hmk",
+    "projectId": "prj_demo_1",
+    "senderId": "usr_anonymous",
+    "senderName": "Nourou Dine AMANDOU",
+    "senderRole": "admin",
+    "content": "Test direct : tout fonctionne parfaitement dans le nouveau tableau de bord et la messagerie !",
+    "createdAt": "2026-09-11T06:46:58.384Z",
+    "read": false
+  },
+  {
+    "id": "msg_1789111599900_ppsl",
+    "projectId": "prj_demo_1",
+    "senderId": "usr_anonymous",
+    "senderName": "Nourou Dine AMANDOU",
+    "senderRole": "admin",
+    "content": "Test direct : tout fonctionne parfaitement dans le nouveau tableau de bord et la messagerie !",
+    "createdAt": "2026-09-11T07:26:39.900Z",
+    "read": false
+  },
+  {
+    "id": "msg_1789111650938_o7y4",
+    "projectId": "prj_demo_1",
+    "senderId": "usr_anonymous",
+    "senderName": "Nourou Dine AMANDOU",
+    "senderRole": "admin",
+    "content": "Test direct : tout fonctionne parfaitement dans le nouveau tableau de bord et la messagerie !",
+    "createdAt": "2026-09-11T07:27:30.938Z",
+    "read": false
+  },
+  {
+    "id": "msg_1789111962548_ykzh",
+    "projectId": "prj_demo_1",
+    "senderId": "usr_anonymous",
+    "senderName": "Nourou Dine AMANDOU",
+    "senderRole": "admin",
+    "content": "Test direct : tout fonctionne parfaitement dans le nouveau tableau de bord et la messagerie !",
+    "createdAt": "2026-09-11T07:32:42.548Z",
+    "read": false
+  }
+]
