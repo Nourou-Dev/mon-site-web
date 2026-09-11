@@ -1,9 +1,5 @@
 import { NextResponse } from "next/server";
-import { getInquiries, getNewsletterSubscribers, InquiryRecord } from "@/lib/storage";
-import fs from "fs/promises";
-import path from "path";
-
-const INQUIRIES_FILE = path.join(process.cwd(), "data", "inquiries.json");
+import { getInquiries, getNewsletterSubscribers, updateInquiryStatus } from "@/lib/storage";
 
 export async function GET() {
   try {
@@ -29,16 +25,12 @@ export async function PATCH(request: Request) {
       return NextResponse.json({ success: false, error: "Paramètres manquants" }, { status: 400 });
     }
 
-    const inquiries = await getInquiries();
-    const idx = inquiries.findIndex((inq) => inq.id === id);
-    if (idx < 0) {
+    const updated = await updateInquiryStatus(id, status);
+    if (!updated) {
       return NextResponse.json({ success: false, error: "Demande introuvable" }, { status: 404 });
     }
 
-    inquiries[idx].status = status;
-    await fs.writeFile(INQUIRIES_FILE, JSON.stringify(inquiries, null, 2), "utf-8");
-
-    return NextResponse.json({ success: true, inquiry: inquiries[idx] });
+    return NextResponse.json({ success: true, inquiry: updated });
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }

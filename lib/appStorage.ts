@@ -91,30 +91,14 @@ export interface CookieConsentLog {
   timestamp: string;
 }
 
+import { readJsonStorage, writeJsonStorage } from "./fsStorage";
+
 // ==========================================
-// 2. UTILITAIRES DE STOCKAGE SÉCURISÉ
+// 2. UTILITAIRES DE STOCKAGE SÉCURISÉ (RÉSILIENT VERCEL / SERVERLESS)
 // ==========================================
 
-async function ensureDataDir(): Promise<void> {
-  try {
-    await fs.mkdir(DATA_DIR, { recursive: true });
-  } catch {}
-}
-
-async function readJson<T>(filePath: string, defaultValue: T): Promise<T> {
-  await ensureDataDir();
-  try {
-    const data = await fs.readFile(filePath, "utf-8");
-    return JSON.parse(data) as T;
-  } catch {
-    return defaultValue;
-  }
-}
-
-async function writeJson<T>(filePath: string, data: T): Promise<void> {
-  await ensureDataDir();
-  await fs.writeFile(filePath, JSON.stringify(data, null, 2), "utf-8");
-}
+const readJson = readJsonStorage;
+const writeJson = writeJsonStorage;
 
 // ==========================================
 // 3. GESTION DES UTILISATEURS (AUTH)

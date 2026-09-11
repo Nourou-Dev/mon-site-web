@@ -37,7 +37,8 @@ export default function MessagesPage() {
   const [refreshing, setRefreshing] = useState(false);
   const [mobileViewChat, setMobileViewChat] = useState(false);
 
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  // Référence spécifique au conteneur interne des bulles de chat (ne fait JAMAIS défiler la page entière)
+  const chatContainerRef = useRef<HTMLDivElement>(null);
 
   // 1. Charger la session utilisateur et la liste des projets
   useEffect(() => {
@@ -82,7 +83,7 @@ export default function MessagesPage() {
     init();
   }, []);
 
-  // 2. Charger les messages du projet sélectionné
+  // 2. Charger les messages du projet sélectionné (sans forcer de défilement)
   const fetchCurrentMessages = async (silent = false) => {
     if (!selectedProjectId) return;
     if (!silent) setRefreshing(true);
@@ -90,8 +91,16 @@ export default function MessagesPage() {
     try {
       const res = await fetch(`/api/app/messages?projectId=${selectedProjectId}`);
       const data = await res.json();
-      if (data.success && data.messages) {
-        setMessages(data.messages);
+      if (data.success && Array.isArray(data.messages)) {
+        setMessages((prev) => {
+          if (
+            prev.length === data.messages.length &&
+            prev.every((m, idx) => m.id === data.messages[idx]?.id)
+          ) {
+            return prev;
+          }
+          return data.messages;
+        });
       }
     } catch (err) {
       console.error("Erreur chargement messages:", err);
@@ -104,18 +113,13 @@ export default function MessagesPage() {
     if (!selectedProjectId) return;
     fetchCurrentMessages(false);
 
-    // Polling automatique toutes les 6 secondes pour le temps réel
+    // Polling discret toutes les 6 secondes pour le temps réel
     const interval = setInterval(() => {
       fetchCurrentMessages(true);
     }, 6000);
 
     return () => clearInterval(interval);
   }, [selectedProjectId]);
-
-  // Scroll automatique en bas lors de la réception de messages
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
 
   // 3. Envoyer un message
   const handleSendMessage = async (e?: React.FormEvent) => {
@@ -140,6 +144,16 @@ export default function MessagesPage() {
       if (data.success && data.message) {
         setMessages((prev) => [...prev, data.message]);
         setContent("");
+
+        // Défilement interne propre UNIQUEMENT lors de l'envoi d'un nouveau message
+        setTimeout(() => {
+          if (chatContainerRef.current) {
+            chatContainerRef.current.scrollTo({
+              top: chatContainerRef.current.scrollHeight,
+              behavior: "smooth",
+            });
+          }
+        }, 80);
       } else {
         alert(data.error || "Erreur lors de l'envoi du message");
       }
@@ -335,7 +349,7 @@ export default function MessagesPage() {
             ) : null}
 
             {/* Corps des messages avec distinction claire droite / gauche */}
-            <div className="flex-1 overflow-y-auto bg-[#fdfdfd] p-4 sm:p-5 space-y-4">
+            <div ref={chatContainerRef} className="flex-1 overflow-y-auto bg-[#fdfdfd] p-4 sm:p-5 space-y-4">
               {messages.length === 0 ? (
                 <div className="flex h-full flex-col items-center justify-center text-center py-12">
                   <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#0060c3]/10 text-[#0060c3]">
@@ -409,7 +423,6 @@ export default function MessagesPage() {
                   );
                 })
               )}
-              <div ref={messagesEndRef} />
             </div>
 
             {/* Suggestions de réponses rapides */}

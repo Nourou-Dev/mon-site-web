@@ -27,31 +27,10 @@ const DATA_DIR = path.join(process.cwd(), "data");
 const INQUIRIES_FILE = path.join(DATA_DIR, "inquiries.json");
 const NEWSLETTER_FILE = path.join(DATA_DIR, "newsletter.json");
 
-// S'assure que le dossier data/ existe
-async function ensureDataDir(): Promise<void> {
-  try {
-    await fs.mkdir(DATA_DIR, { recursive: true });
-  } catch {
-    // Le dossier existe déjà ou erreur ignorée
-  }
-}
+import { readJsonStorage, writeJsonStorage } from "./fsStorage";
 
-// Lecture sécurisée d'un fichier JSON
-async function readJsonFile<T>(filePath: string, defaultValue: T): Promise<T> {
-  await ensureDataDir();
-  try {
-    const content = await fs.readFile(filePath, "utf-8");
-    return JSON.parse(content) as T;
-  } catch {
-    return defaultValue;
-  }
-}
-
-// Écriture sécurisée d'un fichier JSON
-async function writeJsonFile<T>(filePath: string, data: T): Promise<void> {
-  await ensureDataDir();
-  await fs.writeFile(filePath, JSON.stringify(data, null, 2), "utf-8");
-}
+const readJsonFile = readJsonStorage;
+const writeJsonFile = writeJsonStorage;
 
 /**
  * Enregistre une nouvelle demande de devis/contact
@@ -124,4 +103,20 @@ export async function saveNewsletterSubscriber(
  */
 export async function getNewsletterSubscribers(): Promise<NewsletterRecord[]> {
   return await readJsonFile<NewsletterRecord[]>(NEWSLETTER_FILE, []);
+}
+
+/**
+ * Met à jour le statut d'une demande de devis
+ */
+export async function updateInquiryStatus(
+  id: string,
+  status: InquiryRecord["status"]
+): Promise<InquiryRecord | null> {
+  const inquiries = await getInquiries();
+  const idx = inquiries.findIndex((inq) => inq.id === id);
+  if (idx < 0) return null;
+
+  inquiries[idx].status = status;
+  await writeJsonFile(INQUIRIES_FILE, inquiries);
+  return inquiries[idx];
 }
