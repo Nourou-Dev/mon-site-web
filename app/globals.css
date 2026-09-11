@@ -215,3 +215,28 @@ footer {
   background: var(--site-accent);
   flex-shrink: 0;
 }
+
+/* Barre de défilement fluide et élégante pour la messagerie */
+.chat-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 96, 195, 0.35) transparent;
+}
+
+.chat-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.chat-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.chat-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 96, 195, 0.25);
+  border-radius: 9999px;
+}
+
+.chat-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 96, 195, 0.5);
+}
+

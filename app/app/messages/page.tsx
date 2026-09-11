@@ -10,6 +10,7 @@ import {
   RefreshCw,
   FolderKanban,
   ArrowLeft,
+  ArrowDown,
   Sparkles,
   PhoneCall,
   Clock,
@@ -36,9 +37,11 @@ export default function MessagesPage() {
   const [sending, setSending] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [mobileViewChat, setMobileViewChat] = useState(false);
+  const [showScrollBottom, setShowScrollBottom] = useState(false);
 
-  // Référence spécifique au conteneur interne des bulles de chat (ne fait JAMAIS défiler la page entière)
+  // Référence spécifique au conteneur interne des bulles de chat
   const chatContainerRef = useRef<HTMLDivElement>(null);
+  const isInitialLoadRef = useRef(true);
 
   // 1. Charger la session utilisateur et la liste des projets
   useEffect(() => {
@@ -120,6 +123,40 @@ export default function MessagesPage() {
 
     return () => clearInterval(interval);
   }, [selectedProjectId]);
+
+  // Réinitialiser le drapeau de chargement initial lors d'un changement de projet
+  useEffect(() => {
+    isInitialLoadRef.current = true;
+  }, [selectedProjectId]);
+
+  // Positionner les messages en bas au chargement initial du projet (SANS défiler la page globale)
+  useEffect(() => {
+    if (isInitialLoadRef.current && messages.length > 0) {
+      isInitialLoadRef.current = false;
+      setTimeout(() => {
+        if (chatContainerRef.current) {
+          chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+        }
+      }, 60);
+    }
+  }, [messages]);
+
+  const handleChatScroll = () => {
+    if (!chatContainerRef.current) return;
+    const { scrollTop, scrollHeight, clientHeight } = chatContainerRef.current;
+    // Si l'utilisateur est remonté de plus de 100px par rapport au bas, afficher le bouton
+    const isNearBottom = scrollHeight - scrollTop - clientHeight < 100;
+    setShowScrollBottom(!isNearBottom);
+  };
+
+  const scrollToBottom = () => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTo({
+        top: chatContainerRef.current.scrollHeight,
+        behavior: "smooth",
+      });
+    }
+  };
 
   // 3. Envoyer un message
   const handleSendMessage = async (e?: React.FormEvent) => {
@@ -241,14 +278,14 @@ export default function MessagesPage() {
         </div>
       ) : (
         /* Conteneur principal de Messagerie : Sidebar Projets + Chat */
-        <div className="grid grid-cols-1 overflow-hidden rounded-2xl sm:rounded-3xl border border-[#171717]/10 bg-white shadow-sm lg:grid-cols-12 min-h-[500px] h-[calc(100dvh-13rem)] max-h-[820px] min-w-0 max-w-full">
+        <div className="grid grid-cols-1 overflow-hidden rounded-2xl sm:rounded-3xl border border-[#171717]/10 bg-white shadow-sm lg:grid-cols-12 min-h-[440px] sm:min-h-[520px] h-[calc(100dvh-13rem)] max-h-[820px] min-w-0 max-w-full">
           {/* COLONNE GAUCHE : Sélecteur de projets */}
           <div
-            className={`border-b border-[#171717]/10 bg-[#fafafa] p-4 lg:col-span-4 lg:border-b-0 lg:border-r lg:block ${
-              mobileViewChat ? "hidden" : "block"
+            className={`border-b border-[#171717]/10 bg-[#fafafa] p-4 lg:col-span-4 lg:border-b-0 lg:border-r h-full min-h-0 flex flex-col ${
+              mobileViewChat ? "hidden" : "flex"
             }`}
           >
-            <div className="mb-3 flex items-center justify-between px-1">
+            <div className="mb-3 flex items-center justify-between px-1 shrink-0">
               <span className="text-xs font-black uppercase tracking-wider text-[#4b4b4b]">
                 Projets ({projects.length})
               </span>
@@ -257,7 +294,7 @@ export default function MessagesPage() {
               </span>
             </div>
 
-            <div className="space-y-2 overflow-y-auto max-h-[calc(100dvh-18rem)] lg:max-h-[680px] pr-1">
+            <div className="flex-1 min-h-0 overflow-y-auto chat-scrollbar space-y-2 pr-1">
               {projects.map((proj) => {
                 const isSelected = proj.id === selectedProjectId;
                 return (
@@ -306,13 +343,13 @@ export default function MessagesPage() {
 
           {/* COLONNE DROITE : Zone de Chat */}
           <div
-            className={`flex flex-col lg:col-span-8 ${
+            className={`flex flex-col lg:col-span-8 h-full min-h-0 overflow-hidden relative ${
               !mobileViewChat ? "hidden lg:flex" : "flex"
             }`}
           >
             {/* Header du Chat */}
             {selectedProject ? (
-              <div className="flex items-center justify-between border-b border-[#171717]/10 bg-white px-4 sm:px-5 py-3.5">
+              <div className="shrink-0 flex items-center justify-between border-b border-[#171717]/10 bg-white px-4 sm:px-5 py-3.5">
                 <div className="flex items-center gap-3">
                   <button
                     onClick={() => setMobileViewChat(false)}
@@ -348,8 +385,12 @@ export default function MessagesPage() {
               </div>
             ) : null}
 
-            {/* Corps des messages avec distinction claire droite / gauche */}
-            <div ref={chatContainerRef} className="flex-1 overflow-y-auto bg-[#fdfdfd] p-4 sm:p-5 space-y-4">
+            {/* Corps des messages avec défilement fluide et distinction claire droite / gauche */}
+            <div
+              ref={chatContainerRef}
+              onScroll={handleChatScroll}
+              className="flex-1 min-h-0 overflow-y-auto overscroll-contain chat-scrollbar bg-[#fdfdfd] p-4 sm:p-5 space-y-4 select-text"
+            >
               {messages.length === 0 ? (
                 <div className="flex h-full flex-col items-center justify-center text-center py-12">
                   <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#0060c3]/10 text-[#0060c3]">
@@ -425,8 +466,21 @@ export default function MessagesPage() {
               )}
             </div>
 
+            {/* Bouton flottant pour redescendre aux derniers messages */}
+            {showScrollBottom && (
+              <button
+                type="button"
+                onClick={scrollToBottom}
+                className="absolute bottom-28 right-5 z-30 inline-flex items-center gap-1.5 rounded-full bg-[#0060c3] px-3.5 py-2 text-xs font-bold text-white shadow-xl shadow-[#0060c3]/30 transition-all hover:bg-[#004ca3] hover:scale-105 active:scale-95"
+                title="Descendre aux derniers messages"
+              >
+                <ArrowDown className="h-3.5 w-3.5" />
+                <span>Derniers messages</span>
+              </button>
+            )}
+
             {/* Suggestions de réponses rapides */}
-            <div className="border-t border-[#171717]/5 bg-[#fbfbfb] px-4 py-2">
+            <div className="shrink-0 border-t border-[#171717]/5 bg-[#fbfbfb] px-4 py-2">
               <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs">
                 <span className="flex shrink-0 items-center gap-1 text-[11px] font-bold text-[#7b7b7b]">
                   <Sparkles className="h-3 w-3 text-[#0060c3]" />
@@ -453,7 +507,7 @@ export default function MessagesPage() {
             {/* Formulaire d'envoi */}
             <form
               onSubmit={handleSendMessage}
-              className="border-t border-[#171717]/10 bg-white p-4"
+              className="shrink-0 border-t border-[#171717]/10 bg-white p-3 sm:p-4"
             >
               <div className="flex items-center gap-2">
                 <textarea
