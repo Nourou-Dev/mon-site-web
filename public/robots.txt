@@ -1,10 +1,11 @@
 # Robots.txt pour Nourou Dine AMANDOU - Développeur Web Freelance
 
-# 1. Autoriser les moteurs de recherche légitimes (Google, Bing, Yahoo, DuckDuckGo)
+# 1. Autoriser les moteurs de recherche légitimes (Google, Bing, Yahoo, DuckDuckGo, etc.)
 User-agent: *
 Allow: /
 Disallow: /api/
-Disallow: /data/
+Disallow: /dashboard/
+Disallow: /app/
 Disallow: /_next/
 Disallow: /admin/
 
@@ -24,5 +25,5 @@ Disallow: /
 User-agent: ZoominfoBot
 Disallow: /
 
-# Sitemap
-Sitemap: https://nouroudineamandou.com/sitemap.xml
+# Sitemap officiel
+Sitemap: https://nouroudineamandou.vercel.app/sitemap.xml

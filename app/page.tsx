@@ -17,11 +17,13 @@ import FinalCTA from "@/components/FinalCTA";
 import Footer from "@/components/Footer";
 import FloatingActions from "@/components/FloatingActions";
 
+export const revalidate = 3600;
+
 export default function Home() {
   return (
     <>
       <Navbar />
-      <main id="contenu">
+      <main id="contenu" tabIndex={-1}>
         <Hero />
         <ProblemSolution />
         <Solution />

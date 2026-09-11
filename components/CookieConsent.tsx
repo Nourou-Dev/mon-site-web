@@ -144,7 +144,7 @@ export default function CookieConsent() {
             type="button"
             onClick={handleRejectAll}
             aria-label="Fermer et refuser les cookies optionnels"
-            className="flex h-7 w-7 items-center justify-center rounded-full text-[#171717]/50 hover:bg-[#f4f6f8] hover:text-[#171717] transition-colors"
+            className="flex h-9 w-9 items-center justify-center rounded-full text-[#171717]/70 hover:bg-[#f4f6f8] hover:text-[#171717] transition-colors"
           >
             <X className="h-4 w-4" />
           </button>
@@ -153,11 +153,11 @@ export default function CookieConsent() {
         {/* Corps */}
         {!showCustomize ? (
           <>
-            <div className="py-3 text-xs text-[#4b4b4b] leading-relaxed">
+            <div className="py-3 text-xs text-[#374151] leading-relaxed">
               <p>
                 Ce site utilise des cookies essentiels pour son bon fonctionnement et, avec votre accord, des cookies de mesure d’audience et d’expérience.
               </p>
-              <p className="mt-1.5 text-[11px] text-[#171717]/60">
+              <p className="mt-1.5 text-[11px] text-[#4b5563]">
                 Vous pouvez tout accepter, refuser ou personnaliser vos choix. Voir la{" "}
                 <Link
                   href="/confidentialite"
@@ -174,7 +174,7 @@ export default function CookieConsent() {
               <button
                 type="button"
                 onClick={handleAcceptAll}
-                className="w-full rounded-xl bg-[#0060c3] py-2.5 px-4 text-xs font-bold text-white hover:bg-[#0050a5] shadow-sm shadow-[#0060c3]/25 transition-all hover:-translate-y-0.5 text-center"
+                className="w-full rounded-xl bg-[#0060c3] py-3 px-4 text-xs font-bold text-white hover:bg-[#0050a5] shadow-sm shadow-[#0060c3]/25 transition-all hover:-translate-y-0.5 text-center min-h-[44px]"
               >
                 Tout accepter
               </button>
@@ -183,14 +183,14 @@ export default function CookieConsent() {
                 <button
                   type="button"
                   onClick={handleRejectAll}
-                  className="rounded-xl border border-[#171717]/15 bg-white py-2 px-2.5 text-xs font-semibold text-[#171717] hover:bg-[#f4f6f8] transition-colors text-center truncate"
+                  className="rounded-xl border border-[#171717]/15 bg-white py-2.5 px-2.5 text-xs font-semibold text-[#171717] hover:bg-[#f4f6f8] transition-colors text-center truncate min-h-[40px]"
                 >
                   Refuser
                 </button>
                 <button
                   type="button"
                   onClick={() => setShowCustomize(true)}
-                  className="rounded-xl border border-[#171717]/15 bg-[#f8f9fa] py-2 px-2.5 text-xs font-semibold text-[#171717] hover:bg-white hover:text-[#0060c3] hover:border-[#0060c3]/30 transition-colors text-center inline-flex items-center justify-center gap-1 truncate"
+                  className="rounded-xl border border-[#171717]/15 bg-[#f8f9fa] py-2.5 px-2.5 text-xs font-semibold text-[#171717] hover:bg-white hover:text-[#0060c3] hover:border-[#0060c3]/30 transition-colors text-center inline-flex items-center justify-center gap-1 truncate min-h-[40px]"
                 >
                   <Settings2 className="h-3.5 w-3.5" />
                   <span>Personnaliser</span>
@@ -206,7 +206,7 @@ export default function CookieConsent() {
               <div className="flex items-start justify-between gap-2 rounded-xl bg-[#f8f9fa] p-2.5 border border-[#171717]/6">
                 <div>
                   <div className="flex items-center gap-1.5 font-bold text-[#171717]">
-                    <ShieldCheck className="h-3.5 w-3.5 text-[#0060c3]" />
+                    <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />
                     <span className="text-[11px]">Strictement nécessaires</span>
                   </div>
                   <p className="mt-0.5 text-[#4b4b4b] text-[10px] leading-relaxed">
@@ -229,6 +229,7 @@ export default function CookieConsent() {
                 <label className="relative inline-flex shrink-0 cursor-pointer items-center">
                   <input
                     type="checkbox"
+                    aria-label="Autoriser les cookies de mesure d'audience"
                     checked={preferences.analytics}
                     onChange={(e) =>
                       setPreferences({ ...preferences, analytics: e.target.checked })
@@ -250,6 +251,7 @@ export default function CookieConsent() {
                 <label className="relative inline-flex shrink-0 cursor-pointer items-center">
                   <input
                     type="checkbox"
+                    aria-label="Autoriser les cookies d'expérience et confort"
                     checked={preferences.preferences}
                     onChange={(e) =>
                       setPreferences({ ...preferences, preferences: e.target.checked })

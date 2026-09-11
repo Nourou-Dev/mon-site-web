@@ -7,7 +7,8 @@ const brands = [
   {
     name: "adidas",
     logo: (
-      <svg viewBox="0 0 120 40" className="h-10 w-auto" aria-label="adidas logo">
+      <svg viewBox="0 0 120 40" className="h-10 w-auto" role="img" aria-label="Logo adidas">
+        <title>Logo adidas</title>
         <g fill="#171717" opacity="0.8">
           <path d="M6 28L22 6L30 6L18 28H6Z" />
           <path d="M28 28L44 6L52 6L40 28H28Z" />
@@ -19,7 +20,8 @@ const brands = [
   {
     name: "Pepsi",
     logo: (
-      <svg viewBox="0 0 140 40" className="h-10 w-auto" aria-label="Pepsi logo">
+      <svg viewBox="0 0 140 40" className="h-10 w-auto" role="img" aria-label="Logo Pepsi">
+        <title>Logo Pepsi</title>
         <circle cx="20" cy="20" r="18" fill="#0b4dd8" />
         <circle cx="20" cy="20" r="12" fill="#fff" opacity="0.18" />
         <path d="M11 27C18 20 19 11 31 10C25 18 25 23 18 29C15 31 12 30 11 27Z" fill="#f44336" />
@@ -30,7 +32,8 @@ const brands = [
   {
     name: "Spotify",
     logo: (
-      <svg viewBox="0 0 140 40" className="h-10 w-auto" aria-label="Spotify logo">
+      <svg viewBox="0 0 140 40" className="h-10 w-auto" role="img" aria-label="Logo Spotify">
+        <title>Logo Spotify</title>
         <circle cx="20" cy="20" r="18" fill="#1ed760" />
         <path d="M13 17.5C18 16 25 15.5 32 16.5" stroke="#0f1a12" strokeWidth="2.2" strokeLinecap="round" fill="none" />
         <path d="M12 22C18 20 26 19.5 34 20.8" stroke="#0f1a12" strokeWidth="2.2" strokeLinecap="round" fill="none" />
@@ -41,7 +44,8 @@ const brands = [
   {
     name: "Nike",
     logo: (
-      <svg viewBox="0 0 140 40" className="h-10 w-auto" aria-label="Nike logo">
+      <svg viewBox="0 0 140 40" className="h-10 w-auto" role="img" aria-label="Logo Nike">
+        <title>Logo Nike</title>
         <path d="M9 27C19 22 29 16 42 13C49 11 56 12 64 15C55 18 47 22 39 26C31 29 22 31 9 27Z" fill="#171717" opacity="0.8"/>
         <path d="M42 13C52 13 60 17 72 21C78 23 86 25 98 24C89 27 79 30 68 32C59 33 48 31 42 27C38 24 37 17 42 13Z" fill="#171717" opacity="0.8"/>
       </svg>
@@ -50,7 +54,8 @@ const brands = [
   {
     name: "Coca-Cola",
     logo: (
-      <svg viewBox="0 0 180 40" className="h-10 w-auto" aria-label="Coca Cola logo">
+      <svg viewBox="0 0 180 40" className="h-10 w-auto" role="img" aria-label="Logo Coca-Cola">
+        <title>Logo Coca-Cola</title>
         <rect x="4" y="8" width="30" height="24" rx="12" fill="#e61d2b" />
         <path d="M16 12C20 12 23 13 25 15C22 16 20 18 18 21C16 24 15 27 13 29C11 27 10 24 10 20C10 16 13 12 16 12Z" fill="#fff" opacity="0.95"/>
         <text x="42" y="28" fill="#d41722" fontSize="20" fontWeight="700" letterSpacing="-1">Coca-Cola</text>
@@ -60,7 +65,8 @@ const brands = [
   {
     name: "Uber",
     logo: (
-      <svg viewBox="0 0 130 40" className="h-10 w-auto" aria-label="Uber logo">
+      <svg viewBox="0 0 130 40" className="h-10 w-auto" role="img" aria-label="Logo Uber">
+        <title>Logo Uber</title>
         <text x="0" y="27" fill="#171717" fontSize="24" fontWeight="800" letterSpacing="-1">Uber</text>
       </svg>
     ),
@@ -68,7 +74,8 @@ const brands = [
   {
     name: "Netflix",
     logo: (
-      <svg viewBox="0 0 150 40" className="h-10 w-auto" aria-label="Netflix logo">
+      <svg viewBox="0 0 150 40" className="h-10 w-auto" role="img" aria-label="Logo Netflix">
+        <title>Logo Netflix</title>
         <rect x="4" y="6" width="28" height="28" rx="6" fill="#e50914" />
         <path d="M14 13L22 13L19 27L11 27L14 13Z" fill="#fff" />
         <path d="M25 13L33 13L30 27L22 27L25 13Z" fill="#fff" />
@@ -79,7 +86,8 @@ const brands = [
   {
     name: "Microsoft",
     logo: (
-      <svg viewBox="0 0 160 40" className="h-10 w-auto" aria-label="Microsoft logo">
+      <svg viewBox="0 0 160 40" className="h-10 w-auto" role="img" aria-label="Logo Microsoft">
+        <title>Logo Microsoft</title>
         <rect x="0" y="3" width="16" height="16" fill="#f25022" />
         <rect x="20" y="3" width="16" height="16" fill="#7fba00" />
         <rect x="0" y="23" width="16" height="16" fill="#00a4ef" />
@@ -135,7 +143,7 @@ export default function Hero() {
               <div className="relative flex flex-col items-center">
                 <Image
                   src="/media/nourou-portrait-transparent-2.png"
-                  alt="Portrait de Nourou"
+                  alt="Portrait professionnel de Nourou Dine AMANDOU, développeur web freelance et créateur digital"
                   width={760}
                   height={950}
                   priority
@@ -145,19 +153,19 @@ export default function Hero() {
               </div>
 
               <div className="relative z-20 mt-4 grid w-full max-w-[24rem] grid-cols-3 gap-1.5 sm:gap-3 lg:absolute lg:left-1/2 lg:top-[74%] lg:mt-0 lg:-translate-x-1/2">
-                <div className="flex min-h-[4.25rem] w-full flex-col items-center justify-center rounded-[1rem] sm:rounded-[1.1rem] border border-[#171717]/10 bg-white/90 px-1 py-1.5 sm:py-2 text-center shadow-[0_20px_40px_rgba(23,23,23,0.08)] backdrop-blur-sm sm:h-20">
+                <div className="flex min-h-[4.25rem] w-full flex-col items-center justify-center rounded-[1rem] sm:rounded-[1.1rem] border border-[#171717]/10 bg-white/95 px-1 py-1.5 sm:py-2 text-center shadow-[0_20px_40px_rgba(23,23,23,0.08)] backdrop-blur-sm sm:h-20">
                   <span className="text-lg sm:text-2xl font-black tracking-[-0.06em] text-[#171717]">4+</span>
-                  <span className="mt-0.5 text-[8px] sm:text-[10px] uppercase leading-tight tracking-[0.04em] sm:tracking-[0.12em] text-[#4b4b4b]">Expérience</span>
+                  <span className="mt-0.5 text-[8px] sm:text-[10px] uppercase leading-tight tracking-[0.04em] sm:tracking-[0.12em] text-[#1f2937] font-semibold">Expérience</span>
                 </div>
 
-                <div className="flex min-h-[4.25rem] w-full flex-col items-center justify-center rounded-[1rem] sm:rounded-[1.1rem] border border-[#171717]/10 bg-white/90 px-1 py-1.5 sm:py-2 text-center shadow-[0_20px_40px_rgba(23,23,23,0.08)] backdrop-blur-sm sm:h-20">
+                <div className="flex min-h-[4.25rem] w-full flex-col items-center justify-center rounded-[1rem] sm:rounded-[1.1rem] border border-[#171717]/10 bg-white/95 px-1 py-1.5 sm:py-2 text-center shadow-[0_20px_40px_rgba(23,23,23,0.08)] backdrop-blur-sm sm:h-20">
                   <span className="text-lg sm:text-2xl font-black tracking-[-0.06em] text-[#171717]">10+</span>
-                  <span className="mt-0.5 text-[8px] sm:text-[10px] uppercase leading-tight tracking-[0.04em] sm:tracking-[0.12em] text-[#4b4b4b]">Projets livrés</span>
+                  <span className="mt-0.5 text-[8px] sm:text-[10px] uppercase leading-tight tracking-[0.04em] sm:tracking-[0.12em] text-[#1f2937] font-semibold">Projets livrés</span>
                 </div>
 
                 <div className="flex min-h-[4.25rem] w-full flex-col items-center justify-center rounded-[1rem] sm:rounded-[1.1rem] border border-[#171717]/10 bg-[#0060c3] px-1 py-1.5 sm:py-2 text-center text-white shadow-[0_20px_40px_rgba(0,96,195,0.25)] sm:h-20">
                   <span className="text-lg sm:text-2xl font-black tracking-[-0.06em]">92%</span>
-                  <span className="mt-0.5 text-[8px] sm:text-[10px] uppercase leading-tight tracking-[0.04em] sm:tracking-[0.12em] text-white/90">Satisfaction</span>
+                  <span className="mt-0.5 text-[8px] sm:text-[10px] uppercase leading-tight tracking-[0.04em] sm:tracking-[0.12em] text-white font-semibold">Satisfaction</span>
                 </div>
               </div>
             </div>

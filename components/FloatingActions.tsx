@@ -22,7 +22,7 @@ export default function FloatingActions() {
         type="button"
         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
         aria-label="Retourner en haut de page"
-        className={`focus-ring fixed bottom-[max(1rem,env(safe-area-inset-bottom))] left-[max(1rem,env(safe-area-inset-left))] z-50 flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-[#0060c3] text-white shadow-xl shadow-[#0060c3]/30 transition-all hover:bg-[#0050a5] hover:-translate-y-0.5 active:scale-95 sm:bottom-6 sm:left-6 ${
+        className={`focus-ring fixed bottom-[max(1rem,env(safe-area-inset-bottom))] left-[max(1rem,env(safe-area-inset-left))] z-50 flex h-12 w-12 items-center justify-center rounded-full bg-[#0060c3] text-white shadow-xl shadow-[#0060c3]/30 transition-all hover:bg-[#0050a5] hover:-translate-y-0.5 active:scale-95 sm:bottom-6 sm:left-6 ${
           showTop
             ? "translate-y-0 opacity-100"
             : "pointer-events-none translate-y-3 opacity-0"

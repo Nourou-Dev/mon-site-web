@@ -1,0 +1,32 @@
+# Nourou Dine AMANDOU — Développeur Web Freelance & Créateur Digital
+
+> Portfolio et services professionnels de Nourou Dine AMANDOU, développeur web freelance et créateur digital spécialisé dans la conception de sites vitrines modernes, boutiques e-commerce, applications web sur mesure et refontes d'interfaces à fort impact.
+
+## Navigation Rapide
+
+- [Accueil](https://nouroudineamandou.vercel.app/): Présentation générale, services, réalisations et avis clients.
+- [Services](https://nouroudineamandou.vercel.app/services): Détail des prestations (Site Vitrine, E-Commerce, Application Web sur mesure, Refonte & Optimisation).
+- [Réalisations](https://nouroudineamandou.vercel.app/realisations): Études de cas, projets récents avec métriques de résultats et livrables.
+- [Contact & Devis](https://nouroudineamandou.vercel.app/contact): Formulaire de demande de devis et prise de contact rapide (réponse sous 24h).
+- [Espace Client](https://nouroudineamandou.vercel.app/app): Espace sécurisé pour les clients actifs avec suivi des jalons, livrables et messagerie directe.
+
+## Profil & Compétences Clés
+
+- **Nom**: Nourou Dine AMANDOU
+- **Rôle**: Développeur Web Full-Stack & UI/UX Designer Freelance
+- **Localisation**: Bénin & International (Télétravail)
+- **Technologies**: Next.js, React, TypeScript, TailwindCSS, Node.js, PostgreSQL, Prisma ORM, REST API
+- **Spécialités**: Expérience utilisateur soignée, Web Performance (99+ PageSpeed), Accessibilité WCAG AA, SEO technique, Architecture sécurisée.
+
+## Services Proposés
+
+1. **Sites Vitrines & Branding**: Création de sites internet élégants et percutants pour asseoir votre crédibilité et convertir les visiteurs en clients.
+2. **Boutiques E-Commerce**: Solutions marchandes rapides, sécurisées et optimisées pour le taux de conversion et les paiements en ligne.
+3. **Applications Web Sur Mesure**: Plateformes interactives, tableaux de bord de gestion, portails clients avec authentification et bases de données en direct.
+4. **Refonte & Optimisation de Performance**: Modernisation d'anciennes interfaces, passage aux Core Web Vitals (FCP, LCP, CLS) et conformité RGPD.
+
+## Coordonnées Officielles
+
+- **E-mail**: contact@nouroudineamandou.com
+- **Téléphone / WhatsApp**: +229 01 59 36 44 45
+- **Site web officiel**: https://nouroudineamandou.vercel.app
