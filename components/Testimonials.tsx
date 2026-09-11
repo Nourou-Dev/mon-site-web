@@ -1,5 +1,3 @@
-import { Quote, Star } from "lucide-react";
-
 const REAL_TESTIMONIALS = [
   {
     quote:
@@ -41,39 +39,44 @@ export default function Testimonials() {
         {/* En-tête de section */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-12 border-b border-[#C9C4B8]">
           <div>
-            <span className="text-xs font-mono text-[#4B4D54]">
-              07 / Retours d&apos;expérience &amp; témoignages
-            </span>
-            <h2 className="mt-4 font-display text-3xl sm:text-4xl lg:text-5xl font-light tracking-tight text-[#1B1D22] max-w-[640px]">
-              La confiance ne se décrète pas. Elle se mesure aux résultats.
+            <p className="text-xs font-mono text-[#1B1D22]/60">
+              07 · Témoignages d&apos;artisan &amp; Retours de commanditaires
+            </p>
+            <h2 className="mt-4 font-serif text-3xl sm:text-4xl lg:text-5xl font-normal tracking-tight text-[#1B1D22] max-w-[660px]">
+              La confiance ne se décrète pas. Elle se mesure aux résultats réels.
             </h2>
           </div>
-          <p className="max-w-[360px] text-sm text-[#4B4D54] leading-relaxed font-light">
-            Retours authentiques de dirigeants et professionnels qui ont choisi une approche sur mesure pour leur présence en ligne.
+          <p className="max-w-[380px] text-sm text-[#1B1D22]/70 leading-relaxed font-sans">
+            Retours authentiques de dirigeants et fondateurs qui ont choisi une collaboration directe et sur mesure pour leur présence en ligne.
           </p>
         </div>
 
-        {/* Témoignage vedette (Grand format éditorial) */}
-        <div className="mt-12 rounded-2xl border border-[#C9C4B8] bg-white p-8 sm:p-12 lg:p-14 shadow-2xs">
-          <blockquote className="font-display text-xl sm:text-2xl lg:text-3xl font-light leading-snug text-[#1B1D22] tracking-tight">
+        {/* Témoignage vedette (Grand format éditorial / Monographie) */}
+        <div className="mt-12 border border-[#C9C4B8] bg-white p-8 sm:p-12 lg:p-16">
+          <div className="text-xs font-mono text-[#3D5AFE] mb-6 flex items-center gap-2">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#3D5AFE]" />
+            <span>Étude de cas Santé &amp; Prise de rendez-vous · Cotonou</span>
+          </div>
+
+          <blockquote className="font-serif text-2xl sm:text-3xl lg:text-4xl font-normal leading-snug text-[#1B1D22] tracking-tight">
             &ldquo;{REAL_TESTIMONIALS[0].quote}&rdquo;
           </blockquote>
 
-          <div className="mt-8 pt-6 border-t border-[#C9C4B8]/40 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="mt-10 pt-8 border-t border-[#C9C4B8] flex flex-col sm:flex-row sm:items-center justify-between gap-6">
             <div>
-              <p className="font-display text-lg font-medium text-[#1B1D22]">
+              <p className="font-serif text-xl font-normal text-[#1B1D22]">
                 {REAL_TESTIMONIALS[0].author}
               </p>
-              <p className="text-xs sm:text-sm text-[#4B4D54]">
-                {REAL_TESTIMONIALS[0].role} · <span className="font-medium text-[#1B1D22]">{REAL_TESTIMONIALS[0].company}</span>
+              <p className="text-xs sm:text-sm text-[#1B1D22]/60 font-sans mt-0.5">
+                {REAL_TESTIMONIALS[0].role} · <span className="text-[#1B1D22] font-medium">{REAL_TESTIMONIALS[0].company}</span>
               </p>
             </div>
 
-            <div className="flex items-center gap-3 font-mono text-xs">
-              <span className="rounded-full bg-[#F6F4EF] border border-[#C9C4B8] px-3 py-1 font-mono text-xs text-[#1B1D22]">
+            <div className="flex items-center gap-4 font-mono text-xs">
+              <span className="border border-[#C9C4B8] bg-[#F6F4EF] px-3.5 py-1.5 text-[#1B1D22]">
                 {REAL_TESTIMONIALS[0].impact}
               </span>
-              <span className="text-[#4B4D54]">
+              <span className="text-[#1B1D22]/40">
                 {REAL_TESTIMONIALS[0].year}
               </span>
             </div>
@@ -81,25 +84,28 @@ export default function Testimonials() {
         </div>
 
         {/* 2 Témoignages secondaires en grille */}
-        <div className="mt-6 grid gap-6 md:grid-cols-2">
+        <div className="mt-8 grid gap-8 md:grid-cols-2">
           {REAL_TESTIMONIALS.slice(1).map((t) => (
             <div
               key={t.author}
-              className="flex flex-col justify-between rounded-2xl border border-[#C9C4B8] bg-white p-7 sm:p-8 shadow-2xs"
+              className="flex flex-col justify-between border border-[#C9C4B8] bg-white p-8 sm:p-10"
             >
               <div>
-                <blockquote className="text-sm sm:text-base leading-relaxed text-[#4B4D54] font-light">
+                <span className="text-xs font-mono text-[#1B1D22]/50 block mb-4">
+                  {t.project} · {t.year}
+                </span>
+                <blockquote className="font-serif text-lg sm:text-xl font-normal leading-relaxed text-[#1B1D22]">
                   &ldquo;{t.quote}&rdquo;
                 </blockquote>
               </div>
 
-              <div className="mt-6 pt-5 border-t border-[#C9C4B8]/40 flex items-center justify-between">
+              <div className="mt-8 pt-6 border-t border-[#C9C4B8] flex items-center justify-between">
                 <div>
-                  <p className="font-display text-base font-medium text-[#1B1D22]">
+                  <p className="font-serif text-base font-normal text-[#1B1D22]">
                     {t.author}
                   </p>
-                  <p className="text-xs text-[#4B4D54]">
-                    {t.role} · <span className="font-medium text-[#1B1D22]">{t.company}</span>
+                  <p className="text-xs text-[#1B1D22]/60 font-sans">
+                    {t.role} · <span className="text-[#1B1D22] font-medium">{t.company}</span>
                   </p>
                 </div>
                 <span className="text-xs font-mono text-[#3D5AFE]">

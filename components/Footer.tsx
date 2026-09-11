@@ -15,17 +15,17 @@ const socialLinks = [
   {
     name: "Facebook",
     href: "https://facebook.com",
-    icon: <Facebook className="h-4 w-4" strokeWidth={2} />,
+    icon: <Facebook className="h-4 w-4" strokeWidth={1.5} />,
   },
   {
     name: "LinkedIn",
     href: "https://linkedin.com",
-    icon: <Linkedin className="h-4 w-4" strokeWidth={2} />,
+    icon: <Linkedin className="h-4 w-4" strokeWidth={1.5} />,
   },
   {
     name: "Instagram",
     href: "https://instagram.com",
-    icon: <Instagram className="h-4 w-4" strokeWidth={2} />,
+    icon: <Instagram className="h-4 w-4" strokeWidth={1.5} />,
   },
   {
     name: "Behance",
@@ -53,12 +53,12 @@ export default function Footer() {
               <span className="italic">AMANDOU</span>
             </Link>
             <p className="mt-4 max-w-sm text-sm text-[#1B1D22]/70 font-sans leading-relaxed">
-              Atelier indépendant de design d&apos;interface et d&apos;ingénierie web sur mesure. Code propriétaire, performance garantie et accompagnement transparent de bout en bout.
+              Atelier indépendant de direction artistique et d&apos;ingénierie web sur mesure. Code propriétaire, performance garantie et relation directe d&apos;artisan à commanditaire.
             </p>
             
             <div className="mt-6 flex items-center gap-2.5 text-xs font-mono text-[#1B1D22]/60">
               <span className="h-2 w-2 rounded-full bg-[#3D5AFE]"></span>
-              <span>Disponible pour de nouveaux projets</span>
+              <span>1 créneau ouvert pour nouveaux projets</span>
             </div>
 
             <div className="mt-6 flex flex-wrap gap-2">
@@ -138,10 +138,30 @@ export default function Footer() {
           </div>
         </div>
 
+        {/* Colophon d'Atelier (Inspiration Behance / Livre d'art) */}
+        <div className="mt-14 border-t border-[#C9C4B8] pt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4 text-xs font-mono text-[#1B1D22]/60">
+          <div>
+            <span className="text-[#1B1D22] font-medium block">Typographies d&apos;art</span>
+            <span className="mt-1 block">Fraunces (titres) &amp; Manrope (corps)</span>
+          </div>
+          <div>
+            <span className="text-[#1B1D22] font-medium block">Ingénierie &amp; Rendu</span>
+            <span className="mt-1 block">Next.js 14 · Tailwind · Prisma</span>
+          </div>
+          <div>
+            <span className="text-[#1B1D22] font-medium block">Localisation &amp; Délais</span>
+            <span className="mt-1 block">Cotonou (GMT+1) · Monde entier</span>
+          </div>
+          <div>
+            <span className="text-[#1B1D22] font-medium block">Engagement artisanal</span>
+            <span className="mt-1 block">Fait à la main, 1 projet à la fois</span>
+          </div>
+        </div>
+
         {/* Bottom Bar */}
-        <div className="mt-16 flex flex-col items-center justify-between gap-4 border-t border-[#C9C4B8] pt-8 text-xs font-mono text-[#1B1D22]/50 sm:flex-row">
+        <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-[#C9C4B8] pt-8 text-xs font-mono text-[#1B1D22]/50 sm:flex-row">
           <p>
-            © {new Date().getFullYear()} Nourou Dine AMANDOU · Conception éditoriale &amp; code sur mesure.
+            © {new Date().getFullYear()} Nourou Dine AMANDOU · Direction artistique &amp; Code sur mesure.
           </p>
           <div className="flex flex-wrap items-center gap-4 text-xs sm:gap-6">
             <Link href="/mentions-legales" className="hover:text-[#1B1D22] transition-colors">

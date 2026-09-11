@@ -62,16 +62,16 @@ export default function Navbar() {
             className="group flex flex-col focus:outline-none"
           >
             <div className="flex items-center gap-2.5">
-              <span className="font-display text-lg sm:text-xl font-normal tracking-tight text-[#1B1D22] group-hover:text-[#3D5AFE] transition-colors">
+              <span className="font-serif text-lg sm:text-xl font-normal tracking-tight text-[#1B1D22] group-hover:text-[#3D5AFE] transition-colors">
                 Nourou Dine AMANDOU
               </span>
-              <span className="hidden sm:inline-flex items-center gap-1.5 rounded-full border border-[#C9C4B8] bg-white/60 px-2 py-0.5 text-xs text-[#1B1D22]">
+              <span className="hidden sm:inline-flex items-center gap-1.5 border border-[#C9C4B8] bg-white px-2 py-0.5 text-[10px] font-mono text-[#1B1D22]">
                 <span className="h-1.5 w-1.5 rounded-full bg-[#FF6B3D]" />
                 Disponible
               </span>
             </div>
-            <span className="text-xs text-[#4B4D54] font-normal">
-              Design de systèmes &amp; ingénierie web
+            <span className="text-xs font-mono text-[#1B1D22]/60 font-normal">
+              Atelier d&apos;art &amp; Code sur mesure
             </span>
           </Link>
 
