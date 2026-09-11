@@ -11,6 +11,7 @@ import {
   CheckCircle2,
   ChevronRight,
   Clock,
+  ExternalLink,
   Layers,
   Sparkles,
   Wrench,
@@ -170,6 +171,20 @@ export default async function ProjectCaseStudyPage({
                 </div>
               </dl>
             </div>
+
+            {project.preview_url && (
+              <div className="mt-6 flex justify-center">
+                <a
+                  href={project.preview_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-full bg-[#0060c3] px-6 py-3 text-xs sm:text-sm font-bold text-white shadow-md transition-all hover:bg-[#0050a5] hover:-translate-y-0.5 active:scale-95"
+                >
+                  <ExternalLink className="h-4 w-4" />
+                  <span>Visiter le site en direct ({project.preview_url.replace("https://", "")})</span>
+                </a>
+              </div>
+            )}
           </header>
 
           {/* Image principale / Vitrine avec <figure> */}

@@ -8,9 +8,9 @@ export const site = {
   brand: "Nourou Dine AMANDOU",
   brandSuffix: "",
   tagline: "Développeur web freelance basé à Abomey-Calavi",
-  phone: "+229 01 00 00 00 00",
+  phone: "+229 01 61 38 07 98",
   email: "contact@nouroudineamandou.com",
-  whatsapp: "https://wa.me/22900000000",
+  whatsapp: "https://wa.me/2290161380798",
 };
 
 export const navLinks = [

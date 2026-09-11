@@ -59,13 +59,28 @@ export default function StatsBar() {
                 </span>
               </div>
 
-              <div className="flex items-center justify-between gap-4 px-1 pt-4">
-                <h3 className="font-black leading-none tracking-[-0.05em] text-white group-hover:text-white/90">
-                  {project.title}
-                </h3>
-                <span className="text-xs text-white/90 font-medium">
-                  {project.year}
+              <div className="flex flex-col px-1 pt-3.5">
+                <div className="flex items-center justify-between gap-2">
+                  <h3 className="font-black text-lg leading-snug tracking-[-0.04em] text-white group-hover:text-white/90">
+                    {project.title}
+                  </h3>
+                  <span className="text-xs text-white/80 font-medium">
+                    {project.year}
+                  </span>
+                </div>
+                <span className="mt-1 text-xs font-bold text-white/95">
+                  {project.impact}
                 </span>
+                <div className="mt-2.5 flex flex-wrap gap-1.5">
+                  {project.tools.slice(0, 3).map((tool) => (
+                    <span
+                      key={tool}
+                      className="rounded bg-white/15 px-2 py-0.5 text-[10px] font-semibold text-white backdrop-blur-sm"
+                    >
+                      {tool}
+                    </span>
+                  ))}
+                </div>
               </div>
             </Link>
           ))}
