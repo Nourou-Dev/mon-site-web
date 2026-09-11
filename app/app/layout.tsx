@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -8,6 +8,7 @@ import {
   FolderKanban,
   MessageSquare,
   Users,
+  UserCheck,
   Cookie,
   LogOut,
   Menu,
@@ -25,14 +26,18 @@ interface CurrentUser {
   company?: string;
 }
 
+// 1 heure d'inactivité = 3 600 000 ms
+const INACTIVITY_TIMEOUT_MS = 60 * 60 * 1000;
+
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
   const [user, setUser] = useState<CurrentUser | null>(null);
   const [loading, setLoading] = useState(true);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const lastActiveRef = useRef<number>(Date.now());
 
-  // Vérifier la session active
+  // 1. Vérifier la session active à chaque chargement de page
   useEffect(() => {
     if (pathname.includes("/login") || pathname.includes("/admin")) {
       setLoading(false);
@@ -49,17 +54,69 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         const data = await res.json();
         if (data.authenticated && data.user) {
           setUser(data.user);
+          lastActiveRef.current = Date.now();
         } else {
-          window.location.href = "/app/login";
+          window.location.replace("/app/login?reason=session_expired");
         }
       } catch {
-        window.location.href = "/app/login";
+        window.location.replace("/app/login?reason=session_expired");
       } finally {
         setLoading(false);
       }
     }
 
     checkAuth();
+  }, [pathname]);
+
+  // 2. Gestion de l'inactivité (Déconnexion automatique après 1 heure)
+  useEffect(() => {
+    if (pathname.includes("/login") || pathname.includes("/admin")) {
+      return;
+    }
+
+    const resetActivity = () => {
+      lastActiveRef.current = Date.now();
+    };
+
+    // Écouter les interactions utilisateur
+    const events = ["mousedown", "keydown", "scroll", "touchstart", "click"];
+    events.forEach((evt) => window.addEventListener(evt, resetActivity, { passive: true }));
+
+    // Vérifier l'inactivité toutes les 30 secondes
+    const interval = setInterval(async () => {
+      const inactiveDuration = Date.now() - lastActiveRef.current;
+      if (inactiveDuration >= INACTIVITY_TIMEOUT_MS) {
+        // Déconnexion automatique pour inactivité > 1h
+        try {
+          await fetch("/api/app/auth", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ action: "logout" }),
+          });
+        } catch {}
+        window.location.replace("/app/login?reason=inactivity");
+      }
+    }, 30000);
+
+    // Heartbeat toutes les 10 minutes pour rafraîchir le cookie si l'utilisateur est toujours actif
+    const heartbeatInterval = setInterval(async () => {
+      const inactiveDuration = Date.now() - lastActiveRef.current;
+      if (inactiveDuration < INACTIVITY_TIMEOUT_MS) {
+        try {
+          await fetch("/api/app/auth", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ action: "me" }),
+          });
+        } catch {}
+      }
+    }, 10 * 60 * 1000);
+
+    return () => {
+      events.forEach((evt) => window.removeEventListener(evt, resetActivity));
+      clearInterval(interval);
+      clearInterval(heartbeatInterval);
+    };
   }, [pathname]);
 
   const handleLogout = async () => {
@@ -69,10 +126,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ action: "logout" }),
       });
-      window.location.href = "/app/login";
+      window.location.replace("/app/login");
     } catch (e) {
       console.error(e);
-      window.location.href = "/app/login";
+      window.location.replace("/app/login");
     }
   };
 
@@ -86,7 +143,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       <div className="flex min-h-screen items-center justify-center bg-[#f8f9fa]">
         <div className="flex flex-col items-center gap-3 text-[#171717]">
           <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#0060c3] border-t-transparent" />
-          <p className="text-sm font-semibold text-[#4b4b4b]">Chargement de votre espace...</p>
+          <p className="text-sm font-semibold text-[#4b4b4b]">Vérification de l&apos;authentification...</p>
         </div>
       </div>
     );
@@ -100,6 +157,12 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       href: "/app",
       icon: LayoutDashboard,
       adminOnly: false,
+    },
+    {
+      label: "Comptes Clients & Logins",
+      href: "/app/clients",
+      icon: UserCheck,
+      adminOnly: true,
     },
     {
       label: "Demandes & Devis (CRM)",

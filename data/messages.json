@@ -128,5 +128,15 @@
     "content": "Message test direct administrateur sécurisé.",
     "createdAt": "2026-09-11T08:03:46.251Z",
     "read": false
+  },
+  {
+    "id": "msg_1789144504082_j7dn",
+    "projectId": "prj_demo_1",
+    "senderId": "usr_admin_nourou",
+    "senderName": "Nourou Dine AMANDOU",
+    "senderRole": "admin",
+    "content": "La maquette Figma est validée !",
+    "createdAt": "2026-09-11T16:35:04.082Z",
+    "read": false
   }
 ]

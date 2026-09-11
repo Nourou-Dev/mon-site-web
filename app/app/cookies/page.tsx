@@ -1,7 +1,20 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Cookie, ShieldCheck, CheckCircle2, XCircle, Sliders, Calendar, Info, RefreshCw } from "lucide-react";
+import { useEffect, useState, useMemo } from "react";
+import {
+  Cookie,
+  ShieldCheck,
+  CheckCircle2,
+  XCircle,
+  Sliders,
+  Calendar,
+  RefreshCw,
+  Download,
+  Search,
+  Globe,
+  Monitor,
+  Filter,
+} from "lucide-react";
 import { CookieConsentLog } from "@/lib/appStorage";
 
 interface CookieStats {
@@ -10,17 +23,22 @@ interface CookieStats {
   refusedAll: number;
   customized: number;
   analyticsRate: number;
+  availableMonths: string[];
   recentLogs: CookieConsentLog[];
 }
 
 export default function CookiesAnalyticsPage() {
   const [stats, setStats] = useState<CookieStats | null>(null);
   const [loading, setLoading] = useState(true);
+  const [selectedMonth, setSelectedMonth] = useState<string>("all");
+  const [choiceFilter, setChoiceFilter] = useState<string>("all");
+  const [search, setSearch] = useState("");
 
-  const fetchStats = async () => {
+  const fetchStats = async (month?: string) => {
     setLoading(true);
     try {
-      const res = await fetch("/api/app/cookies");
+      const q = month && month !== "all" ? `?month=${month}` : "";
+      const res = await fetch(`/api/app/cookies${q}`);
       const data = await res.json();
       if (data.success && data.stats) {
         setStats(data.stats);
@@ -33,16 +51,48 @@ export default function CookiesAnalyticsPage() {
   };
 
   useEffect(() => {
-    fetchStats();
-  }, []);
+    fetchStats(selectedMonth);
+  }, [selectedMonth]);
 
-  if (loading) {
-    return (
-      <div className="flex h-64 items-center justify-center">
-        <div className="h-7 w-7 animate-spin rounded-full border-4 border-[#0060c3] border-t-transparent" />
-      </div>
-    );
-  }
+  // Filtrer les logs affichés
+  const filteredLogs = useMemo(() => {
+    if (!stats?.recentLogs) return [];
+    return stats.recentLogs.filter((log) => {
+      const matchChoice = choiceFilter === "all" || log.choice === choiceFilter;
+      const s = search.toLowerCase();
+      const matchSearch =
+        !search ||
+        (log.ip && log.ip.toLowerCase().includes(s)) ||
+        (log.userAgent && log.userAgent.toLowerCase().includes(s)) ||
+        (log.country && log.country.toLowerCase().includes(s));
+      return matchChoice && matchSearch;
+    });
+  }, [stats?.recentLogs, choiceFilter, search]);
+
+  const exportCSV = () => {
+    if (!filteredLogs || filteredLogs.length === 0) return;
+    const headers = ["ID", "Date", "Mois", "Adresse IP", "Pays", "Choix", "Analytiques", "Experience", "User-Agent"];
+    const rows = filteredLogs.map((l) => [
+      l.id,
+      l.timestamp,
+      l.month || l.timestamp.slice(0, 7),
+      l.ip || "127.0.0.1",
+      l.country || "N/A",
+      l.choice,
+      l.analytics ? "Oui" : "Non",
+      l.experience ? "Oui" : "Non",
+      `"${(l.userAgent || "").replace(/"/g, '""')}"`,
+    ]);
+
+    const csvContent = "data:text/csv;charset=utf-8," + [headers.join(","), ...rows.map((e) => e.join(","))].join("\n");
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `registre_cookies_rgpd_${selectedMonth}_${Date.now()}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   const total = stats?.total || 1;
   const acceptedAll = stats?.acceptedAll || 0;
@@ -55,39 +105,54 @@ export default function CookiesAnalyticsPage() {
 
   return (
     <div className="space-y-8">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      {/* En-tête */}
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-black text-[#171717]">Statistiques &amp; Consentement des Cookies</h1>
-            <span className="rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-bold text-emerald-800">
+            <h1 className="text-2xl font-black tracking-tight text-[#171717] sm:text-3xl">
+              Registre &amp; Traçabilité des Cookies
+            </h1>
+            <span className="rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-bold text-emerald-800 border border-emerald-200">
               Conformité RGPD
             </span>
           </div>
           <p className="mt-1 text-sm text-[#4b4b4b]">
-            Suivez les choix réels effectués par vos visiteurs via le modal de cookies sur votre site.
+            Enregistrement complet des choix des visiteurs : IP, date, mois, décision et catégories acceptées.
           </p>
         </div>
 
-        <button
-          onClick={fetchStats}
-          className="inline-flex items-center gap-2 rounded-full border border-[#171717]/15 bg-white px-4 py-2 text-xs font-bold text-[#171717] shadow-sm hover:bg-[#171717]/5 transition-colors"
-        >
-          <RefreshCw className="h-3.5 w-3.5 text-[#0060c3]" />
-          <span>Actualiser</span>
-        </button>
+        <div className="flex flex-wrap items-center gap-2.5">
+          <button
+            onClick={() => fetchStats(selectedMonth)}
+            disabled={loading}
+            className="inline-flex items-center gap-2 rounded-xl border border-[#171717]/15 bg-white px-4 py-2.5 text-xs font-bold text-[#171717] shadow-sm hover:bg-[#171717]/5 transition-colors disabled:opacity-50"
+          >
+            <RefreshCw className={`h-3.5 w-3.5 text-[#0060c3] ${loading ? "animate-spin" : ""}`} />
+            <span>Actualiser</span>
+          </button>
+
+          <button
+            onClick={exportCSV}
+            disabled={filteredLogs.length === 0}
+            className="inline-flex items-center gap-2 rounded-xl bg-[#0060c3] px-4 py-2.5 text-xs font-bold text-white shadow-md shadow-[#0060c3]/20 hover:bg-[#0050a5] transition-all disabled:opacity-50"
+          >
+            <Download className="h-3.5 w-3.5" />
+            <span>Exporter le Registre CSV</span>
+          </button>
+        </div>
       </div>
 
       {/* 4 Indicateurs Clés */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <div className="rounded-2xl border border-[#171717]/10 bg-white p-5 shadow-sm">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold uppercase tracking-wider text-[#4b4b4b]">Décisions Enregistrées</span>
+            <span className="text-xs font-bold uppercase tracking-wider text-[#4b4b4b]">Décisions Totales</span>
             <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#0060c3]/10 text-[#0060c3]">
               <Cookie className="h-4 w-4" />
             </div>
           </div>
           <p className="mt-3 text-3xl font-black text-[#171717]">{stats?.total || 0}</p>
-          <p className="mt-1 text-xs text-[#4b4b4b]">Visites interactives qualifiées</p>
+          <p className="mt-1 text-xs text-[#4b4b4b]">Sur la période sélectionnée</p>
         </div>
 
         <div className="rounded-2xl border border-[#171717]/10 bg-white p-5 shadow-sm">
@@ -98,24 +163,10 @@ export default function CookiesAnalyticsPage() {
             </div>
           </div>
           <div className="mt-3 flex items-baseline gap-2">
-            <p className="text-3xl font-black text-emerald-700">{acceptPercent}%</p>
-            <span className="text-xs text-[#4b4b4b]">({acceptedAll} visiteurs)</span>
+            <span className="text-3xl font-black text-emerald-600">{acceptedAll}</span>
+            <span className="text-xs font-bold text-emerald-700">({acceptPercent}%)</span>
           </div>
-          <p className="mt-1 text-xs text-emerald-600 font-semibold">Autorise les mesures d'audience</p>
-        </div>
-
-        <div className="rounded-2xl border border-[#171717]/10 bg-white p-5 shadow-sm">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold uppercase tracking-wider text-[#4b4b4b]">Tout Refusé</span>
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-red-50 text-red-600">
-              <XCircle className="h-4 w-4" />
-            </div>
-          </div>
-          <div className="mt-3 flex items-baseline gap-2">
-            <p className="text-3xl font-black text-red-700">{refusePercent}%</p>
-            <span className="text-xs text-[#4b4b4b]">({refusedAll} visiteurs)</span>
-          </div>
-          <p className="mt-1 text-xs text-red-600 font-semibold">Seulement les traceurs requis</p>
+          <p className="mt-1 text-xs text-[#4b4b4b]">Plein consentement analytique &amp; UX</p>
         </div>
 
         <div className="rounded-2xl border border-[#171717]/10 bg-white p-5 shadow-sm">
@@ -126,121 +177,194 @@ export default function CookiesAnalyticsPage() {
             </div>
           </div>
           <div className="mt-3 flex items-baseline gap-2">
-            <p className="text-3xl font-black text-blue-700">{customPercent}%</p>
-            <span className="text-xs text-[#4b4b4b]">({customized} visiteurs)</span>
+            <span className="text-3xl font-black text-blue-600">{customized}</span>
+            <span className="text-xs font-bold text-blue-700">({customPercent}%)</span>
           </div>
-          <p className="mt-1 text-xs text-blue-600 font-semibold">Choix fin par catégorie</p>
+          <p className="mt-1 text-xs text-[#4b4b4b]">Choix fin par catégorie</p>
+        </div>
+
+        <div className="rounded-2xl border border-[#171717]/10 bg-white p-5 shadow-sm">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-bold uppercase tracking-wider text-[#4b4b4b]">Tout Refusé</span>
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-red-50 text-red-600">
+              <XCircle className="h-4 w-4" />
+            </div>
+          </div>
+          <div className="mt-3 flex items-baseline gap-2">
+            <span className="text-3xl font-black text-red-600">{refusedAll}</span>
+            <span className="text-xs font-bold text-red-700">({refusePercent}%)</span>
+          </div>
+          <p className="mt-1 text-xs text-[#4b4b4b]">Uniquement cookies essentiels</p>
         </div>
       </div>
 
-      {/* Barre de répartition visuelle */}
-      <div className="rounded-[2rem] border border-[#171717]/10 bg-white p-6 shadow-sm">
-        <h2 className="text-base font-bold text-[#171717]">Répartition Graphique des Consentements</h2>
-        <div className="mt-4 h-5 w-full overflow-hidden rounded-full bg-gray-100 flex p-1 border border-[#171717]/5">
-          <div
-            style={{ width: `${acceptPercent}%` }}
-            className="h-full rounded-l-full bg-emerald-500 transition-all duration-500"
-            title={`Tout accepté: ${acceptPercent}%`}
-          />
-          <div
-            style={{ width: `${customPercent}%` }}
-            className="h-full bg-blue-500 transition-all duration-500"
-            title={`Personnalisé: ${customPercent}%`}
-          />
-          <div
-            style={{ width: `${refusePercent}%` }}
-            className="h-full rounded-r-full bg-red-400 transition-all duration-500"
-            title={`Refusé: ${refusePercent}%`}
-          />
-        </div>
+      {/* Barre d'outils : Filtre par Mois, Choix et Recherche par IP */}
+      <div className="rounded-2xl border border-[#171717]/10 bg-white p-4 shadow-sm sm:p-5">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-wrap items-center gap-3">
+            {/* Sélecteur de Mois */}
+            <div className="flex items-center gap-2">
+              <Calendar className="h-4 w-4 text-[#0060c3]" />
+              <label className="text-xs font-bold text-[#171717]">Mois :</label>
+              <select
+                value={selectedMonth}
+                onChange={(e) => setSelectedMonth(e.target.value)}
+                className="rounded-xl border border-[#171717]/15 bg-[#f8f9fa] px-3 py-2 text-xs font-bold text-[#171717] focus:border-[#0060c3] focus:bg-white focus:outline-none"
+              >
+                <option value="all">Tous les mois enregistrés</option>
+                {stats?.availableMonths.map((m) => (
+                  <option key={m} value={m}>
+                    {m}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-        <div className="mt-4 flex flex-wrap items-center gap-6 text-xs text-[#4b4b4b]">
-          <div className="flex items-center gap-2">
-            <div className="h-3 w-3 rounded-full bg-emerald-500" />
-            <span>Tout accepté ({acceptPercent}%)</span>
+            {/* Filtre par Décision */}
+            <div className="flex items-center gap-2">
+              <Filter className="h-4 w-4 text-[#4b4b4b]" />
+              <label className="text-xs font-bold text-[#171717]">Décision :</label>
+              <select
+                value={choiceFilter}
+                onChange={(e) => setChoiceFilter(e.target.value)}
+                className="rounded-xl border border-[#171717]/15 bg-[#f8f9fa] px-3 py-2 text-xs font-bold text-[#171717] focus:border-[#0060c3] focus:bg-white focus:outline-none"
+              >
+                <option value="all">Toutes les décisions</option>
+                <option value="accepted_all">Accepté (Tout)</option>
+                <option value="refused_all">Refusé (Tout)</option>
+                <option value="customized">Personnalisé</option>
+              </select>
+            </div>
           </div>
-          <div className="flex items-center gap-2">
-            <div className="h-3 w-3 rounded-full bg-blue-500" />
-            <span>Personnalisé ({customPercent}%)</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="h-3 w-3 rounded-full bg-red-400" />
-            <span>Refusé ({refusePercent}%)</span>
+
+          {/* Champ Recherche par IP / User-Agent */}
+          <div className="relative min-w-[240px]">
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#7b7b7b]" />
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Rechercher par IP ou Navigateur..."
+              className="w-full rounded-xl border border-[#171717]/15 bg-[#f8f9fa] py-2 pl-9 pr-3 text-xs text-[#171717] focus:border-[#0060c3] focus:bg-white focus:outline-none"
+            />
           </div>
         </div>
       </div>
 
-      {/* Journal d'Audit & Historique Récent */}
-      <div className="overflow-hidden rounded-[2rem] border border-[#171717]/10 bg-white shadow-sm">
-        <div className="border-b border-[#171717]/10 bg-[#f8f9fa] px-6 py-4">
-          <h3 className="text-sm font-bold text-[#171717]">Journal Anonymisé des Derniers Événements de Consentement</h3>
-          <p className="text-xs text-[#4b4b4b]">Preuve de traçabilité conforme aux directives de la CNIL et du RGPD.</p>
+      {/* Tableau d'audit détaillé */}
+      <div className="rounded-[2rem] border border-[#171717]/10 bg-white p-6 shadow-sm sm:p-8">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h2 className="text-lg font-bold text-[#171717]">Registre Détaillé des Consentements</h2>
+            <p className="text-xs text-[#4b4b4b]">
+              {filteredLogs.length} décision{filteredLogs.length > 1 ? "s" : ""} affichée{filteredLogs.length > 1 ? "s" : ""}.
+            </p>
+          </div>
         </div>
 
-        <table className="w-full text-left text-xs">
-          <thead className="border-b border-[#171717]/10 bg-white text-[11px] font-bold uppercase tracking-wider text-[#4b4b4b]">
-            <tr>
-              <th className="px-6 py-3.5">Date &amp; Heure</th>
-              <th className="px-6 py-3.5">Choix Utilisateur</th>
-              <th className="px-6 py-3.5">Mesure d'Audience</th>
-              <th className="px-6 py-3.5">Préférences</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-[#171717]/10">
-            {stats?.recentLogs && stats.recentLogs.length > 0 ? (
-              stats.recentLogs.map((log) => (
-                <tr key={log.id} className="hover:bg-[#f8f9fa]/50 transition-colors">
-                  <td className="px-6 py-3.5 text-[#171717]">
-                    {new Date(log.timestamp).toLocaleDateString("fr-FR", {
-                      day: "numeric",
-                      month: "short",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                      second: "2-digit",
-                    })}
-                  </td>
-                  <td className="px-6 py-3.5">
-                    <span
-                      className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold ${
-                        log.choice === "accepted_all"
-                          ? "bg-emerald-100 text-emerald-800"
-                          : log.choice === "refused_all"
-                          ? "bg-red-100 text-red-800"
-                          : "bg-blue-100 text-blue-800"
-                      }`}
-                    >
-                      {log.choice === "accepted_all"
-                        ? "Tout accepté"
-                        : log.choice === "refused_all"
-                        ? "Tout refusé"
-                        : "Personnalisé"}
-                    </span>
-                  </td>
-                  <td className="px-6 py-3.5">
-                    {log.analytics ? (
-                      <span className="text-emerald-700 font-bold">Autorisé ✓</span>
-                    ) : (
-                      <span className="text-gray-400">Bloqué ✗</span>
-                    )}
-                  </td>
-                  <td className="px-6 py-3.5">
-                    {log.experience ? (
-                      <span className="text-emerald-700 font-bold">Autorisé ✓</span>
-                    ) : (
-                      <span className="text-gray-400">Bloqué ✗</span>
-                    )}
-                  </td>
+        {filteredLogs.length === 0 ? (
+          <div className="p-8 text-center text-sm text-[#4b4b4b]">
+            Aucun enregistrement de consentement trouvé pour cette sélection.
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs">
+              <thead className="border-b border-[#171717]/10 bg-[#f8f9fa] text-[11px] font-bold uppercase tracking-wider text-[#4b4b4b]">
+                <tr>
+                  <th className="px-4 py-3 rounded-l-xl">Date &amp; Heure</th>
+                  <th className="px-4 py-3">Adresse IP</th>
+                  <th className="px-4 py-3">Pays</th>
+                  <th className="px-4 py-3">Choix</th>
+                  <th className="px-4 py-3">Analytiques</th>
+                  <th className="px-4 py-3">Expérience</th>
+                  <th className="px-4 py-3 rounded-r-xl">Navigateur / User-Agent</th>
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan={4} className="p-8 text-center text-[#4b4b4b]">
-                  Aucun événement de consentement enregistré pour le moment.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+              </thead>
+              <tbody className="divide-y divide-[#171717]/5 font-medium text-[#171717]">
+                {filteredLogs.map((log) => {
+                  const d = new Date(log.timestamp);
+                  const formattedDate = isNaN(d.getTime())
+                    ? log.timestamp
+                    : d.toLocaleDateString("fr-FR", {
+                        day: "2-digit",
+                        month: "short",
+                        year: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        second: "2-digit",
+                      });
+
+                  return (
+                    <tr key={log.id} className="hover:bg-[#f8f9fa]/80 transition-colors">
+                      <td className="px-4 py-3.5 font-mono text-[11px] text-[#4b4b4b] whitespace-nowrap">
+                        {formattedDate}
+                      </td>
+
+                      <td className="px-4 py-3.5 whitespace-nowrap">
+                        <span className="inline-flex items-center gap-1 font-mono font-bold bg-slate-100 text-slate-800 px-2 py-0.5 rounded-md border border-slate-200">
+                          <Globe className="h-3 w-3 text-[#0060c3]" />
+                          {log.ip || "127.0.0.1"}
+                        </span>
+                      </td>
+
+                      <td className="px-4 py-3.5 text-[#4b4b4b]">
+                        {log.country || "Non déterminé"}
+                      </td>
+
+                      <td className="px-4 py-3.5">
+                        {log.choice === "accepted_all" && (
+                          <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-0.5 text-[11px] font-bold text-emerald-700 border border-emerald-200">
+                            <CheckCircle2 className="h-3 w-3" />
+                            Tout Accepté
+                          </span>
+                        )}
+                        {log.choice === "refused_all" && (
+                          <span className="inline-flex items-center gap-1 rounded-full bg-red-50 px-2.5 py-0.5 text-[11px] font-bold text-red-700 border border-red-200">
+                            <XCircle className="h-3 w-3" />
+                            Tout Refusé
+                          </span>
+                        )}
+                        {log.choice === "customized" && (
+                          <span className="inline-flex items-center gap-1 rounded-full bg-blue-50 px-2.5 py-0.5 text-[11px] font-bold text-blue-700 border border-blue-200">
+                            <Sliders className="h-3 w-3" />
+                            Personnalisé
+                          </span>
+                        )}
+                      </td>
+
+                      <td className="px-4 py-3.5">
+                        <span
+                          className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${
+                            log.analytics ? "bg-emerald-100 text-emerald-800" : "bg-red-100 text-red-800"
+                          }`}
+                        >
+                          {log.analytics ? "Oui" : "Non"}
+                        </span>
+                      </td>
+
+                      <td className="px-4 py-3.5">
+                        <span
+                          className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${
+                            log.experience ? "bg-emerald-100 text-emerald-800" : "bg-red-100 text-red-800"
+                          }`}
+                        >
+                          {log.experience ? "Oui" : "Non"}
+                        </span>
+                      </td>
+
+                      <td className="px-4 py-3.5 text-[#4b4b4b] max-w-xs truncate" title={log.userAgent}>
+                        <span className="flex items-center gap-1.5 truncate">
+                          <Monitor className="h-3 w-3 shrink-0 text-[#7b7b7b]" />
+                          <span className="truncate text-[11px]">{log.userAgent || "Navigateur inconnu"}</span>
+                        </span>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </div>
   );

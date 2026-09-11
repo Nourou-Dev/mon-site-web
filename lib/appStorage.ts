@@ -1,9 +1,9 @@
 import fs from "fs/promises";
 import path from "path";
 import crypto from "crypto";
-import { hashPassword, encodeSession, decodeSession } from "./authUtils";
+import { hashPassword, encodeSession, decodeSession, touchSession } from "./authUtils";
 
-export { hashPassword, encodeSession, decodeSession };
+export { hashPassword, encodeSession, decodeSession, touchSession };
 
 const DATA_DIR = path.join(process.cwd(), "data");
 const USERS_FILE = path.join(DATA_DIR, "users.json");
@@ -84,6 +84,9 @@ export interface CookieConsentLog {
   choice: "accepted_all" | "refused_all" | "customized";
   analytics: boolean;
   experience: boolean;
+  ip?: string;
+  month?: string; // Format YYYY-MM
+  country?: string;
   userAgent?: string;
   timestamp: string;
 }
@@ -369,53 +372,61 @@ export async function logCookieConsent(data: {
   choice: "accepted_all" | "refused_all" | "customized";
   analytics: boolean;
   experience: boolean;
+  ip?: string;
+  country?: string;
   userAgent?: string;
 }): Promise<void> {
   const logs = await readJson<CookieConsentLog[]>(COOKIE_STATS_FILE, []);
+  const now = new Date();
+  const month = now.toISOString().slice(0, 7); // Format "YYYY-MM"
 
   const entry: CookieConsentLog = {
-    id: `ck_${Date.now()}_${Math.random().toString(36).substring(2, 5)}`,
+    id: `ck_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
     choice: data.choice,
     analytics: data.analytics,
     experience: data.experience,
-    userAgent: data.userAgent?.slice(0, 150) || "",
-    timestamp: new Date().toISOString(),
+    ip: data.ip || "127.0.0.1",
+    country: data.country || "Non déterminé",
+    month,
+    userAgent: data.userAgent?.slice(0, 200) || "",
+    timestamp: now.toISOString(),
   };
 
   logs.unshift(entry);
-  // Conserver les 1000 derniers événements
-  if (logs.length > 1000) logs.length = 1000;
+  // Conserver les 2000 derniers événements
+  if (logs.length > 2000) logs.length = 2000;
 
   await writeJson(COOKIE_STATS_FILE, logs);
 }
 
-export async function getCookieStats(): Promise<{
+export async function getCookieStats(monthFilter?: string): Promise<{
   total: number;
   acceptedAll: number;
   refusedAll: number;
   customized: number;
   analyticsRate: number;
+  availableMonths: string[];
   recentLogs: CookieConsentLog[];
 }> {
-  const logs = await readJson<CookieConsentLog[]>(COOKIE_STATS_FILE, []);
+  let logs = await readJson<CookieConsentLog[]>(COOKIE_STATS_FILE, []);
 
-  if (logs.length === 0) {
-    const defaultStats: CookieConsentLog[] = [
-      { id: "c1", choice: "accepted_all", analytics: true, experience: true, timestamp: new Date(Date.now() - 3600000 * 2).toISOString() },
-      { id: "c2", choice: "accepted_all", analytics: true, experience: true, timestamp: new Date(Date.now() - 3600000 * 5).toISOString() },
-      { id: "c3", choice: "customized", analytics: false, experience: true, timestamp: new Date(Date.now() - 3600000 * 12).toISOString() },
-      { id: "c4", choice: "refused_all", analytics: false, experience: false, timestamp: new Date(Date.now() - 3600000 * 24).toISOString() },
-      { id: "c5", choice: "accepted_all", analytics: true, experience: true, timestamp: new Date(Date.now() - 3600000 * 30).toISOString() },
-    ];
-    await writeJson(COOKIE_STATS_FILE, defaultStats);
-    return {
-      total: 5,
-      acceptedAll: 3,
-      refusedAll: 1,
-      customized: 1,
-      analyticsRate: 60,
-      recentLogs: defaultStats,
-    };
+  // Mois disponibles dans l'historique
+  const monthsSet = new Set<string>();
+  logs.forEach((l) => {
+    const m = l.month || (l.timestamp ? l.timestamp.slice(0, 7) : new Date().toISOString().slice(0, 7));
+    monthsSet.add(m);
+  });
+  if (monthsSet.size === 0) {
+    monthsSet.add(new Date().toISOString().slice(0, 7));
+  }
+  const availableMonths = Array.from(monthsSet).sort().reverse();
+
+  // Filtrer par mois si spécifié
+  if (monthFilter && monthFilter !== "all") {
+    logs = logs.filter((l) => {
+      const m = l.month || l.timestamp?.slice(0, 7);
+      return m === monthFilter;
+    });
   }
 
   const total = logs.length;
@@ -430,6 +441,7 @@ export async function getCookieStats(): Promise<{
     refusedAll,
     customized,
     analyticsRate: total > 0 ? Math.round((withAnalytics / total) * 100) : 0,
-    recentLogs: logs.slice(0, 50),
+    availableMonths,
+    recentLogs: logs.slice(0, 200), // Renvoyer jusqu'à 200 logs
   };
 }

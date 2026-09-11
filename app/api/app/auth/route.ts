@@ -6,10 +6,12 @@ import {
   getUsers,
   encodeSession,
   decodeSession,
+  touchSession,
   AppUser,
 } from "@/lib/appStorage";
 
 const SESSION_COOKIE = "nd_session";
+const SESSION_MAX_AGE_SEC = 3600; // 1 heure d'inactivité
 
 // Détermine si le cookie doit porter le drapeau Secure (HTTPS en production, mais JAMAIS sur localhost HTTP)
 function getCookieSecurity(request: Request): boolean {
@@ -31,7 +33,7 @@ function isAuthorizedAdmin(emailOrLogin: string, password?: string): boolean {
 
   if (!isAdminLogin) return false;
 
-  if (!password) return true;
+  if (!password) return false;
 
   const cleanPass = password.trim();
   const envSecret = process.env.ADMIN_SECRET_KEY?.trim();
@@ -43,7 +45,7 @@ function isAuthorizedAdmin(emailOrLogin: string, password?: string): boolean {
     cleanPass === "admin2026" ||
     cleanPass === "nourou2026";
 
-  const isMasterKey = envSecret && cleanPass === envSecret;
+  const isMasterKey = Boolean(envSecret && cleanPass === envSecret);
 
   return Boolean(isDefaultPassword || isMasterKey);
 }
@@ -54,7 +56,7 @@ export async function POST(request: Request) {
     const { action } = body;
     const isSecureCookie = getCookieSecurity(request);
 
-    // 1. OBTENIR L'UTILISATEUR ACTUELLEMENT CONNECTÉ
+    // 1. OBTENIR L'UTILISATEUR ACTUELLEMENT CONNECTÉ & TOUCH SESSION
     if (action === "me") {
       const cookieHeader = request.headers.get("cookie") || "";
       let rawToken = (request as any).cookies?.get?.(SESSION_COOKIE)?.value;
@@ -72,10 +74,15 @@ export async function POST(request: Request) {
 
       const session = decodeSession(rawToken);
       if (!session) {
-        return NextResponse.json({ authenticated: false, user: null });
+        // Session expirée ou invalide (> 1h)
+        const res = NextResponse.json({ authenticated: false, user: null, reason: "expired" });
+        res.cookies.set(SESSION_COOKIE, "", { path: "/", maxAge: 0, expires: new Date(0) });
+        return res;
       }
 
-      return NextResponse.json({
+      // Renouveler la session glissante (1h à partir de cette activité)
+      const refreshedToken = touchSession(session);
+      const res = NextResponse.json({
         authenticated: true,
         user: {
           id: session.id,
@@ -85,11 +92,32 @@ export async function POST(request: Request) {
           company: session.company,
         },
       });
+
+      res.cookies.set(SESSION_COOKIE, refreshedToken, {
+        httpOnly: true,
+        secure: isSecureCookie,
+        sameSite: "lax",
+        path: "/",
+        maxAge: SESSION_MAX_AGE_SEC,
+      });
+
+      return res;
     }
 
-    // 2. CONNEXION ADMINISTRATEUR DÉDIÉE (/admin)
+    // 2. CONNEXION ADMINISTRATEUR STRICTE (/admin : Email + Mot de passe OBLIGATOIRES)
     if (action === "admin_login") {
-      const { login, password, secretKey } = body;
+      const { login, password } = body;
+
+      if (!login || !password) {
+        return NextResponse.json(
+          {
+            success: false,
+            error: "Veuillez renseigner votre identifiant et votre mot de passe administrateur.",
+          },
+          { status: 400 }
+        );
+      }
+
       const users = await getUsers();
       let adminUser = users.find((u) => u.role === "admin");
 
@@ -106,32 +134,24 @@ export async function POST(request: Request) {
         };
       }
 
-      // Connexion par clé secrète directe
-      const envSecret = process.env.ADMIN_SECRET_KEY?.trim();
-      const isKeyMatch =
-        (secretKey && envSecret && secretKey.trim() === envSecret) ||
-        (secretKey && (secretKey.trim() === "admin123!" || secretKey.trim() === "nourou_admin_secret_2026!"));
+      // Vérification stricte des identifiants
+      const isCustomPasswordMatch =
+        adminUser.email.toLowerCase() === login.trim().toLowerCase() &&
+        adminUser.passwordHash === hashPassword(password);
 
-      // Connexion par identifiant et mot de passe
-      const isCredentialMatch =
-        login &&
-        isAuthorizedAdmin(login, password) ||
-        (login && adminUser.email.toLowerCase() === login.trim().toLowerCase() && adminUser.passwordHash === hashPassword(password || ""));
+      const isKnownAdmin = isAuthorizedAdmin(login, password);
 
-      // Connexion directe via bouton d'accès administrateur authentifié
-      const isDirectAdminAccess = body.directAdmin === true;
-
-      if (!isKeyMatch && !isCredentialMatch && !isDirectAdminAccess) {
+      if (!isKnownAdmin && !isCustomPasswordMatch) {
         return NextResponse.json(
           {
             success: false,
-            error: "Accès administrateur refusé. Identifiant ou clé de sécurité incorrecte.",
+            error: "Identifiants administrateur incorrects. Accès refusé.",
           },
           { status: 401 }
         );
       }
 
-      // Générer la session Administrateur
+      // Générer la session Administrateur (durée 1 heure)
       const sessionToken = encodeSession(adminUser);
       const res = NextResponse.json({
         success: true,
@@ -149,7 +169,7 @@ export async function POST(request: Request) {
         secure: isSecureCookie,
         sameSite: "lax",
         path: "/",
-        maxAge: 7 * 24 * 3600,
+        maxAge: SESSION_MAX_AGE_SEC,
       });
 
       return res;
@@ -199,7 +219,7 @@ export async function POST(request: Request) {
           secure: isSecureCookie,
           sameSite: "lax",
           path: "/",
-          maxAge: 7 * 24 * 3600,
+          maxAge: SESSION_MAX_AGE_SEC,
         });
 
         return res;
@@ -240,7 +260,7 @@ export async function POST(request: Request) {
         secure: isSecureCookie,
         sameSite: "lax",
         path: "/",
-        maxAge: 7 * 24 * 3600,
+        maxAge: SESSION_MAX_AGE_SEC,
       });
 
       return res;
@@ -301,7 +321,7 @@ export async function POST(request: Request) {
         secure: isSecureCookie,
         sameSite: "lax",
         path: "/",
-        maxAge: 7 * 24 * 3600,
+        maxAge: SESSION_MAX_AGE_SEC,
       });
 
       return res;

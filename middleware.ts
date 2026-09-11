@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { decodeSession } from "@/lib/sessionUtils";
+
+const SESSION_COOKIE = "nd_session";
 
 // Liste des signatures d'outils de scan de vulnérabilités et robots malveillants connus
 const BLOCKED_USER_AGENTS = [
@@ -56,26 +59,72 @@ export function middleware(request: NextRequest) {
     }
   }
 
-  // 3. Routage dynamique par sous-domaine pour l'application : app.nomdusite.com / app.localhost
+  // 3. Détection de sous-domaine
   const isAppSubdomain =
     host.startsWith("app.") ||
     host.startsWith("dashboard.") ||
     host.includes("app.localhost");
 
-  let response: NextResponse;
+  // Déterminer le chemin logique de l'application
+  let targetPath = pathname;
+  if (isAppSubdomain && !pathname.startsWith("/api") && !pathname.startsWith("/_next")) {
+    targetPath = pathname === "/" ? "/app" : `/app${pathname.startsWith("/app") ? pathname.slice(4) : pathname}`;
+  }
 
-  // Si l'utilisateur visite le sous-domaine app.* et n'appelle pas déjà une route /api ou /_next
+  // 4. VÉRIFICATION D'AUTHENTIFICATION CÔTÉ SERVEUR (Espace Client & Admin)
+  const isProtectedAppRoute =
+    targetPath.startsWith("/app") &&
+    !targetPath.startsWith("/app/login") &&
+    !targetPath.startsWith("/app/admin");
+
+  const isLoginPage = targetPath === "/app/login";
+  const isAdminLoginPage = targetPath === "/admin" || targetPath === "/app/admin";
+
+  const rawCookie = request.cookies.get(SESSION_COOKIE)?.value;
+  const session = rawCookie ? decodeSession(rawCookie) : null;
+  const isAuthenticated = Boolean(session && session.id);
+
+  // A. Accès à une page protégée de l'espace (/app, /app/projets, /app/messages, etc.)
+  if (isProtectedAppRoute) {
+    if (!isAuthenticated) {
+      // Redirection immédiate côté serveur vers la page de login
+      const loginUrl = request.nextUrl.clone();
+      loginUrl.pathname = isAppSubdomain ? "/login" : "/app/login";
+      loginUrl.searchParams.set("reason", "session_expired");
+      
+      const redirectRes = NextResponse.redirect(loginUrl);
+      // Supprimer tout cookie périmé
+      redirectRes.cookies.set(SESSION_COOKIE, "", { path: "/", maxAge: 0 });
+      return redirectRes;
+    }
+  }
+
+  // B. Visite de la page de login alors qu'on est déjà connecté
+  if (isLoginPage && isAuthenticated) {
+    // Redirection directe vers le tableau de bord
+    const appUrl = request.nextUrl.clone();
+    appUrl.pathname = isAppSubdomain ? "/" : "/app";
+    return NextResponse.redirect(appUrl);
+  }
+
+  // C. Visite de la page /admin alors qu'on est déjà connecté en tant qu'admin
+  if (isAdminLoginPage && isAuthenticated && session?.role === "admin") {
+    const appUrl = request.nextUrl.clone();
+    appUrl.pathname = isAppSubdomain ? "/" : "/app";
+    return NextResponse.redirect(appUrl);
+  }
+
+  // 5. Réécriture transparente pour le sous-domaine
+  let response: NextResponse;
   if (isAppSubdomain && !pathname.startsWith("/api") && !pathname.startsWith("/_next")) {
     const url = request.nextUrl.clone();
-    // Réécriture transparente vers les pages de l'espace app
-    const targetPath = pathname === "/" ? "/app" : `/app${pathname.startsWith("/app") ? pathname.slice(4) : pathname}`;
     url.pathname = targetPath;
     response = NextResponse.rewrite(url);
   } else {
     response = NextResponse.next();
   }
 
-  // 4. En-têtes de sécurité HTTP sur toutes les réponses
+  // 6. En-têtes de sécurité HTTP sur toutes les réponses
   response.headers.set("X-Frame-Options", "SAMEORIGIN");
   response.headers.set("X-Content-Type-Options", "nosniff");
   response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
