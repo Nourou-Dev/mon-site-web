@@ -172,13 +172,13 @@ export default function MessagesPage() {
   return (
     <div className="space-y-6">
       {/* En-tête */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-black tracking-tight text-[#171717] sm:text-3xl">
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+        <div className="min-w-0">
+          <div className="flex flex-wrap items-center gap-2">
+            <h1 className="text-xl sm:text-2xl font-black tracking-tight text-[#171717] lg:text-3xl">
               Messagerie en Direct
             </h1>
-            <span className="flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-semibold text-emerald-700 border border-emerald-200">
+            <span className="shrink-0 flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-semibold text-emerald-700 border border-emerald-200">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
               Canal Chiffré
             </span>
@@ -188,7 +188,7 @@ export default function MessagesPage() {
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2 shrink-0">
           <button
             onClick={() => fetchCurrentMessages(false)}
             disabled={refreshing}
@@ -227,7 +227,7 @@ export default function MessagesPage() {
         </div>
       ) : (
         /* Conteneur principal de Messagerie : Sidebar Projets + Chat */
-        <div className="grid grid-cols-1 overflow-hidden rounded-3xl border border-[#171717]/10 bg-white shadow-sm lg:grid-cols-12 min-h-[500px] h-[calc(100dvh-13rem)] max-h-[820px]">
+        <div className="grid grid-cols-1 overflow-hidden rounded-2xl sm:rounded-3xl border border-[#171717]/10 bg-white shadow-sm lg:grid-cols-12 min-h-[500px] h-[calc(100dvh-13rem)] max-h-[820px] min-w-0 max-w-full">
           {/* COLONNE GAUCHE : Sélecteur de projets */}
           <div
             className={`border-b border-[#171717]/10 bg-[#fafafa] p-4 lg:col-span-4 lg:border-b-0 lg:border-r lg:block ${

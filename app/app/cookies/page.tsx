@@ -106,13 +106,13 @@ export default function CookiesAnalyticsPage() {
   return (
     <div className="space-y-8">
       {/* En-tête */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-black tracking-tight text-[#171717] sm:text-3xl">
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+        <div className="min-w-0">
+          <div className="flex flex-wrap items-center gap-2">
+            <h1 className="text-xl sm:text-2xl font-black tracking-tight text-[#171717] lg:text-3xl">
               Registre &amp; Traçabilité des Cookies
             </h1>
-            <span className="rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-bold text-emerald-800 border border-emerald-200">
+            <span className="shrink-0 rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-bold text-emerald-800 border border-emerald-200">
               Conformité RGPD
             </span>
           </div>
@@ -121,7 +121,7 @@ export default function CookiesAnalyticsPage() {
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2.5">
+        <div className="flex flex-wrap items-center gap-2.5 shrink-0">
           <button
             onClick={() => fetchStats(selectedMonth)}
             disabled={loading}
@@ -142,8 +142,8 @@ export default function CookiesAnalyticsPage() {
         </div>
       </div>
 
-      {/* 4 Indicateurs Clés */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {/* 4 Indicateurs Clés fluides */}
+      <div className="grid gap-3.5 grid-cols-1 sm:grid-cols-2 xl:grid-cols-4">
         <div className="rounded-2xl border border-[#171717]/10 bg-white p-5 shadow-sm">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold uppercase tracking-wider text-[#4b4b4b]">Décisions Totales</span>
@@ -200,7 +200,7 @@ export default function CookiesAnalyticsPage() {
 
       {/* Barre d'outils : Filtre par Mois, Choix et Recherche par IP */}
       <div className="rounded-2xl border border-[#171717]/10 bg-white p-4 shadow-sm sm:p-5">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-3.5 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex flex-wrap items-center gap-3">
             {/* Sélecteur de Mois */}
             <div className="flex items-center gap-2">
@@ -238,7 +238,7 @@ export default function CookiesAnalyticsPage() {
           </div>
 
           {/* Champ Recherche par IP / User-Agent */}
-          <div className="relative min-w-[240px]">
+          <div className="relative w-full lg:w-72">
             <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#7b7b7b]" />
             <input
               type="text"
@@ -252,7 +252,7 @@ export default function CookiesAnalyticsPage() {
       </div>
 
       {/* Tableau d'audit détaillé */}
-      <div className="rounded-[2rem] border border-[#171717]/10 bg-white p-6 shadow-sm sm:p-8">
+      <div className="rounded-2xl sm:rounded-[2rem] border border-[#171717]/10 bg-white p-4 sm:p-6 lg:p-7 shadow-sm min-w-0 max-w-full">
         <div className="flex items-center justify-between mb-6">
           <div>
             <h2 className="text-lg font-bold text-[#171717]">Registre Détaillé des Consentements</h2>
@@ -357,9 +357,9 @@ export default function CookiesAnalyticsPage() {
               })}
             </div>
 
-            {/* VUE TABLETTE & DESKTOP */}
-            <div className="hidden md:block overflow-x-auto">
-              <table className="w-full text-left text-xs">
+            {/* VUE TABLETTE & DESKTOP : Défilement interne propre sans déborder sur la page */}
+            <div className="hidden md:block overflow-x-auto w-full max-w-full">
+              <table className="w-full text-left text-xs min-w-[760px]">
                 <thead className="border-b border-[#171717]/10 bg-[#f8f9fa] text-[11px] font-bold uppercase tracking-wider text-[#4b4b4b]">
                   <tr>
                     <th className="px-4 py-3 rounded-l-xl">Date &amp; Heure</th>

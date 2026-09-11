@@ -158,14 +158,14 @@ export default function ParametresPage() {
   }
 
   return (
-    <div className="max-w-4xl space-y-8">
+    <div className="max-w-4xl space-y-8 min-w-0">
       {/* En-tête */}
-      <div>
-        <div className="flex items-center gap-2">
-          <h1 className="text-2xl font-black tracking-tight text-[#171717] sm:text-3xl">
+      <div className="min-w-0">
+        <div className="flex flex-wrap items-center gap-2">
+          <h1 className="text-xl sm:text-2xl font-black tracking-tight text-[#171717] lg:text-3xl">
             Paramètres du Compte
           </h1>
-          <span className="rounded-full bg-[#0060c3]/10 px-2.5 py-0.5 text-xs font-bold text-[#0060c3]">
+          <span className="shrink-0 rounded-full bg-[#0060c3]/10 px-2.5 py-0.5 text-xs font-bold text-[#0060c3]">
             {user?.role === "admin" ? "Profil Administrateur" : "Profil Client"}
           </span>
         </div>
@@ -174,9 +174,9 @@ export default function ParametresPage() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-6 lg:gap-8 lg:grid-cols-2 min-w-0">
         {/* SECTION 1 : Coordonnées du profil */}
-        <div className="rounded-3xl border border-[#171717]/10 bg-white p-6 shadow-sm sm:p-7">
+        <div className="min-w-0 rounded-2xl sm:rounded-3xl border border-[#171717]/10 bg-white p-5 sm:p-7 shadow-sm">
           <div className="flex items-center gap-3 border-b border-[#171717]/10 pb-4">
             <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#0060c3]/10 text-[#0060c3]">
               <User className="h-5 w-5" />
@@ -271,7 +271,7 @@ export default function ParametresPage() {
         </div>
 
         {/* SECTION 2 : Sécurité & Mot de passe */}
-        <div className="rounded-3xl border border-[#171717]/10 bg-white p-6 shadow-sm sm:p-7">
+        <div className="min-w-0 rounded-2xl sm:rounded-3xl border border-[#171717]/10 bg-white p-5 sm:p-7 shadow-sm">
           <div className="flex items-center gap-3 border-b border-[#171717]/10 pb-4">
             <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-amber-500/10 text-amber-600">
               <KeyRound className="h-5 w-5" />

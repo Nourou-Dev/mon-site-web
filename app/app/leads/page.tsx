@@ -116,9 +116,11 @@ export default function LeadsCRMPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-black text-[#171717]">CRM &amp; Acquisition de Prospects</h1>
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+        <div className="min-w-0">
+          <h1 className="text-xl sm:text-2xl font-black text-[#171717] lg:text-3xl">
+            CRM &amp; Acquisition de Prospects
+          </h1>
           <p className="mt-1 text-sm text-[#4b4b4b]">
             Centralisation des demandes de devis et de votre liste de diffusion newsletter.
           </p>
@@ -126,7 +128,7 @@ export default function LeadsCRMPage() {
 
         <button
           onClick={tab === "inquiries" ? exportInquiriesCSV : exportNewsletterCSV}
-          className="inline-flex items-center gap-2 rounded-full border border-[#171717]/15 bg-white px-4 py-2 text-xs font-bold text-[#171717] shadow-sm hover:bg-[#171717]/5 transition-colors"
+          className="inline-flex items-center gap-2 rounded-full border border-[#171717]/15 bg-white px-4 py-2 text-xs font-bold text-[#171717] shadow-sm hover:bg-[#171717]/5 transition-colors shrink-0"
         >
           <Download className="h-3.5 w-3.5 text-[#0060c3]" />
           <span>Exporter en CSV ({tab === "inquiries" ? inquiries.length : subscribers.length})</span>
@@ -195,7 +197,7 @@ export default function LeadsCRMPage() {
 
       {/* Contenu Tableau Devis */}
       {tab === "inquiries" ? (
-        <div className="overflow-hidden rounded-[2rem] border border-[#171717]/10 bg-white shadow-sm">
+        <div className="overflow-hidden rounded-2xl sm:rounded-[2rem] border border-[#171717]/10 bg-white shadow-sm min-w-0 max-w-full">
           <div className="divide-y divide-[#171717]/10">
             {filteredInquiries.length === 0 ? (
               <div className="p-12 text-center text-xs text-[#4b4b4b]">
@@ -285,9 +287,9 @@ export default function LeadsCRMPage() {
         </div>
       ) : (
         /* Contenu Tableau Newsletter avec défilement horizontal garanti */
-        <div className="overflow-hidden rounded-[2rem] border border-[#171717]/10 bg-white shadow-sm">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
+        <div className="overflow-hidden rounded-2xl sm:rounded-[2rem] border border-[#171717]/10 bg-white shadow-sm min-w-0 max-w-full">
+          <div className="overflow-x-auto w-full max-w-full">
+            <table className="w-full text-left text-xs min-w-[550px]">
               <thead className="border-b border-[#171717]/10 bg-[#f8f9fa] text-[11px] font-bold uppercase tracking-wider text-[#4b4b4b]">
                 <tr>
                   <th className="px-6 py-4">Adresse E-mail</th>

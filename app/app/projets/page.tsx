@@ -143,9 +143,11 @@ export default function ProjectsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-black text-[#171717]">Projets &amp; Suivi de Livraison</h1>
+      <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+        <div className="min-w-0">
+          <h1 className="text-xl sm:text-2xl font-black text-[#171717] lg:text-3xl">
+            Projets &amp; Suivi de Livraison
+          </h1>
           <p className="mt-1 text-sm text-[#4b4b4b]">
             {isAdmin
               ? "Pilotez les jalons, livrables et la progression de vos chantiers clients."
@@ -156,7 +158,7 @@ export default function ProjectsPage() {
         {isAdmin && (
           <button
             onClick={() => setIsCreating(true)}
-            className="inline-flex items-center gap-2 rounded-full bg-[#0060c3] px-5 py-2.5 text-xs font-bold text-white shadow-sm hover:bg-[#0050a5] transition-colors"
+            className="inline-flex items-center gap-2 rounded-full bg-[#0060c3] px-5 py-2.5 text-xs font-bold text-white shadow-sm hover:bg-[#0050a5] transition-colors shrink-0"
           >
             <Plus className="h-4 w-4" />
             <span>Nouveau projet</span>
@@ -314,11 +316,11 @@ export default function ProjectsPage() {
         </div>
 
         {/* Colonne Droite : Détail du projet sélectionné */}
-        <div className="lg:col-span-2">
+        <div className="lg:col-span-2 min-w-0">
           {selectedProject ? (
-            <div className="rounded-[2rem] border border-[#171717]/10 bg-white p-6 shadow-sm sm:p-8">
-              <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between border-b border-[#171717]/10 pb-6">
-                <div>
+            <div className="rounded-2xl sm:rounded-[2rem] border border-[#171717]/10 bg-white p-5 sm:p-7 lg:p-8 shadow-sm min-w-0">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between border-b border-[#171717]/10 pb-6 min-w-0">
+                <div className="min-w-0">
                   <span className="inline-flex items-center gap-1 rounded-full bg-[#0060c3]/10 px-2.5 py-0.5 text-xs font-bold text-[#0060c3]">
                     {selectedProject.category}
                   </span>

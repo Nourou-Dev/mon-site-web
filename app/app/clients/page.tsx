@@ -107,13 +107,13 @@ export default function AdminClientsPage() {
   return (
     <div className="space-y-8">
       {/* En-tête de la page */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-black tracking-tight text-[#171717] sm:text-3xl">
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+        <div className="min-w-0">
+          <div className="flex flex-wrap items-center gap-2">
+            <h1 className="text-xl sm:text-2xl font-black tracking-tight text-[#171717] lg:text-3xl">
               Comptes Clients &amp; Identifiants
             </h1>
-            <span className="rounded-full bg-[#0060c3]/10 px-2.5 py-0.5 text-xs font-bold text-[#0060c3] border border-[#0060c3]/20">
+            <span className="shrink-0 rounded-full bg-[#0060c3]/10 px-2.5 py-0.5 text-xs font-bold text-[#0060c3] border border-[#0060c3]/20">
               Espace Administrateur
             </span>
           </div>
@@ -122,7 +122,7 @@ export default function AdminClientsPage() {
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2.5">
+        <div className="flex flex-wrap items-center gap-2.5 shrink-0">
           <button
             onClick={loadAccounts}
             disabled={loading}
@@ -144,8 +144,8 @@ export default function AdminClientsPage() {
       </div>
 
       {/* 3 Cartes Statistiques */}
-      <div className="grid gap-4 sm:grid-cols-3">
-        <div className="rounded-2xl border border-[#171717]/10 bg-white p-5 shadow-sm">
+      <div className="grid gap-3.5 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3">
+        <div className="min-w-0 rounded-2xl border border-[#171717]/10 bg-white p-5 shadow-sm">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold uppercase tracking-wider text-[#4b4b4b]">Total Comptes Créés</span>
             <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#0060c3]/10 text-[#0060c3]">
@@ -156,7 +156,7 @@ export default function AdminClientsPage() {
           <p className="mt-1 text-xs text-[#4b4b4b]">Enregistrés dans la base de données</p>
         </div>
 
-        <div className="rounded-2xl border border-[#171717]/10 bg-white p-5 shadow-sm">
+        <div className="min-w-0 rounded-2xl border border-[#171717]/10 bg-white p-5 shadow-sm">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold uppercase tracking-wider text-[#4b4b4b]">Clients Inscrits</span>
             <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">
@@ -167,7 +167,7 @@ export default function AdminClientsPage() {
           <p className="mt-1 text-xs text-[#4b4b4b]">Accès à leur espace projet actif</p>
         </div>
 
-        <div className="rounded-2xl border border-[#171717]/10 bg-white p-5 shadow-sm">
+        <div className="min-w-0 rounded-2xl border border-[#171717]/10 bg-white p-5 shadow-sm sm:col-span-2 xl:col-span-1">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold uppercase tracking-wider text-[#4b4b4b]">Sécurité &amp; Rôles</span>
             <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-purple-50 text-purple-600">
@@ -181,8 +181,8 @@ export default function AdminClientsPage() {
 
       {/* Barre de Recherche et Filtres */}
       <div className="rounded-2xl border border-[#171717]/10 bg-white p-4 shadow-sm sm:p-5">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div className="relative flex-1 max-w-md">
+        <div className="flex flex-col gap-3.5 md:flex-row md:items-center md:justify-between">
+          <div className="relative flex-1 w-full md:max-w-md">
             <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#7b7b7b]" />
             <input
               type="text"
@@ -193,7 +193,7 @@ export default function AdminClientsPage() {
             />
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-2.5">
             <label className="text-xs font-bold text-[#171717]">Filtrer par rôle :</label>
             <select
               value={roleFilter}
@@ -209,7 +209,7 @@ export default function AdminClientsPage() {
       </div>
 
       {/* Tableau des Comptes Clients */}
-      <div className="rounded-[2rem] border border-[#171717]/10 bg-white p-6 shadow-sm sm:p-8">
+      <div className="rounded-2xl sm:rounded-[2rem] border border-[#171717]/10 bg-white p-4 sm:p-6 lg:p-8 shadow-sm min-w-0 max-w-full">
         <div className="mb-6 flex items-center justify-between">
           <div>
             <h2 className="text-lg font-bold text-[#171717]">Liste des Comptes Enregistrés</h2>
@@ -349,9 +349,9 @@ export default function AdminClientsPage() {
               })}
             </div>
 
-            {/* VUE TABLETTE / DESKTOP : Tableau complet et aéré */}
-            <div className="hidden md:block overflow-x-auto">
-              <table className="w-full text-left text-xs">
+            {/* VUE TABLETTE / DESKTOP : Tableau complet et aéré avec scrollbar interne si nécessaire */}
+            <div className="hidden md:block overflow-x-auto w-full max-w-full">
+              <table className="w-full text-left text-xs min-w-[760px]">
                 <thead className="border-b border-[#171717]/10 bg-[#f8f9fa] text-[11px] font-bold uppercase tracking-wider text-[#4b4b4b]">
                   <tr>
                     <th className="px-4 py-3.5 rounded-l-xl">Client / Nom</th>

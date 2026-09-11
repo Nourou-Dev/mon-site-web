@@ -227,10 +227,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         />
       )}
 
-      <div className="flex">
+      <div className="flex w-full min-w-0">
         {/* Sidebar Desktop & Tiroir Mobile */}
         <aside
-          className={`fixed inset-y-0 left-0 z-50 flex w-72 flex-col justify-between border-r border-[#171717]/10 bg-white p-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] transition-transform duration-300 ease-out lg:static lg:translate-x-0 ${
+          className={`fixed inset-y-0 left-0 z-50 flex w-72 shrink-0 flex-col justify-between border-r border-[#171717]/10 bg-white p-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] transition-transform duration-300 ease-out lg:static lg:translate-x-0 ${
             mobileMenuOpen ? "translate-x-0 shadow-2xl" : "-translate-x-full"
           }`}
         >
@@ -327,9 +327,11 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           </div>
         </aside>
 
-        {/* Contenu principal */}
-        <main className="min-h-screen flex-1 p-4 sm:p-6 lg:p-8">
-          {children}
+        {/* Contenu principal strictement borné à l'espace restant sans débordement */}
+        <main className="min-h-screen flex-1 min-w-0 max-w-full p-4 sm:p-6 lg:p-8 overflow-x-hidden">
+          <div className="w-full min-w-0 max-w-7xl mx-auto">
+            {children}
+          </div>
         </main>
       </div>
     </div>

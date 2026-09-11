@@ -96,13 +96,13 @@ export default function AppDashboardPage() {
   return (
     <div className="space-y-8">
       {/* En-tête de bienvenue */}
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-black tracking-tight text-[#171717] sm:text-3xl">
+      <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+        <div className="min-w-0">
+          <div className="flex flex-wrap items-center gap-2">
+            <h1 className="text-xl sm:text-2xl font-black tracking-tight text-[#171717] lg:text-3xl">
               Bonjour, {user?.name || "Bienvenue"}
             </h1>
-            <span className="rounded-full bg-[#0060c3]/10 px-2.5 py-0.5 text-xs font-bold text-[#0060c3]">
+            <span className="shrink-0 rounded-full bg-[#0060c3]/10 px-2.5 py-0.5 text-xs font-bold text-[#0060c3]">
               {isAdmin ? "Administrateur" : "Espace Client"}
             </span>
           </div>
@@ -113,7 +113,7 @@ export default function AppDashboardPage() {
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2.5">
+        <div className="flex flex-wrap items-center gap-2.5 shrink-0">
           {isAdmin ? (
             <Link
               href="/app/projets"
@@ -249,9 +249,9 @@ export default function AppDashboardPage() {
       {isAdmin && (
         <>
           {/* Grille des 4 indicateurs clés (KPIs) */}
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-3.5 grid-cols-1 sm:grid-cols-2 xl:grid-cols-4">
             {/* KPI 1 : Demandes de devis */}
-            <div className="rounded-2xl border border-[#171717]/10 bg-white p-5 shadow-sm">
+            <div className="min-w-0 rounded-2xl border border-[#171717]/10 bg-white p-5 shadow-sm">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold uppercase tracking-wider text-[#4b4b4b]">
                   Demandes de Devis
@@ -276,7 +276,7 @@ export default function AppDashboardPage() {
             </div>
 
             {/* KPI 2 : Abonnés Newsletter */}
-            <div className="rounded-2xl border border-[#171717]/10 bg-white p-5 shadow-sm">
+            <div className="min-w-0 rounded-2xl border border-[#171717]/10 bg-white p-5 shadow-sm">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold uppercase tracking-wider text-[#4b4b4b]">
                   Abonnés Newsletter
@@ -299,7 +299,7 @@ export default function AppDashboardPage() {
             </div>
 
             {/* KPI 3 : Projets Actifs */}
-            <div className="rounded-2xl border border-[#171717]/10 bg-white p-5 shadow-sm">
+            <div className="min-w-0 rounded-2xl border border-[#171717]/10 bg-white p-5 shadow-sm">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold uppercase tracking-wider text-[#4b4b4b]">
                   Projets Actifs
@@ -322,7 +322,7 @@ export default function AppDashboardPage() {
             </div>
 
             {/* KPI 4 : Consentement Cookies */}
-            <div className="rounded-2xl border border-[#171717]/10 bg-white p-5 shadow-sm">
+            <div className="min-w-0 rounded-2xl border border-[#171717]/10 bg-white p-5 shadow-sm">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold uppercase tracking-wider text-[#4b4b4b]">
                   Consentement Cookies
@@ -346,9 +346,9 @@ export default function AppDashboardPage() {
           </div>
 
           {/* Grille principale : Dernières demandes & Projets récents */}
-          <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
+          <div className="grid gap-6 grid-cols-1 xl:grid-cols-[1.2fr_0.8fr] min-w-0">
             {/* Dernières demandes de devis */}
-            <div className="rounded-[2rem] border border-[#171717]/10 bg-white p-6 shadow-sm">
+            <div className="min-w-0 rounded-[2rem] border border-[#171717]/10 bg-white p-6 shadow-sm">
               <div className="flex items-center justify-between">
                 <div>
                   <h2 className="text-lg font-bold text-[#171717]">Dernières Demandes de Devis</h2>
