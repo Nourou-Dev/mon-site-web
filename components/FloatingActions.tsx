@@ -2,12 +2,11 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowUp, MessageSquare, X } from "lucide-react";
-import { site } from "@/lib/data";
+import { ArrowUp, Bot, X } from "lucide-react";
 
 export default function FloatingActions() {
   const [showTop, setShowTop] = useState(false);
-  const [panelOpen, setPanelOpen] = useState(false);
+  const [chatOpen, setChatOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setShowTop(window.scrollY > 600);
@@ -18,70 +17,54 @@ export default function FloatingActions() {
 
   return (
     <>
-      {/* Bouton de défilement vers le haut */}
+      {/* Bouton de défilement vers le haut (à gauche, en bleu) */}
       <button
         type="button"
         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
         aria-label="Retourner en haut de page"
-        className={`fixed bottom-6 left-6 z-50 flex h-11 w-11 items-center justify-center border border-[#C9C4B8] bg-[#1B1D22] text-white transition-all hover:bg-[#3D5AFE] ${
+        className={`focus-ring fixed bottom-[max(1rem,env(safe-area-inset-bottom))] left-[max(1rem,env(safe-area-inset-left))] z-50 flex h-12 w-12 items-center justify-center rounded-full bg-[#0060c3] text-white shadow-xl shadow-[#0060c3]/30 transition-all hover:bg-[#0050a5] hover:-translate-y-0.5 active:scale-95 sm:bottom-6 sm:left-6 ${
           showTop
             ? "translate-y-0 opacity-100"
             : "pointer-events-none translate-y-3 opacity-0"
         }`}
       >
-        <ArrowUp className="h-4 w-4" strokeWidth={1.5} />
+        <ArrowUp className="h-4 w-4 sm:h-5 sm:w-5" strokeWidth={2.4} />
       </button>
 
-      {/* Bouton Contact direct studio */}
-      <div className="fixed bottom-6 right-6 z-50">
+      {/* Bouton Assistant / Contact rapide (à droite) */}
+      <div className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] right-[max(1rem,env(safe-area-inset-right))] z-50 sm:bottom-6 sm:right-6">
         <button
           type="button"
-          onClick={() => setPanelOpen((v) => !v)}
-          aria-expanded={panelOpen}
+          onClick={() => setChatOpen((v) => !v)}
+          aria-expanded={chatOpen}
           aria-label={
-            panelOpen ? "Fermer le menu de contact" : "Échanger sur votre projet"
+            chatOpen ? "Fermer l'assistant" : "Ouvrir l'assistant"
           }
-          className="flex h-12 w-12 items-center justify-center border border-[#C9C4B8] bg-[#1B1D22] text-white shadow-lg transition-colors hover:bg-[#3D5AFE]"
+          className="focus-ring flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-full bg-[#171717] text-white shadow-xl transition-transform hover:-translate-y-0.5 hover:bg-black active:scale-95"
         >
-          {panelOpen ? (
-            <X className="h-5 w-5" />
+          {chatOpen ? (
+            <X className="h-5 w-5 sm:h-6 sm:w-6" />
           ) : (
-            <MessageSquare className="h-5 w-5" />
+            <Bot className="h-5 w-5 sm:h-6 sm:w-6" />
           )}
         </button>
 
-        {panelOpen && (
-          <div className="absolute bottom-16 right-0 w-[min(22rem,calc(100vw-3rem))] border border-[#C9C4B8] bg-[#F6F4EF] p-6 shadow-xl">
-            <div className="flex items-center gap-2 text-xs font-mono text-[#1B1D22]/60">
-              <span className="h-2 w-2 rounded-full bg-[#3D5AFE]"></span>
-              <span>Atelier · Réponse sous 24h</span>
-            </div>
-            
-            <p className="mt-3 font-serif text-xl font-normal text-[#1B1D22]">
-              Un projet à concrétiser ?
+        {chatOpen && (
+          <div className="absolute bottom-[3.75rem] sm:bottom-[4.25rem] right-0 w-[min(20rem,calc(100vw-2.5rem))] rounded-2xl border border-black/10 bg-white p-4 shadow-2xl">
+            <p className="text-sm font-bold text-[#171717]">
+              Une question rapide ?
             </p>
-            <p className="mt-2 text-xs text-[#1B1D22]/70 leading-relaxed font-sans">
-              Discutons de vos enjeux, de vos délais et du cadrage technique sans intermédiaire.
+            <p className="mt-1.5 text-xs sm:text-sm text-[#4b4b4b]">
+              Décrivez votre projet en quelques mots, la réponse arrive par
+              e-mail sous 24 h.
             </p>
-            
-            <div className="mt-5 flex flex-col gap-2.5">
-              <Link
-                href="/contact"
-                onClick={() => setPanelOpen(false)}
-                className="inline-flex items-center justify-center bg-[#1B1D22] px-4 py-2.5 text-xs font-mono text-white transition-colors hover:bg-[#3D5AFE]"
-              >
-                Formulaire de cadrage
-              </Link>
-              <a
-                href={site.whatsapp}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => setPanelOpen(false)}
-                className="inline-flex items-center justify-center border border-[#C9C4B8] bg-white px-4 py-2 text-xs font-mono text-[#1B1D22] transition-colors hover:bg-[#1B1D22] hover:text-white"
-              >
-                WhatsApp direct
-              </a>
-            </div>
+            <Link
+              href="/contact"
+              onClick={() => setChatOpen(false)}
+              className="focus-ring mt-3 inline-flex items-center justify-center rounded-full bg-[#0060c3] px-4 py-2.5 text-xs sm:text-sm font-semibold text-white transition-transform active:scale-95 hover:bg-[#0050a5]"
+            >
+              Écrire un message
+            </Link>
           </div>
         )}
       </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Mail, CheckCircle2, AlertCircle } from "lucide-react";
+import { Mail, ArrowRight, ArrowUpRight, CheckCircle2, Sparkles, AlertCircle } from "lucide-react";
 
 export default function Newsletter() {
   const [email, setEmail] = useState("");
@@ -55,29 +55,35 @@ export default function Newsletter() {
   };
 
   return (
-    <section className="bg-[#F6F4EF] px-4 py-20 sm:px-6 sm:py-28 lg:px-10 border-b border-[#C9C4B8]">
-      <div className="mx-auto max-w-[1100px] border border-[#C9C4B8] bg-white p-8 sm:p-14 lg:p-16">
-        <div className="mx-auto max-w-2xl text-center">
-          <p className="text-xs font-mono text-[#1B1D22]/60">
-            Dispatch mensuel · Veille &amp; Stratégie
-          </p>
+    <section className="bg-white px-4 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-14">
+      <div className="relative mx-auto max-w-[1280px] overflow-hidden rounded-[2rem] border border-[#0060c3]/30 bg-[#0060c3] px-6 py-12 text-white shadow-[0_25px_60px_rgba(0,96,195,0.28)] sm:px-12 sm:py-16 lg:px-16">
+        {/* Glow décoratif */}
+        <div className="absolute -left-20 -top-20 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
+        <div className="absolute -bottom-20 -right-20 h-64 w-64 rounded-full bg-[#004a99]/40 blur-3xl" />
 
-          <h2 className="mt-4 font-serif text-2xl sm:text-3xl lg:text-4xl font-normal tracking-tight text-[#1B1D22]">
-            Des réflexions concrètes sur l&apos;ingénierie et le design, <span className="italic">directement dans votre boîte</span>
+        <div className="relative z-10 mx-auto max-w-2xl text-center">
+          <span className="inline-flex items-center gap-2 rounded-full border border-[#171717]/10 bg-[#f4f6f8] px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-[#171717] shadow-sm">
+            <Mail className="h-3.5 w-3.5 text-[#0060c3]" />
+            Newsletter · Stratégie &amp; Design
+          </span>
+
+          <h2 className="mt-5 text-2xl font-black tracking-[-0.06em] text-white sm:text-3xl lg:text-4xl">
+            Recevez mes conseils pour faire de votre site une machine à convaincre
           </h2>
 
-          <p className="mt-4 text-sm sm:text-base text-[#1B1D22]/70 leading-relaxed font-sans max-w-xl mx-auto">
-            Analyses de cas réels, retours d&apos;expérience sur la conversion et méthodologie de projet. Sans jargon commercial, ni promotion agressive.
+          <p className="mt-4 text-[0.95rem] leading-relaxed text-white/95 sm:text-[1.05rem]">
+            Analyses de sites, retours d’expérience concrets et astuces d’optimisation
+            pour développer votre clientèle grâce à votre présence en ligne.
           </p>
 
           <div className="mt-8">
             {submitted ? (
-              <div className="mx-auto flex max-w-lg flex-col items-center gap-3 border border-[#C9C4B8] bg-[#F6F4EF] p-6 text-center text-[#1B1D22]">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#3D5AFE]/10 text-[#3D5AFE]">
-                  <CheckCircle2 className="h-5 w-5 shrink-0" />
+              <div className="mx-auto flex max-w-lg flex-col items-center gap-3 rounded-2xl border border-white/30 bg-white/20 p-6 text-center text-white backdrop-blur-md">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#0060c3]">
+                  <CheckCircle2 className="h-6 w-6 shrink-0" />
                 </div>
-                <p className="text-sm font-medium leading-relaxed font-sans">
-                  {feedbackMessage || "C'est noté ! Merci pour votre confiance, vos premières analyses arrivent bientôt."}
+                <p className="text-sm font-semibold leading-relaxed text-white">
+                  {feedbackMessage || "C'est noté ! Merci pour votre confiance, vos premiers conseils arrivent bientôt."}
                 </p>
                 <button
                   type="button"
@@ -85,7 +91,7 @@ export default function Newsletter() {
                     setSubmitted(false);
                     setFeedbackMessage(null);
                   }}
-                  className="mt-2 text-xs font-mono text-[#3D5AFE] underline hover:text-[#1B1D22] transition-colors"
+                  className="mt-2 text-xs font-semibold text-white/90 underline hover:text-white transition-colors"
                 >
                   Inscrire une autre adresse
                 </button>
@@ -93,8 +99,8 @@ export default function Newsletter() {
             ) : (
               <div className="mx-auto max-w-md">
                 {errorMessage && (
-                  <div className="mb-4 flex items-center justify-center gap-2 border border-red-300 bg-red-50 px-4 py-2.5 text-xs text-red-800">
-                    <AlertCircle className="h-4 w-4 shrink-0 text-red-600" />
+                  <div className="mb-3 flex items-center justify-center gap-2 rounded-xl border border-red-200/50 bg-red-500/20 px-4 py-2.5 text-xs font-semibold text-white backdrop-blur-md">
+                    <AlertCircle className="h-4 w-4 shrink-0 text-red-200" />
                     <span>{errorMessage}</span>
                   </div>
                 )}
@@ -129,36 +135,43 @@ export default function Newsletter() {
                   </div>
 
                   <div className="relative flex-1">
-                    <Mail className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#1B1D22]/40" />
+                    <Mail className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-white/80" />
                     <input
                       type="email"
                       required
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder="votre@email.com"
+                      placeholder="Votre adresse e-mail..."
                       aria-label="Votre adresse e-mail pour la newsletter"
-                      className="w-full border border-[#C9C4B8] bg-white px-11 py-3 text-sm text-[#1B1D22] placeholder-[#1B1D22]/40 transition-colors focus:border-[#1B1D22] focus:outline-none"
+                      className="w-full rounded-full border border-white/30 bg-white/15 px-11 py-3.5 text-sm text-white placeholder-white/75 backdrop-blur-sm transition-colors focus:border-white focus:bg-white/25 focus:outline-none"
                     />
                   </div>
 
                   <button
                     type="submit"
                     disabled={loading}
-                    className="inline-flex items-center justify-center bg-[#1B1D22] px-7 py-3 text-xs font-mono text-white transition-colors hover:bg-[#3D5AFE] disabled:opacity-70 shrink-0"
+                    className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-6 py-3.5 text-sm font-bold text-[#0060c3] shadow-lg transition-transform hover:-translate-y-0.5 hover:bg-[#f5f9ff] active:scale-95 disabled:opacity-70"
                   >
-                    {loading ? "Inscription..." : "S'inscrire"}
+                    {loading ? (
+                      "Inscription..."
+                    ) : (
+                      <>
+                        Rejoindre
+                        <ArrowUpRight className="h-4 w-4" strokeWidth={2.5} />
+                      </>
+                    )}
                   </button>
                 </form>
               </div>
             )}
           </div>
 
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-4 text-center text-xs font-mono text-[#1B1D22]/50">
-            <span>Gratuit</span>
-            <span>·</span>
-            <span>Un email tous les 15 jours</span>
-            <span>·</span>
-            <span>Désinscription immédiate</span>
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-4 text-center text-xs text-white/90 font-medium">
+            <span>✓ Gratuit &amp; sans engagement</span>
+            <span>•</span>
+            <span>✓ Désinscription en 1 clic</span>
+            <span>•</span>
+            <span>✓ 0% spam, 100% valeur</span>
           </div>
         </div>
       </div>

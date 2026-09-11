@@ -1,156 +1,73 @@
-import Link from "next/link";
+import { AlertCircle } from "lucide-react";
 
 export default function ProblemSolution() {
   return (
-    <section className="relative w-full bg-[#F6F4EF] py-20 sm:py-28 lg:py-32 border-b border-[#C9C4B8]">
-      <div className="mx-auto max-w-[1360px] px-4 sm:px-6 lg:px-10">
-        
-        {/* En-tête de section */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-12 border-b border-[#C9C4B8]">
+    <section className="bg-white px-4 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-10">
+      <div className="mx-auto max-w-[1280px] rounded-[2rem] border border-[#171717]/8 bg-[#f8f9fa] p-5 sm:p-8 lg:p-12">
+        <div className="grid gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-start lg:gap-12">
           <div>
-            <p className="text-xs font-mono text-[#1B1D22]/60">
-              01 · Constat &amp; Démarche d&apos;atelier
-            </p>
-            <h2 className="mt-4 font-serif text-3xl sm:text-4xl lg:text-5xl font-normal tracking-tight text-[#1B1D22] max-w-[700px]">
-              Votre site actuel reflète-t-il le niveau d&apos;excellence de votre travail ?
-            </h2>
-          </div>
-          <p className="max-w-[420px] text-sm sm:text-base leading-relaxed text-[#1B1D22]/70 font-sans">
-            Un prospect évalue la crédibilité d&apos;une marque dès les 5 premières secondes. Une vitrine générique ou lente décourage l&apos;attention avant même que vous n&apos;ayez pu présenter votre offre.
-          </p>
-        </div>
-
-        {/* Grille 3 colonnes architecturales */}
-        <div className="mt-12 grid gap-8 md:grid-cols-3">
-          
-          {/* Colonne 1 : Le problème ordinaire */}
-          <div className="flex flex-col justify-between border border-[#C9C4B8] bg-white p-7 sm:p-9">
-            <div>
-              <div className="flex items-center justify-between pb-4 border-b border-[#C9C4B8]">
-                <span className="text-xs font-mono text-[#1B1D22]/60">
-                  Le piège du préfabriqué
-                </span>
-                <span className="text-xs font-mono text-[#1B1D22]/40">Standard</span>
-              </div>
-              <h3 className="mt-6 font-serif text-2xl font-normal text-[#1B1D22]">
-                L&apos;illusion du tout-fait
-              </h3>
-              <p className="mt-3 text-sm leading-relaxed text-[#1B1D22]/70 font-sans">
-                Les thèmes préfabriqués et générateurs automatiques se ressemblent tous. Surchargés de code superflu, lents sur smartphone, ils noient votre singularité dans la masse.
-              </p>
-              <ul className="mt-6 space-y-3 text-xs font-mono text-[#1B1D22]/60">
-                <li className="flex items-center gap-2.5">
-                  <span className="h-1.5 w-1.5 rounded-full bg-[#1B1D22]/30" />
-                  <span>Temps de chargement supérieur à 3 secondes</span>
-                </li>
-                <li className="flex items-center gap-2.5">
-                  <span className="h-1.5 w-1.5 rounded-full bg-[#1B1D22]/30" />
-                  <span>Mise en page générique interchangeable</span>
-                </li>
-                <li className="flex items-center gap-2.5">
-                  <span className="h-1.5 w-1.5 rounded-full bg-[#1B1D22]/30" />
-                  <span>Perte d&apos;attention et devis sous-évalués</span>
-                </li>
-              </ul>
-            </div>
-            <div className="mt-8 pt-4 border-t border-[#C9C4B8] text-xs font-mono text-[#1B1D22]/50">
-              Conséquence : Faible conversion et statut amoindri.
-            </div>
-          </div>
-
-          {/* Colonne 2 : La méthode artisanale (accent encre) */}
-          <div className="flex flex-col justify-between border border-[#1B1D22] bg-[#1B1D22] p-7 sm:p-9 text-[#F6F4EF]">
-            <div>
-              <div className="flex items-center justify-between pb-4 border-b border-white/15">
-                <span className="text-xs font-mono text-white/70">
-                  L&apos;approche d&apos;auteur
-                </span>
-                <span className="text-xs font-mono text-[#3D5AFE]">Fait main</span>
-              </div>
-              <h3 className="mt-6 font-serif text-2xl font-normal text-white">
-                Direction artistique &amp; code pur
-              </h3>
-              <p className="mt-3 text-sm leading-relaxed text-white/80 font-sans">
-                Chaque projet démarre d&apos;une page blanche. Une typographie de caractère choisie pour vous, une structure éditoriale claire et un code Next.js ultra-rapide taillé pour durer.
-              </p>
-              <ul className="mt-6 space-y-3 text-xs font-mono text-white/80">
-                <li className="flex items-center gap-2.5">
-                  <span className="h-1.5 w-1.5 rounded-full bg-[#3D5AFE]" />
-                  <span>Système visuel exclusif à votre marque</span>
-                </li>
-                <li className="flex items-center gap-2.5">
-                  <span className="h-1.5 w-1.5 rounded-full bg-[#3D5AFE]" />
-                  <span>Score PageSpeed 99+ mesurable</span>
-                </li>
-                <li className="flex items-center gap-2.5">
-                  <span className="h-1.5 w-1.5 rounded-full bg-[#3D5AFE]" />
-                  <span>Parcours pensé pour inspirer confiance</span>
-                </li>
-              </ul>
-            </div>
-            <div className="mt-8 pt-4 border-t border-white/15 text-xs font-mono text-white/60">
-              Résultat : Une image irréprochable et un statut fort.
-            </div>
-          </div>
-
-          {/* Colonne 3 : L'impact mesurable */}
-          <div className="flex flex-col justify-between border border-[#C9C4B8] bg-white p-7 sm:p-9">
-            <div>
-              <div className="flex items-center justify-between pb-4 border-b border-[#C9C4B8]">
-                <span className="text-xs font-mono text-[#1B1D22]/60">
-                  La rentabilité de l&apos;actif
-                </span>
-                <span className="text-xs font-mono text-[#3D5AFE]">Pérennité</span>
-              </div>
-              <h3 className="mt-6 font-serif text-2xl font-normal text-[#1B1D22]">
-                Un outil qui vous appartient
-              </h3>
-              <p className="mt-3 text-sm leading-relaxed text-[#1B1D22]/70 font-sans">
-                Votre site travaille 24h/24 : il répond aux hésitations de vos prospects, valorise vos honoraires et accélère la prise de décision de vos interlocuteurs les plus exigeants.
-              </p>
-              <ul className="mt-6 space-y-3 text-xs font-mono text-[#1B1D22]/60">
-                <li className="flex items-center gap-2.5">
-                  <span className="h-1.5 w-1.5 rounded-full bg-[#3D5AFE]" />
-                  <span>Visiteurs rassurés dès les premières secondes</span>
-                </li>
-                <li className="flex items-center gap-2.5">
-                  <span className="h-1.5 w-1.5 rounded-full bg-[#3D5AFE]" />
-                  <span>Demandes de contact plus ciblées</span>
-                </li>
-                <li className="flex items-center gap-2.5">
-                  <span className="h-1.5 w-1.5 rounded-full bg-[#3D5AFE]" />
-                  <span>0 abonnement captif, liberté totale</span>
-                </li>
-              </ul>
-            </div>
-            <div className="mt-8 pt-4 border-t border-[#C9C4B8]">
-              <Link
-                href="/services"
-                className="text-xs font-mono text-[#3D5AFE] hover:underline"
-              >
-                Consulter les 4 offres d&apos;atelier
-              </Link>
-            </div>
-          </div>
-
-        </div>
-
-        {/* Note d'atelier incarnée (Inspiration Dribbble & Behance Editorial) */}
-        <div className="mt-12 border border-[#C9C4B8] bg-[#F6F4EF] p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div className="max-w-2xl">
-            <span className="text-xs font-mono text-[#1B1D22]/60 block mb-2">
-              Note d&apos;artisan · Philosophie de travail
+            <span className="inline-flex items-center gap-2 rounded-full border border-[#171717]/10 bg-[#f4f6f8] px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-[#171717] shadow-sm">
+              <AlertCircle className="h-3.5 w-3.5 text-[#0060c3]" />
+              Votre site vous fait-il perdre des clients ?
             </span>
-            <p className="font-serif text-base sm:text-lg text-[#1B1D22] italic leading-relaxed">
-              « Dans un écosystème saturé de templates uniformes et de pages générées en série, le soin du détail et la précision typographique sont les seuls leviers qui vous distinguent instantanément. »
+
+            <h2 className="mt-6 max-w-[540px] font-black tracking-[-0.07em] text-[#171717]">
+              Votre site actuel ne reflète peut-être pas la valeur réelle de votre entreprise
+            </h2>
+
+            <p className="mt-5 max-w-[520px] text-base sm:text-lg leading-relaxed sm:leading-8 text-[#4b4b4b]">
+              Vous proposez de bons produits ou services, mais votre présence en ligne ne vous aide pas suffisamment à les vendre.
             </p>
+
+            <div className="mt-8 sm:mt-9">
+              <p className="mb-4 text-[0.72rem] font-medium uppercase tracking-[0.18em] text-[#171717]/65">
+                Peut-être que :
+              </p>
+
+              <ul className="space-y-2.5 text-[0.92rem] sm:text-[0.98rem] leading-snug sm:leading-7 text-[#2f2f2f]">
+                {[
+                  "votre site paraît dépassé ou manque de personnalité ;",
+                  "vos visiteurs ne comprennent pas rapidement ce que vous proposez ;",
+                  "votre image manque de cohérence ;",
+                  "votre site n’est pas adapté aux smartphones ;",
+                  "vous dépendez uniquement des réseaux sociaux pour présenter votre activité ;",
+                  "vos prospects posent toujours les mêmes questions avant de passer à l’action ;",
+                  "vous recevez peu de demandes malgré vos efforts de communication.",
+                ].map((item) => (
+                  <li key={item} className="flex items-start gap-3">
+                    <span className="mt-[0.35rem] text-base font-bold leading-none text-[#0060c3]">✕</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
-          <div className="shrink-0 font-mono text-xs text-[#1B1D22]/60 border-t md:border-t-0 md:border-l border-[#C9C4B8] pt-4 md:pt-0 md:pl-6">
-            <p className="font-medium text-[#1B1D22]">Nourou Dine AMANDOU</p>
-            <p className="text-[#1B1D22]/50 mt-0.5">Direction artistique &amp; Code</p>
+
+          <div className="relative flex h-full min-h-0 items-stretch lg:min-h-[420px]">
+            <div className="absolute left-5 top-6 h-28 w-28 rounded-full bg-[#0060c3]/20 blur-2xl" />
+            <div className="absolute bottom-4 right-0 h-24 w-24 rounded-full bg-[#0060c3]/15 blur-2xl" />
+
+            <div className="relative flex h-full w-full flex-col justify-between rounded-[1.8rem] border border-[#0060c3]/30 bg-[#0060c3] p-5 text-white shadow-[0_24px_60px_rgba(0,96,195,0.28)] sm:p-8">
+              <div>
+                <p className="text-[0.7rem] font-medium uppercase tracking-[0.18em] text-white/80">
+                  Diagnostic
+                </p>
+                <p className="mt-5 sm:mt-6 text-4xl sm:text-5xl font-black leading-none tracking-[-0.08em] text-white">
+                  01
+                </p>
+              </div>
+
+              <div className="mt-8">
+                <p className="text-[1rem] sm:text-[1.05rem] leading-relaxed sm:leading-7 text-white">
+                  Un site web ne doit pas seulement être agréable à regarder.
+                </p>
+                <p className="mt-4 text-[1rem] sm:text-[1.05rem] leading-relaxed sm:leading-7 text-white/90">
+                  Il doit rassurer, expliquer clairement votre valeur et guider vos visiteurs vers la prochaine étape.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
-
       </div>
     </section>
   );

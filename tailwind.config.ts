@@ -8,29 +8,31 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        paper: "#F6F4EF",
         ink: {
-          DEFAULT: "#1B1D22",
-          soft: "#4B4D54",
+          DEFAULT: "#15141B",
+          soft: "#4A4854",
         },
-        cobalt: {
-          DEFAULT: "#3D5AFE",
-          hover: "#2A45E2",
+        cream: "#FBF9F6",
+        sand: "#F3EFE9",
+        ember: {
+          50: "#FFF3ED",
+          100: "#FFE2D2",
+          300: "#FFA983",
+          500: "#FF5A2D",
+          600: "#EA4415",
+          700: "#C1350E",
         },
-        coral: {
-          DEFAULT: "#FF6B3D",
-        },
-        stone: {
-          border: "#C9C4B8",
-          DEFAULT: "#C9C4B8",
+        pine: {
+          400: "#3FB88A",
+          500: "#1E9C6D",
         },
       },
       fontFamily: {
         display: [
           "var(--font-display)",
-          "Fraunces",
-          "Georgia",
-          "serif",
+          "ui-sans-serif",
+          "system-ui",
+          "sans-serif",
         ],
         body: [
           "var(--font-body)",

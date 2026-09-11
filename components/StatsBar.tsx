@@ -1,212 +1,86 @@
 import Image from "next/image";
 import Link from "next/link";
+import { ArrowRight, ArrowUpRight, FolderKanban } from "lucide-react";
+
 import { allProjects } from "@/lib/projectsData";
 
 export default function StatsBar() {
-  const asteria = allProjects.find((p) => p.slug === "asteria") || allProjects[0];
-  const northlane = allProjects.find((p) => p.slug === "northlane") || allProjects[1];
-  const maison7 = allProjects.find((p) => p.slug === "maison-7") || allProjects[2];
+  const featuredProjects = allProjects.slice(0, 4);
 
   return (
-    <section id="realisations" className="relative w-full bg-[#F6F4EF] py-20 sm:py-28 lg:py-32 border-b border-[#C9C4B8]">
-      <div className="mx-auto max-w-[1360px] px-4 sm:px-6 lg:px-10">
-        
-        {/* En-tête de section éditorial */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-12 border-b border-[#C9C4B8]">
-          <div>
-            <p className="text-xs font-mono text-[#1B1D22]/60">
-              03 · Études de cas sélectionnées &amp; Récits de création
-            </p>
-            <h2 className="mt-4 font-serif text-3xl sm:text-4xl lg:text-5xl font-normal tracking-tight text-[#1B1D22] max-w-[660px]">
-              Chaque projet possède son propre système visuel.
-            </h2>
-          </div>
-          <div className="flex flex-col items-start md:items-end gap-3">
-            <p className="max-w-[380px] text-sm text-[#1B1D22]/70 leading-relaxed md:text-right font-sans">
-              Des pièces uniques façonnées pour répondre à des objectifs d&apos;autorité, de clarté commerciale et de rentabilité pérenne.
-            </p>
+    <section id="realisations" className="scroll-mt-[5.5rem] bg-[#ffffff] px-4 py-12 sm:py-16 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-[1280px] rounded-[2rem] border border-white/20 bg-[#0054ab] p-5 text-white shadow-2xl sm:p-8 lg:p-10">
+        <div className="mb-8 flex items-center justify-between gap-3">
+          <span className="inline-flex items-center gap-2 rounded-full border border-[#171717]/10 bg-[#f4f6f8] px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-[#171717] shadow-sm">
+            <FolderKanban className="h-3.5 w-3.5 text-[#0060c3]" />
+            Mes réalisations
+          </span>
+          <Link
+            href="/realisations"
+            className="hidden sm:inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-bold text-[#0060c3] shadow-sm transition-all hover:bg-[#f5f9ff] hover:-translate-y-0.5"
+          >
+            Voir tous les projets
+            <ArrowRight className="h-4 w-4" strokeWidth={2.4} />
+          </Link>
+        </div>
+
+        <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+          <h2 className="max-w-[420px] font-black tracking-[-0.07em] text-white">
+            Des projets pensés pour marquer les esprits
+          </h2>
+
+          <p className="max-w-[360px] text-[0.95rem] leading-relaxed text-white/95 sm:text-[1.05rem]">
+            Un travail sérieux, clair et premium, pensé pour donner de la crédibilité à votre activité.
+          </p>
+        </div>
+
+        <div className="mt-8 sm:mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {featuredProjects.map((project) => (
             <Link
-              href="/realisations"
-              className="text-xs font-mono text-[#3D5AFE] hover:underline"
+              key={project.slug}
+              href={`/realisations/${project.slug}`}
+              className="group block"
             >
-              Consulter l&apos;ensemble du portfolio
+              <div className="relative h-64 overflow-hidden rounded-[1.8rem] bg-[#dfe7ed] shadow-[0_12px_24px_rgba(0,0,0,0.12)] transition-transform duration-300 group-hover:-translate-y-1">
+                <div className="absolute left-4 top-4 z-10 flex gap-2">
+                  <span className="rounded-full bg-white px-3 py-1.5 text-[0.65rem] font-bold text-[#171717] shadow-sm">
+                    {project.category}
+                  </span>
+                </div>
+                <Image
+                  src={project.image}
+                  alt={project.title}
+                  width={800}
+                  height={600}
+                  className="h-full w-full object-cover transition-transform duration-300 ease-out group-hover:scale-[1.03]"
+                />
+                <span className="absolute bottom-3 right-3 flex h-12 w-12 items-center justify-center rounded-full bg-[#0060c3] text-white shadow-lg transition-transform duration-300 group-hover:rotate-[-10deg]">
+                  <ArrowUpRight className="h-5 w-5" strokeWidth={2} />
+                </span>
+              </div>
+
+              <div className="flex items-center justify-between gap-4 px-1 pt-4">
+                <h3 className="font-black leading-none tracking-[-0.05em] text-white group-hover:text-white/90">
+                  {project.title}
+                </h3>
+                <span className="text-xs text-white/90 font-medium">
+                  {project.year}
+                </span>
+              </div>
             </Link>
-          </div>
+          ))}
         </div>
 
-        {/* Étude 1 : Format Panoramique Horizontal (Asteria Properties) */}
-        <div className="mt-14">
+        {/* Bouton visible uniquement sur mobile en bas des cartes */}
+        <div className="mt-8 flex justify-center sm:hidden">
           <Link
-            href={`/realisations/${asteria.slug}`}
-            className="group block border border-[#C9C4B8] bg-white transition-colors hover:border-[#1B1D22]"
+            href="/realisations"
+            className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-white px-6 py-3.5 text-sm font-bold text-[#0060c3] shadow-md transition-transform active:scale-95 text-center"
           >
-            <div className="grid lg:grid-cols-[1.1fr_0.9fr] items-stretch">
-              <div className="relative aspect-[16/10] lg:aspect-auto w-full overflow-hidden bg-[#EAE6DD] border-b lg:border-b-0 lg:border-r border-[#C9C4B8]">
-                <Image
-                  src={asteria.image}
-                  alt={`Aperçu du projet ${asteria.title}`}
-                  fill
-                  sizes="(min-width: 1024px) 700px, 100vw"
-                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-102"
-                />
-              </div>
-
-              <div className="flex flex-col justify-between p-7 sm:p-10 lg:p-12">
-                <div>
-                  <div className="flex items-center justify-between text-xs font-mono text-[#1B1D22]/60 pb-4 border-b border-[#C9C4B8]">
-                    <span>Projet 01 · Réf. 2026-CH</span>
-                    <span>{asteria.category} · {asteria.year}</span>
-                  </div>
-
-                  <h3 className="mt-6 font-serif text-2xl sm:text-3xl lg:text-4xl font-normal text-[#1B1D22] group-hover:text-[#3D5AFE] transition-colors">
-                    {asteria.client}
-                  </h3>
-
-                  <p className="mt-4 text-sm text-[#1B1D22]/70 leading-relaxed font-sans">
-                    {asteria.desc}
-                  </p>
-
-                  {/* Note d'atelier incarnée */}
-                  <div className="mt-6 border-l-2 border-[#3D5AFE] pl-4 py-1 text-xs text-[#1B1D22]/80 font-sans italic">
-                    « Parti pris de direction artistique : typographie serif à fort contraste, blanc tournant généreux et parcours de réservation ultra-court. »
-                  </div>
-
-                  <div className="mt-8 grid grid-cols-3 gap-4 pt-6 border-t border-[#C9C4B8]">
-                    {asteria.results.map((r) => (
-                      <div key={r.label}>
-                        <span className="block font-serif text-2xl sm:text-3xl font-normal text-[#1B1D22]">
-                          {r.metric}
-                        </span>
-                        <span className="mt-1 block text-xs font-sans text-[#1B1D22]/60 leading-tight">
-                          {r.label}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="mt-8 pt-4 border-t border-[#C9C4B8] flex items-center justify-between">
-                  <span className="text-xs font-mono text-[#3D5AFE]">
-                    Consulter la fiche complète
-                  </span>
-                  <span className="text-xs font-mono text-[#1B1D22]/50">
-                    Genève &amp; Côte d&apos;Azur
-                  </span>
-                </div>
-              </div>
-            </div>
+            Voir tous les projets
+            <ArrowRight className="h-4 w-4" strokeWidth={2.4} />
           </Link>
         </div>
-
-        {/* Études 2 & 3 : Mises en page différenciées et asymétriques */}
-        <div className="mt-8 grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
-          
-          {/* Étude 2 : Northlane (Traitement Encre Profonde & Ingénierie) */}
-          <Link
-            href={`/realisations/${northlane.slug}`}
-            className="group flex flex-col justify-between border border-[#1B1D22] bg-[#1B1D22] p-7 sm:p-10 text-[#F6F4EF] transition-colors hover:border-[#3D5AFE]"
-          >
-            <div>
-              <div className="flex items-center justify-between text-xs font-mono text-white/60 pb-4 border-b border-white/15">
-                <span>Projet 02 · Réf. 2026-ARCH</span>
-                <span>{northlane.category}</span>
-              </div>
-
-              <h3 className="mt-6 font-serif text-2xl sm:text-3xl font-normal text-[#F6F4EF] group-hover:text-[#3D5AFE] transition-colors">
-                {northlane.client}
-              </h3>
-
-              <p className="mt-3 text-sm text-white/75 leading-relaxed font-sans">
-                {northlane.desc}
-              </p>
-
-              <div className="relative mt-6 aspect-[16/9] w-full overflow-hidden border border-white/15 bg-black/40">
-                <Image
-                  src={northlane.image}
-                  alt={`Aperçu de ${northlane.title}`}
-                  fill
-                  sizes="(min-width: 1024px) 600px, 100vw"
-                  className="object-cover opacity-90 transition-transform duration-700 ease-out group-hover:scale-102"
-                />
-              </div>
-
-              <div className="mt-6 border-l-2 border-[#3D5AFE] pl-4 py-1 text-xs text-white/80 font-sans italic">
-                « Défi d&apos;ingénierie : afficher des rendus 3D lourds en garantissant un affichage complet sous 0.6 seconde. »
-              </div>
-
-              <div className="mt-6 flex flex-wrap gap-2">
-                {northlane.tools.map((t) => (
-                  <span
-                    key={t}
-                    className="border border-white/15 bg-white/5 px-2.5 py-1 text-[11px] font-mono text-white/80"
-                  >
-                    {t}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            <div className="mt-8 pt-4 border-t border-white/15 flex items-center justify-between text-xs font-mono">
-              <span className="text-white/70">
-                Impact : {northlane.impact}
-              </span>
-              <span className="text-[#3D5AFE]">
-                Voir l&apos;étude
-              </span>
-            </div>
-          </Link>
-
-          {/* Étude 3 : Maison 7 (Traitement Galerie & Architecture d'Intérieur) */}
-          <Link
-            href={`/realisations/${maison7.slug}`}
-            className="group flex flex-col justify-between border border-[#C9C4B8] bg-white p-7 sm:p-10 transition-colors hover:border-[#1B1D22]"
-          >
-            <div>
-              <div className="flex items-center justify-between text-xs font-mono text-[#1B1D22]/60 pb-4 border-b border-[#C9C4B8]">
-                <span>Projet 03 · Réf. 2026-LUX</span>
-                <span>{maison7.category}</span>
-              </div>
-
-              <h3 className="mt-6 font-serif text-2xl sm:text-3xl font-normal text-[#1B1D22] group-hover:text-[#3D5AFE] transition-colors">
-                {maison7.client}
-              </h3>
-
-              <p className="mt-3 text-sm text-[#1B1D22]/70 leading-relaxed font-sans">
-                {maison7.desc}
-              </p>
-
-              <div className="relative mt-6 aspect-[4/3] w-full overflow-hidden border border-[#C9C4B8] bg-[#EAE6DD]">
-                <Image
-                  src={maison7.image}
-                  alt={`Aperçu de ${maison7.title}`}
-                  fill
-                  sizes="(min-width: 1024px) 500px, 100vw"
-                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-102"
-                />
-              </div>
-
-              {maison7.testimonial && (
-                <div className="mt-6 border border-[#C9C4B8] bg-[#F6F4EF] p-4 text-xs italic text-[#1B1D22]/80 font-sans">
-                  « {maison7.testimonial.quote} »
-                  <div className="mt-2 text-[11px] not-italic font-mono text-[#1B1D22] font-medium">
-                    {maison7.testimonial.author}
-                  </div>
-                </div>
-              )}
-            </div>
-
-            <div className="mt-8 pt-4 border-t border-[#C9C4B8] flex items-center justify-between text-xs font-mono">
-              <span className="text-[#1B1D22]/70">
-                {maison7.impact}
-              </span>
-              <span className="text-[#3D5AFE]">
-                Voir l&apos;étude
-              </span>
-            </div>
-          </Link>
-
-        </div>
-
       </div>
     </section>
   );

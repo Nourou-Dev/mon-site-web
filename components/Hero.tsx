@@ -1,155 +1,188 @@
 import Image from "next/image";
 import Link from "next/link";
+import { ArrowRight, ArrowUpRight, MessageCircle, Palette } from "lucide-react";
+import { heroStats, site } from "@/lib/data";
+
+const brands = [
+  {
+    name: "adidas",
+    logo: (
+      <svg viewBox="0 0 120 40" className="h-10 w-auto" role="img" aria-label="Logo adidas">
+        <title>Logo adidas</title>
+        <g fill="#171717" opacity="0.8">
+          <path d="M6 28L22 6L30 6L18 28H6Z" />
+          <path d="M28 28L44 6L52 6L40 28H28Z" />
+          <path d="M50 28L66 6L74 6L62 28H50Z" />
+        </g>
+      </svg>
+    ),
+  },
+  {
+    name: "Pepsi",
+    logo: (
+      <svg viewBox="0 0 140 40" className="h-10 w-auto" role="img" aria-label="Logo Pepsi">
+        <title>Logo Pepsi</title>
+        <circle cx="20" cy="20" r="18" fill="#0b4dd8" />
+        <circle cx="20" cy="20" r="12" fill="#fff" opacity="0.18" />
+        <path d="M11 27C18 20 19 11 31 10C25 18 25 23 18 29C15 31 12 30 11 27Z" fill="#f44336" />
+        <path d="M31 10C36 11 42 12 47 17C41 17 35 17 29 22C26 18 28 13 31 10Z" fill="#f8d64e" />
+      </svg>
+    ),
+  },
+  {
+    name: "Spotify",
+    logo: (
+      <svg viewBox="0 0 140 40" className="h-10 w-auto" role="img" aria-label="Logo Spotify">
+        <title>Logo Spotify</title>
+        <circle cx="20" cy="20" r="18" fill="#1ed760" />
+        <path d="M13 17.5C18 16 25 15.5 32 16.5" stroke="#0f1a12" strokeWidth="2.2" strokeLinecap="round" fill="none" />
+        <path d="M12 22C18 20 26 19.5 34 20.8" stroke="#0f1a12" strokeWidth="2.2" strokeLinecap="round" fill="none" />
+        <path d="M13 26.5C20 24.8 28 24.2 36 25.5" stroke="#0f1a12" strokeWidth="2.2" strokeLinecap="round" fill="none" />
+      </svg>
+    ),
+  },
+  {
+    name: "Nike",
+    logo: (
+      <svg viewBox="0 0 140 40" className="h-10 w-auto" role="img" aria-label="Logo Nike">
+        <title>Logo Nike</title>
+        <path d="M9 27C19 22 29 16 42 13C49 11 56 12 64 15C55 18 47 22 39 26C31 29 22 31 9 27Z" fill="#171717" opacity="0.8"/>
+        <path d="M42 13C52 13 60 17 72 21C78 23 86 25 98 24C89 27 79 30 68 32C59 33 48 31 42 27C38 24 37 17 42 13Z" fill="#171717" opacity="0.8"/>
+      </svg>
+    ),
+  },
+  {
+    name: "Coca-Cola",
+    logo: (
+      <svg viewBox="0 0 180 40" className="h-10 w-auto" role="img" aria-label="Logo Coca-Cola">
+        <title>Logo Coca-Cola</title>
+        <rect x="4" y="8" width="30" height="24" rx="12" fill="#e61d2b" />
+        <path d="M16 12C20 12 23 13 25 15C22 16 20 18 18 21C16 24 15 27 13 29C11 27 10 24 10 20C10 16 13 12 16 12Z" fill="#fff" opacity="0.95"/>
+        <text x="42" y="28" fill="#d41722" fontSize="20" fontWeight="700" letterSpacing="-1">Coca-Cola</text>
+      </svg>
+    ),
+  },
+  {
+    name: "Uber",
+    logo: (
+      <svg viewBox="0 0 130 40" className="h-10 w-auto" role="img" aria-label="Logo Uber">
+        <title>Logo Uber</title>
+        <text x="0" y="27" fill="#171717" fontSize="24" fontWeight="800" letterSpacing="-1">Uber</text>
+      </svg>
+    ),
+  },
+  {
+    name: "Netflix",
+    logo: (
+      <svg viewBox="0 0 150 40" className="h-10 w-auto" role="img" aria-label="Logo Netflix">
+        <title>Logo Netflix</title>
+        <rect x="4" y="6" width="28" height="28" rx="6" fill="#e50914" />
+        <path d="M14 13L22 13L19 27L11 27L14 13Z" fill="#fff" />
+        <path d="M25 13L33 13L30 27L22 27L25 13Z" fill="#fff" />
+        <text x="42" y="28" fill="#171717" fontSize="22" fontWeight="800" letterSpacing="-1">Netflix</text>
+      </svg>
+    ),
+  },
+  {
+    name: "Microsoft",
+    logo: (
+      <svg viewBox="0 0 160 40" className="h-10 w-auto" role="img" aria-label="Logo Microsoft">
+        <title>Logo Microsoft</title>
+        <rect x="0" y="3" width="16" height="16" fill="#f25022" />
+        <rect x="20" y="3" width="16" height="16" fill="#7fba00" />
+        <rect x="0" y="23" width="16" height="16" fill="#00a4ef" />
+        <rect x="20" y="23" width="16" height="16" fill="#ffb900" />
+        <text x="46" y="27" fill="#171717" fontSize="22" fontWeight="700">Microsoft</text>
+      </svg>
+    ),
+  },
+];
 
 export default function Hero() {
   return (
-    <section id="accueil" className="relative w-full bg-[#F6F4EF] pt-28 pb-16 sm:pt-36 sm:pb-24 lg:pt-40 lg:pb-28 border-b border-[#C9C4B8] overflow-hidden">
-      {/* Grille exposée en transparence avec croisillons d'atelier */}
-      <div className="absolute inset-0 exposed-grid pointer-events-none opacity-40" />
+    <section id="accueil" className="w-full scroll-mt-[5.5rem] bg-white">
+      <div className="relative w-full bg-white px-0 pb-10 pt-[5.5rem] sm:pb-14 lg:pb-20">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(0,96,195,0.08),transparent_22%),radial-gradient(circle_at_bottom_right,_rgba(0,0,0,0.02),transparent_18%)]" />
 
-      {/* Repères de coupe d'atelier aux 4 coins (Swiss drafting marks) */}
-      <span className="craft-mark absolute top-6 left-6 hidden lg:block">+</span>
-      <span className="craft-mark absolute top-6 right-6 hidden lg:block">+</span>
-      <span className="craft-mark absolute bottom-6 left-6 hidden lg:block">+</span>
-      <span className="craft-mark absolute bottom-6 right-6 hidden lg:block">+</span>
+        <div className="relative mx-auto max-w-[1140px] px-4 sm:px-6 lg:px-8">
+          <div className="grid gap-6 md:grid-cols-[1.02fr_0.98fr] md:items-center">
+            <div>
+              <span className="inline-flex items-center gap-2 rounded-full border border-[#171717]/10 bg-[#f4f6f8] px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-[#171717] shadow-sm">
+                <Palette className="h-3.5 w-3.5 text-[#0060c3]" />
+                Graphiste &amp; Web Designer
+              </span>
 
-      <div className="relative mx-auto max-w-[1360px] px-4 sm:px-6 lg:px-10">
-        
-        {/* Bandeau Colophon d'Atelier (Inspiration Papeterie & Monographie d'art) */}
-        <div className="mb-10 pb-4 border-b border-[#C9C4B8] flex flex-wrap items-center justify-between gap-4 text-xs font-mono text-[#1B1D22]/60">
-          <div className="flex items-center gap-3">
-            <span className="font-medium text-[#1B1D22]">Atelier Nourou Dine</span>
-            <span>·</span>
-            <span>Direction artistique &amp; Code sur mesure</span>
-          </div>
+              <h1 className="mt-7 max-w-[14ch] font-black tracking-[-0.07em] text-[#171717]">
+                Des sites qui font choisir votre marque
+              </h1>
 
-          <div className="flex items-center gap-4">
-            <span className="hidden sm:inline-block">Cotonou (GMT+1) · Travail à distance worldwide</span>
-            <span className="hidden sm:inline-block">·</span>
-            <div className="flex items-center gap-2">
-              <span className="h-2 w-2 rounded-full bg-[#FF6B3D]" />
-              <span className="text-[#1B1D22] font-medium">1 créneau disponible ce trimestre</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Grille Principale 2 Colonnes Asymétriques */}
-        <div className="grid gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:items-start">
-          
-          {/* Colonne gauche : Le Titre d'Auteur & La Vision */}
-          <div className="flex flex-col items-start pt-2">
-            <h1 className="font-serif text-4xl sm:text-5xl lg:text-[4.25rem] font-normal leading-[1.04] tracking-[-0.03em] text-[#1B1D22]">
-              Des interfaces conçues avec rigueur, pour inspirer une{" "}
-              <span className="italic">
-                confiance immédiate
-              </span>.
-            </h1>
-
-            <p className="mt-8 max-w-xl text-base sm:text-lg leading-relaxed text-[#1B1D22]/75 font-sans">
-              Je conçois et développe des sites web sur mesure pour des dirigeants, cabinets et marques qui refusent les modèles préfabriqués. Un seul interlocuteur du premier croquis au déploiement final, avec une obsession pour la typographie, la vitesse et le résultat commercial.
-            </p>
-
-            {/* Boutons d'action affirmés sans flèches */}
-            <div className="mt-10 flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full sm:w-auto">
-              <Link
-                href="/contact"
-                className="inline-flex min-h-[50px] items-center justify-center bg-[#1B1D22] px-8 py-3.5 text-xs font-mono text-white transition-colors hover:bg-[#3D5AFE]"
-              >
-                Discuter de votre projet
-              </Link>
-
-              <Link
-                href="/realisations"
-                className="inline-flex min-h-[50px] items-center justify-center border border-[#C9C4B8] bg-white px-8 py-3.5 text-xs font-mono text-[#1B1D22] transition-colors hover:border-[#1B1D22]"
-              >
-                Explorer les réalisations
-              </Link>
-            </div>
-
-            {/* Note d'engagement de l'artisan */}
-            <div className="mt-8 flex items-center gap-4 text-xs font-mono text-[#1B1D22]/50">
-              <span>Code 100% propriétaire</span>
-              <span>·</span>
-              <span>Zéro abonnement captif</span>
-              <span>·</span>
-              <span>Livraison sous délais fermes</span>
-            </div>
-          </div>
-
-          {/* Colonne droite : Composition Atelier — Le Créateur & La Preuve en Images */}
-          <div className="flex flex-col gap-6">
-            
-            {/* Carte 1 : Carte d'identité de l'Artisan (Tirage d'art éditorial) */}
-            <div className="border border-[#C9C4B8] bg-white p-5 sm:p-6">
-              <div className="flex items-center gap-4 pb-4 border-b border-[#C9C4B8]">
-                <div className="relative h-14 w-14 shrink-0 overflow-hidden border border-[#C9C4B8] bg-[#EAE6DD]">
-                  <Image
-                    src="/media/nourou-portrait.jpg"
-                    alt="Portrait de Nourou Dine AMANDOU"
-                    fill
-                    sizes="56px"
-                    className="object-cover grayscale hover:grayscale-0 transition-all duration-500"
-                    priority
-                  />
-                </div>
-                <div>
-                  <h2 className="font-serif text-base font-normal text-[#1B1D22] leading-tight">
-                    Nourou Dine AMANDOU
-                  </h2>
-                  <p className="text-xs font-mono text-[#1B1D22]/60 mt-0.5">
-                    Designer d&apos;interface &amp; Ingénieur web
-                  </p>
-                </div>
-              </div>
-
-              <p className="mt-3.5 text-xs sm:text-sm text-[#1B1D22]/75 font-sans leading-relaxed italic">
-                « Quand vous travaillez avec moi, vous échangez directement avec la personne qui pense chaque transition, affine la typographie et écrit le code. »
+              <p className="mt-6 max-w-[34rem] text-lg leading-7 text-[#4b4b4b] lg:max-w-[28rem]">
+                Des sites premium, clairs et convertisseurs pour les entrepreneurs qui veulent gagner en crédibilité.
               </p>
-            </div>
 
-            {/* Carte 2 : Vignette asymétrique de projet réel (Asteria Properties) */}
-            <Link
-              href="/realisations/asteria"
-              className="group block border border-[#C9C4B8] bg-white p-5 sm:p-6 transition-colors hover:border-[#1B1D22]"
-            >
-              <div className="flex items-center justify-between pb-3 border-b border-[#C9C4B8] text-xs font-mono text-[#1B1D22]/60">
-                <div className="flex items-center gap-2">
-                  <span className="h-1.5 w-1.5 rounded-full bg-[#3D5AFE]" />
-                  <span>Dernière étude publiée</span>
-                </div>
-                <span>Genève, Suisse</span>
+              <div className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                <Link
+                  href="/contact"
+                  className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-full bg-[#0060c3] px-6 py-3.5 text-[0.95rem] font-semibold text-white shadow-lg shadow-[#0060c3]/25 transition-all duration-200 hover:bg-[#0050a5] hover:-translate-y-0.5 active:scale-95 text-center"
+                >
+                  Discutons de votre projet
+                  <ArrowUpRight className="h-4 w-4" strokeWidth={2.5} />
+                </Link>
+                <Link
+                  href="/realisations"
+                  className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-full border border-[#171717]/15 bg-white px-6 py-3.5 text-[0.95rem] font-semibold text-[#171717] transition-colors duration-200 hover:border-[#171717]/30 text-center"
+                >
+                  Voir mes réalisations
+                  <ArrowRight className="h-4 w-4" strokeWidth={2.2} />
+                </Link>
               </div>
 
-              <div className="relative mt-4 aspect-[16/10] w-full overflow-hidden border border-[#C9C4B8] bg-[#EAE6DD]">
+            </div>
+
+            <div className="relative mx-auto flex w-full max-w-[28rem] flex-col items-center justify-center lg:mx-0 lg:pb-20">
+              <div className="relative flex flex-col items-center">
                 <Image
-                  src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1200&q=85"
-                  alt="Aperçu de l'étude de cas Asteria Properties"
-                  fill
+                  src="/media/nourou-portrait-transparent-2.png"
+                  alt="Portrait professionnel de Nourou Dine AMANDOU, développeur web freelance et créateur digital"
+                  width={760}
+                  height={950}
                   priority
-                  sizes="(min-width: 1024px) 550px, (min-width: 640px) 500px, 320px"
-                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-103"
+                  sizes="(min-width: 1024px) 450px, (min-width: 640px) 390px, 340px"
+                  className="relative z-10 h-[min(54vw,340px)] w-auto max-w-full object-contain drop-shadow-[0_22px_40px_rgba(0,0,0,0.12)] sm:h-[390px] lg:h-[450px]"
                 />
               </div>
 
-              <div className="mt-4 flex flex-col gap-1.5">
-                <div className="flex items-baseline justify-between">
-                  <h3 className="font-serif text-xl font-normal text-[#1B1D22] group-hover:text-[#3D5AFE] transition-colors">
-                    Asteria Properties
-                  </h3>
-                  <span className="text-xs font-mono text-[#3D5AFE]">
-                    Consulter l&apos;étude
-                  </span>
+              <div className="relative z-20 mt-4 grid w-full max-w-[24rem] grid-cols-3 gap-1.5 sm:gap-3 lg:absolute lg:left-1/2 lg:top-[74%] lg:mt-0 lg:-translate-x-1/2">
+                <div className="flex min-h-[4.25rem] w-full flex-col items-center justify-center rounded-[1rem] sm:rounded-[1.1rem] border border-[#171717]/10 bg-white/95 px-1 py-1.5 sm:py-2 text-center shadow-[0_20px_40px_rgba(23,23,23,0.08)] backdrop-blur-sm sm:h-20">
+                  <span className="text-lg sm:text-2xl font-black tracking-[-0.06em] text-[#171717]">4+</span>
+                  <span className="mt-0.5 text-[8px] sm:text-[10px] uppercase leading-tight tracking-[0.04em] sm:tracking-[0.12em] text-[#1f2937] font-semibold">Expérience</span>
                 </div>
-                <p className="text-xs text-[#1B1D22]/70 font-sans leading-relaxed">
-                  Immobilier de prestige · Temps de chargement 0.7s · Demandes qualifiées +140%
-                </p>
+
+                <div className="flex min-h-[4.25rem] w-full flex-col items-center justify-center rounded-[1rem] sm:rounded-[1.1rem] border border-[#171717]/10 bg-white/95 px-1 py-1.5 sm:py-2 text-center shadow-[0_20px_40px_rgba(23,23,23,0.08)] backdrop-blur-sm sm:h-20">
+                  <span className="text-lg sm:text-2xl font-black tracking-[-0.06em] text-[#171717]">10+</span>
+                  <span className="mt-0.5 text-[8px] sm:text-[10px] uppercase leading-tight tracking-[0.04em] sm:tracking-[0.12em] text-[#1f2937] font-semibold">Projets livrés</span>
+                </div>
+
+                <div className="flex min-h-[4.25rem] w-full flex-col items-center justify-center rounded-[1rem] sm:rounded-[1.1rem] border border-[#171717]/10 bg-[#0060c3] px-1 py-1.5 sm:py-2 text-center text-white shadow-[0_20px_40px_rgba(0,96,195,0.25)] sm:h-20">
+                  <span className="text-lg sm:text-2xl font-black tracking-[-0.06em]">92%</span>
+                  <span className="mt-0.5 text-[8px] sm:text-[10px] uppercase leading-tight tracking-[0.04em] sm:tracking-[0.12em] text-white font-semibold">Satisfaction</span>
+                </div>
               </div>
-            </Link>
-
+            </div>
           </div>
-
         </div>
 
+        <div className="relative mt-8 w-full max-w-full overflow-hidden border-t-0 bg-white">
+          <div className="w-full max-w-full overflow-hidden">
+            <div className="brand-marquee flex min-w-max items-center gap-14 py-8 sm:gap-16 sm:py-9">
+              {[...brands, ...brands, ...brands, ...brands].map((brand, index) => (
+                <div key={`${brand.name}-${index}`} className="flex items-center justify-center opacity-80">
+                  {brand.logo}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );

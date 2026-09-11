@@ -15,17 +15,17 @@ const socialLinks = [
   {
     name: "Facebook",
     href: "https://facebook.com",
-    icon: <Facebook className="h-4 w-4" strokeWidth={1.5} />,
+    icon: <Facebook className="h-4 w-4" strokeWidth={2} />,
   },
   {
     name: "LinkedIn",
     href: "https://linkedin.com",
-    icon: <Linkedin className="h-4 w-4" strokeWidth={1.5} />,
+    icon: <Linkedin className="h-4 w-4" strokeWidth={2} />,
   },
   {
     name: "Instagram",
     href: "https://instagram.com",
-    icon: <Instagram className="h-4 w-4" strokeWidth={1.5} />,
+    icon: <Instagram className="h-4 w-4" strokeWidth={2} />,
   },
   {
     name: "Behance",
@@ -40,28 +40,21 @@ const socialLinks = [
 
 export default function Footer() {
   return (
-    <footer className="border-t border-[#C9C4B8] bg-[#F6F4EF] px-4 pt-16 pb-12 sm:px-6 lg:px-10">
-      <div className="mx-auto max-w-[1360px]">
-        <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr]">
-          {/* Col 1: Studio Identity */}
+    <footer className="mt-6 bg-white px-4 pb-6 sm:px-6 lg:px-8">
+      <div className="relative mx-auto max-w-[1280px] overflow-hidden rounded-[2rem] border border-[#171717]/8 bg-[#f8f9fa] pt-14 shadow-[0_15px_40px_rgba(17,17,17,0.04)]">
+        <div className="grid gap-10 px-6 sm:px-10 md:grid-cols-[1.2fr_1fr_1fr] lg:px-14">
           <div>
             <Link
               href="/"
-              className="inline-flex items-center gap-2 font-serif text-2xl font-normal text-[#1B1D22] transition-opacity hover:opacity-80"
+              className="inline-flex min-w-0 items-center gap-1.5 text-[1.15rem] sm:text-xl font-extrabold tracking-[-0.05em] text-[#171717] transition-opacity hover:opacity-85"
             >
               <span>Nourou Dine</span>
-              <span className="italic">AMANDOU</span>
+              <span className="text-[#0060c3]">AMANDOU</span>
             </Link>
-            <p className="mt-4 max-w-sm text-sm text-[#1B1D22]/70 font-sans leading-relaxed">
-              Atelier indépendant de direction artistique et d&apos;ingénierie web sur mesure. Code propriétaire, performance garantie et relation directe d&apos;artisan à commanditaire.
+            <p className="mt-3 max-w-xs text-sm leading-relaxed text-[#4b4b4b]">
+              Sites et applications web sur mesure, pensés pour convertir et faciliter le suivi de votre projet, de bout en bout.
             </p>
-            
-            <div className="mt-6 flex items-center gap-2.5 text-xs font-mono text-[#1B1D22]/60">
-              <span className="h-2 w-2 rounded-full bg-[#3D5AFE]"></span>
-              <span>1 créneau ouvert pour nouveaux projets</span>
-            </div>
-
-            <div className="mt-6 flex flex-wrap gap-2">
+            <div className="mt-5 flex flex-wrap gap-2.5">
               {socialLinks.map((social) => (
                 <a
                   key={social.name}
@@ -69,7 +62,7 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={social.name}
-                  className="flex h-9 w-9 items-center justify-center border border-[#C9C4B8] bg-white text-[#1B1D22] transition-colors hover:bg-[#1B1D22] hover:text-white"
+                  className="focus-ring flex h-10 w-10 items-center justify-center rounded-full bg-white border border-[#171717]/10 text-[#171717]/70 transition-all duration-200 hover:bg-[#0060c3] hover:border-[#0060c3] hover:text-white hover:-translate-y-0.5 shadow-sm"
                 >
                   {social.icon}
                 </a>
@@ -77,105 +70,61 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Col 2: Navigation */}
           <div>
-            <p className="text-xs font-mono text-[#1B1D22]/50">Navigation</p>
-            <ul className="mt-5 space-y-3">
+            <p className="font-semibold text-[#171717]">Navigation</p>
+            <ul className="mt-4 space-y-2.5">
               {navLinks.map((link) => (
                 <li key={link.href}>
-                  <Link 
-                    href={link.href} 
-                    className="text-sm text-[#1B1D22]/70 hover:text-[#1B1D22] font-sans transition-colors"
-                  >
+                  <Link href={link.href} className="focus-ring rounded text-sm text-[#4b4b4b] hover:text-[#171717]">
                     {link.label}
                   </Link>
                 </li>
               ))}
-              <li>
-                <Link 
-                  href="/app" 
-                  className="text-sm text-[#3D5AFE] font-medium hover:underline transition-colors font-sans"
-                >
-                  Espace Client Privé
-                </Link>
-              </li>
             </ul>
           </div>
 
-          {/* Col 3: Direct Contact */}
           <div>
-            <p className="text-xs font-mono text-[#1B1D22]/50">Contact direct</p>
-            <ul className="mt-5 space-y-3">
+            <p className="font-semibold text-[#171717]">Contact</p>
+            <ul className="mt-4 space-y-3">
               <li>
                 <a
                   href={`tel:${site.phone.replace(/\s/g, "")}`}
-                  className="flex items-center gap-3 text-sm text-[#1B1D22]/70 hover:text-[#1B1D22] font-sans transition-colors"
+                  className="focus-ring flex items-center gap-2.5 rounded text-sm text-[#4b4b4b] hover:text-[#171717]"
                 >
-                  <Phone className="h-4 w-4 text-[#1B1D22]" />
-                  <span>{site.phone}</span>
+                  <Phone className="h-4 w-4 text-[#0060c3]" />
+                  {site.phone}
                 </a>
               </li>
               <li>
                 <a
                   href={`mailto:${site.email}`}
-                  className="flex items-center gap-3 text-sm text-[#1B1D22]/70 hover:text-[#1B1D22] font-sans transition-colors"
+                  className="focus-ring flex items-center gap-2.5 rounded text-sm text-[#4b4b4b] hover:text-[#171717]"
                 >
-                  <Mail className="h-4 w-4 text-[#1B1D22]" />
-                  <span>{site.email}</span>
-                </a>
-              </li>
-              <li className="pt-2">
-                <a
-                  href={site.whatsapp}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 border border-[#C9C4B8] bg-white px-4 py-2 text-xs font-mono text-[#1B1D22] hover:bg-[#1B1D22] hover:text-white transition-colors"
-                >
-                  <span>Discussion WhatsApp</span>
+                  <Mail className="h-4 w-4 text-[#0060c3]" />
+                  {site.email}
                 </a>
               </li>
             </ul>
           </div>
         </div>
 
-        {/* Colophon d'Atelier (Inspiration Behance / Livre d'art) */}
-        <div className="mt-14 border-t border-[#C9C4B8] pt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4 text-xs font-mono text-[#1B1D22]/60">
-          <div>
-            <span className="text-[#1B1D22] font-medium block">Typographies d&apos;art</span>
-            <span className="mt-1 block">Fraunces (titres) &amp; Manrope (corps)</span>
-          </div>
-          <div>
-            <span className="text-[#1B1D22] font-medium block">Ingénierie &amp; Rendu</span>
-            <span className="mt-1 block">Next.js 14 · Tailwind · Prisma</span>
-          </div>
-          <div>
-            <span className="text-[#1B1D22] font-medium block">Localisation &amp; Délais</span>
-            <span className="mt-1 block">Cotonou (GMT+1) · Monde entier</span>
-          </div>
-          <div>
-            <span className="text-[#1B1D22] font-medium block">Engagement artisanal</span>
-            <span className="mt-1 block">Fait à la main, 1 projet à la fois</span>
-          </div>
-        </div>
-
-        {/* Bottom Bar */}
-        <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-[#C9C4B8] pt-8 text-xs font-mono text-[#1B1D22]/50 sm:flex-row">
+        <div className="mt-10 flex flex-col items-center justify-between gap-3 border-t border-[#171717]/5 px-5 py-5 text-xs text-[#4b4b4b] sm:flex-row sm:px-10 lg:px-14">
           <p>
-            © {new Date().getFullYear()} Nourou Dine AMANDOU · Direction artistique &amp; Code sur mesure.
+            © {new Date().getFullYear()} Nourou Dine AMANDOU — Tous droits réservés.
           </p>
-          <div className="flex flex-wrap items-center gap-4 text-xs sm:gap-6">
-            <Link href="/mentions-legales" className="hover:text-[#1B1D22] transition-colors">
+          <div className="flex flex-wrap items-center gap-4 text-xs sm:gap-5">
+            <Link href="/mentions-legales" className="focus-ring rounded hover:text-[#0060c3] transition-colors">
               Mentions légales
             </Link>
-            <Link href="/confidentialite" className="hover:text-[#1B1D22] transition-colors">
+            <Link href="/confidentialite" className="focus-ring rounded hover:text-[#0060c3] transition-colors">
               Confidentialité
             </Link>
-            <span>·</span>
-            <Link href="/app" className="hover:text-[#1B1D22] transition-colors">
+            <span className="text-[#171717]/20">·</span>
+            <Link href="/app" className="focus-ring rounded hover:text-[#0060c3] transition-colors">
               Espace Client
             </Link>
-            <Link href="/admin" className="hover:text-[#1B1D22] transition-colors">
-              Admin
+            <Link href="/admin" className="focus-ring rounded hover:text-[#0060c3] transition-colors font-semibold">
+              Administration
             </Link>
           </div>
         </div>
