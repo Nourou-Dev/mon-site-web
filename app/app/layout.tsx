@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
   FolderKanban,
@@ -10,13 +10,13 @@ import {
   Users,
   Cookie,
   LogOut,
-  ArrowUpRight,
   Menu,
   X,
-  Shield,
-  User,
   Sparkles,
-  ExternalLink,
+  Settings,
+  Shield,
+  UserCheck,
+  RefreshCw,
 } from "lucide-react";
 
 interface CurrentUser {
@@ -29,15 +29,14 @@ interface CurrentUser {
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const router = useRouter();
 
   const [user, setUser] = useState<CurrentUser | null>(null);
   const [loading, setLoading] = useState(true);
+  const [switchingRole, setSwitchingRole] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Vérifier la session active
   useEffect(() => {
-    // Si on est sur la page de login/register, ne pas forcer la redirection
     if (pathname.includes("/login")) {
       setLoading(false);
       return;
@@ -54,18 +53,17 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         if (data.authenticated && data.user) {
           setUser(data.user);
         } else {
-          // Si non connecté, redirection vers /app/login
-          router.push("/app/login");
+          window.location.href = "/app/login";
         }
       } catch {
-        router.push("/app/login");
+        window.location.href = "/app/login";
       } finally {
         setLoading(false);
       }
     }
 
     checkAuth();
-  }, [pathname, router]);
+  }, [pathname]);
 
   const handleLogout = async () => {
     try {
@@ -74,10 +72,29 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ action: "logout" }),
       });
-      setUser(null);
-      router.push("/app/login");
+      window.location.href = "/app/login";
     } catch (e) {
       console.error(e);
+      window.location.href = "/app/login";
+    }
+  };
+
+  const handleSwitchRole = async (targetRole: "admin" | "client") => {
+    setSwitchingRole(true);
+    try {
+      const res = await fetch("/api/app/auth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "switch_role", targetRole }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        window.location.href = "/app";
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setSwitchingRole(false);
     }
   };
 
@@ -130,6 +147,12 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       icon: MessageSquare,
       adminOnly: false,
     },
+    {
+      label: "Paramètres du Compte",
+      href: "/app/parametres",
+      icon: Settings,
+      adminOnly: false,
+    },
   ];
 
   return (
@@ -141,7 +164,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             <span>Nourou Dine</span> <span className="text-[#0060c3]">AMANDOU</span>
           </Link>
           <span className="rounded-full bg-[#0060c3]/10 px-2 py-0.5 text-[10px] font-bold text-[#0060c3]">
-            APP
+            {isAdmin ? "Admin" : "Espace Client"}
           </span>
         </div>
         <button
@@ -170,15 +193,11 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 <div className="mt-1 flex items-center gap-2">
                   <span className="inline-flex items-center gap-1 rounded-full bg-[#0060c3]/10 px-2.5 py-0.5 text-[11px] font-bold text-[#0060c3]">
                     <Sparkles className="h-3 w-3" />
-                    Espace Plateforme
+                    {isAdmin ? "Espace Administrateur" : "Espace Client"}
                   </span>
-                  {isAdmin ? (
+                  {isAdmin && (
                     <span className="rounded-full bg-emerald-50 border border-emerald-200 px-2 py-0.5 text-[10px] font-semibold text-emerald-700">
                       Admin
-                    </span>
-                  ) : (
-                    <span className="rounded-full bg-blue-50 border border-blue-200 px-2 py-0.5 text-[10px] font-semibold text-blue-700">
-                      Client
                     </span>
                   )}
                 </div>
@@ -219,36 +238,66 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             </nav>
           </div>
 
-          {/* Footer de la Sidebar : Profil & Déconnexion */}
-          <div className="border-t border-[#171717]/10 pt-4">
+          {/* Footer de la Sidebar : Profil, Basculement de Rôle & Paramètres */}
+          <div className="border-t border-[#171717]/10 pt-4 space-y-2.5">
+            {/* Widget utilisateur connecté */}
             {user && (
-              <div className="mb-3 flex items-center gap-3 rounded-xl bg-[#f8f9fa] p-3 border border-[#171717]/5">
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#0060c3] text-sm font-bold text-white">
-                  {user.name.charAt(0).toUpperCase()}
+              <div className="flex items-center justify-between gap-2 rounded-xl bg-[#f8f9fa] p-2.5 border border-[#171717]/5">
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#0060c3] text-xs font-bold text-white">
+                    {user.name.charAt(0).toUpperCase()}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-xs font-bold text-[#171717]">{user.name}</p>
+                    <p className="truncate text-[10px] text-[#4b4b4b]">{user.company || user.email}</p>
+                  </div>
                 </div>
-                <div className="min-w-0 flex-1">
-                  <p className="truncate text-xs font-bold text-[#171717]">{user.name}</p>
-                  <p className="truncate text-[11px] text-[#4b4b4b]">{user.company || user.email}</p>
-                </div>
+
+                {/* Basculeur rapide Admin / Client en 1-clic pour tests faciles */}
+                <button
+                  onClick={() => handleSwitchRole(isAdmin ? "client" : "admin")}
+                  disabled={switchingRole}
+                  title={isAdmin ? "Tester la vue Client" : "Passer sur l'espace Administrateur"}
+                  className={`shrink-0 rounded-lg p-1.5 text-[10px] font-bold border transition ${
+                    isAdmin
+                      ? "border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-100"
+                      : "border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
+                  }`}
+                >
+                  {switchingRole ? (
+                    <RefreshCw className="h-3.5 w-3.5 animate-spin" />
+                  ) : isAdmin ? (
+                    <span className="flex items-center gap-1">
+                      <UserCheck className="h-3 w-3" />
+                      Client
+                    </span>
+                  ) : (
+                    <span className="flex items-center gap-1">
+                      <Shield className="h-3 w-3" />
+                      Admin
+                    </span>
+                  )}
+                </button>
               </div>
             )}
 
+            {/* Bouton Paramètres & Déconnexion */}
             <div className="flex items-center gap-2">
               <Link
-                href="/"
-                target="_blank"
-                className="flex flex-1 items-center justify-center gap-1.5 rounded-xl border border-[#171717]/10 bg-white py-2 text-xs font-semibold text-[#4b4b4b] transition-colors hover:bg-[#171717]/5 hover:text-[#171717]"
+                href="/app/parametres"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex flex-1 items-center justify-center gap-1.5 rounded-xl border border-[#171717]/10 bg-white py-2 text-xs font-bold text-[#171717] transition-colors hover:bg-[#f8f9fa] hover:border-[#0060c3]"
               >
-                <span>Site public</span>
-                <ExternalLink className="h-3 w-3" />
+                <Settings className="h-3.5 w-3.5 text-[#0060c3]" />
+                <span>Paramètres</span>
               </Link>
 
               <button
                 onClick={handleLogout}
                 title="Se déconnecter"
-                className="flex h-9 w-9 items-center justify-center rounded-xl border border-red-200 bg-red-50 text-red-600 transition-colors hover:bg-red-100"
+                className="flex h-8 w-8 items-center justify-center rounded-xl border border-red-200 bg-red-50 text-red-600 transition-colors hover:bg-red-100 shrink-0"
               >
-                <LogOut className="h-4 w-4" />
+                <LogOut className="h-3.5 w-3.5" />
               </button>
             </div>
           </div>

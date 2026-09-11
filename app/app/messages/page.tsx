@@ -9,12 +9,13 @@ import {
   ShieldCheck,
   RefreshCw,
   FolderKanban,
-  ExternalLink,
   ArrowLeft,
   Sparkles,
   PhoneCall,
   Clock,
   CheckCheck,
+  Shield,
+  UserCheck,
 } from "lucide-react";
 import { ProjectRecord, MessageRecord } from "@/lib/appStorage";
 
@@ -35,6 +36,7 @@ export default function MessagesPage() {
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+  const [switchingRole, setSwitchingRole] = useState(false);
   const [mobileViewChat, setMobileViewChat] = useState(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -55,14 +57,13 @@ export default function MessagesPage() {
         const authData = await authRes.json();
         const projData = await projRes.json();
 
-        if (authData.success && authData.user) {
+        if (authData.authenticated && authData.user) {
           setUser(authData.user);
         }
 
         if (projData.success && projData.projects) {
           setProjects(projData.projects);
           if (projData.projects.length > 0) {
-            // Regarder si un projectId est dans l'URL
             const urlParams = new URLSearchParams(window.location.search);
             const queryProjectId = urlParams.get("projectId");
             const initialId =
@@ -156,7 +157,27 @@ export default function MessagesPage() {
     setContent(text);
   };
 
+  const handleSwitchRole = async (targetRole: "admin" | "client") => {
+    setSwitchingRole(true);
+    try {
+      const res = await fetch("/api/app/auth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "switch_role", targetRole }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        window.location.reload();
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setSwitchingRole(false);
+    }
+  };
+
   const selectedProject = projects.find((p) => p.id === selectedProjectId);
+  const isAdmin = user?.role === "admin";
 
   if (loading) {
     return (
@@ -189,6 +210,21 @@ export default function MessagesPage() {
         </div>
 
         <div className="flex items-center gap-2">
+          {/* Basculeur rapide Admin / Client */}
+          <button
+            onClick={() => handleSwitchRole(isAdmin ? "client" : "admin")}
+            disabled={switchingRole}
+            className={`inline-flex items-center gap-1.5 rounded-xl border px-3 py-2 text-xs font-bold transition shadow-sm ${
+              isAdmin
+                ? "border-emerald-200 bg-emerald-50 text-emerald-800 hover:bg-emerald-100"
+                : "border-blue-200 bg-blue-50 text-blue-800 hover:bg-blue-100"
+            }`}
+            title="Basculer instantanément de rôle pour tester"
+          >
+            {isAdmin ? <Shield className="h-3.5 w-3.5 text-emerald-600" /> : <UserCheck className="h-3.5 w-3.5 text-blue-600" />}
+            <span>{isAdmin ? "Mode : Admin (Nourou Dine)" : "Mode : Client"}</span>
+          </button>
+
           <button
             onClick={() => fetchCurrentMessages(false)}
             disabled={refreshing}
@@ -204,7 +240,7 @@ export default function MessagesPage() {
             className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 px-3.5 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-emerald-700"
           >
             <PhoneCall className="h-3.5 w-3.5" />
-            WhatsApp Direct
+            WhatsApp
           </a>
         </div>
       </div>
@@ -228,7 +264,7 @@ export default function MessagesPage() {
       ) : (
         /* Conteneur principal de Messagerie : Sidebar Projets + Chat */
         <div className="grid grid-cols-1 overflow-hidden rounded-3xl border border-[#171717]/10 bg-white shadow-sm lg:grid-cols-12 min-h-[640px] max-h-[820px]">
-          {/* COLONNE GAUCHE : Sélecteur de projets (Masquée en mobile quand chat ouvert) */}
+          {/* COLONNE GAUCHE : Sélecteur de projets */}
           <div
             className={`border-b border-[#171717]/10 bg-[#fafafa] p-4 lg:col-span-4 lg:border-b-0 lg:border-r lg:block ${
               mobileViewChat ? "hidden" : "block"
@@ -239,7 +275,7 @@ export default function MessagesPage() {
                 Projets ({projects.length})
               </span>
               <span className="rounded-full bg-white px-2 py-0.5 text-[11px] font-semibold text-[#0060c3] border border-[#171717]/5">
-                {user?.role === "admin" ? "Vue Admin" : "Vos Projets"}
+                {isAdmin ? "Vue Admin" : "Vos Projets"}
               </span>
             </div>
 
@@ -333,7 +369,7 @@ export default function MessagesPage() {
               </div>
             ) : null}
 
-            {/* Corps des messages */}
+            {/* Corps des messages avec distinction claire droite / gauche */}
             <div className="flex-1 overflow-y-auto bg-[#fdfdfd] p-5 space-y-4 max-h-[520px]">
               {messages.length === 0 ? (
                 <div className="flex h-full flex-col items-center justify-center text-center py-12">
@@ -349,23 +385,34 @@ export default function MessagesPage() {
                 </div>
               ) : (
                 messages.map((msg) => {
-                  const isMe = user ? msg.senderId === user.id : false;
-                  const isAdminSender = msg.senderRole === "admin";
+                  // RÈGLE CLAIRE D'ALIGNEMENT :
+                  // Si l'utilisateur est Admin (Nourou Dine AMANDOU), ses messages (admin) sont À DROITE (items-end)
+                  // et les messages du Client sont À GAUCHE (items-start).
+                  // Si l'utilisateur est Client, ses messages (client) sont À DROITE et ceux de Nourou Dine À GAUCHE.
+                  const isMyMessage = isAdmin
+                    ? msg.senderRole === "admin" || msg.senderName.toLowerCase().includes("nourou")
+                    : msg.senderRole === "client" && msg.senderId === user?.id;
+
+                  const isNourouDine = msg.senderRole === "admin" || msg.senderName.toLowerCase().includes("nourou");
 
                   return (
                     <div
                       key={msg.id}
-                      className={`flex flex-col ${isMe ? "items-end" : "items-start"}`}
+                      className={`flex flex-col ${isMyMessage ? "items-end" : "items-start"}`}
                     >
-                      {/* Signature / En-tête du message */}
+                      {/* En-tête / Auteur du message */}
                       <div className="mb-1 flex items-center gap-1.5 px-1 text-[11px] text-[#7b7b7b]">
                         <span className="font-bold text-[#171717]">
-                          {msg.senderName}
+                          {isNourouDine ? "Nourou Dine AMANDOU" : msg.senderName}
                         </span>
-                        {isAdminSender && (
+                        {isNourouDine ? (
                           <span className="inline-flex items-center gap-0.5 rounded-full bg-[#0060c3]/10 px-1.5 py-0.2 text-[10px] font-bold text-[#0060c3]">
                             <ShieldCheck className="h-2.5 w-2.5" />
                             Admin
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-0.5 rounded-full bg-gray-100 px-1.5 py-0.2 text-[10px] font-medium text-gray-700">
+                            Client
                           </span>
                         )}
                         <span>•</span>
@@ -378,22 +425,20 @@ export default function MessagesPage() {
                         </span>
                       </div>
 
-                      {/* Bulle de message */}
+                      {/* Bulle de message : Droite (Bleu vibrant pour vos messages) vs Gauche (Blanc épuré) */}
                       <div
                         className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed shadow-sm sm:max-w-[75%] ${
-                          isMe
-                            ? "bg-[#0060c3] text-white rounded-br-none"
-                            : isAdminSender
-                            ? "bg-[#171717] text-white rounded-bl-none"
-                            : "bg-white border border-[#171717]/10 text-[#171717] rounded-bl-none"
+                          isMyMessage
+                            ? "bg-[#0060c3] text-white rounded-br-none shadow-md shadow-[#0060c3]/20"
+                            : "bg-white border border-[#171717]/10 text-[#171717] rounded-bl-none shadow-sm"
                         }`}
                       >
                         <p className="whitespace-pre-wrap break-words">{msg.content}</p>
                       </div>
 
                       <div className="mt-0.5 flex items-center gap-1 px-1 text-[10px] text-[#9b9b9b]">
-                        <CheckCheck className="h-3 w-3 text-emerald-500" />
-                        <span>Reçu</span>
+                        <CheckCheck className={`h-3 w-3 ${isMyMessage ? "text-[#0060c3]" : "text-emerald-500"}`} />
+                        <span>{isMyMessage ? "Envoyé" : "Reçu"}</span>
                       </div>
                     </div>
                   );
@@ -443,7 +488,7 @@ export default function MessagesPage() {
                     }
                   }}
                   rows={2}
-                  placeholder="Écrivez votre message ici... (Entrée pour envoyer, Maj+Entrée pour un saut de ligne)"
+                  placeholder={`Écrivez en tant que ${user?.name || (isAdmin ? "Nourou Dine AMANDOU" : "Client")}... (Entrée pour envoyer)`}
                   className="flex-1 resize-none rounded-xl border border-[#171717]/15 bg-[#f8f9fa] p-3 text-xs sm:text-sm text-[#171717] placeholder:text-[#9b9b9b] focus:border-[#0060c3] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0060c3]/20"
                 />
 

@@ -5,8 +5,18 @@
     "email": "contact@nouroudineamandou.com",
     "passwordHash": "bb37f0c3c04ea5c34ef22c7fe20922bfccf1a712ae2ab5e9fecc1a4ee6799469",
     "role": "admin",
-    "company": "Studio Webdesign",
-    "phone": "+229 01 00 00 00",
+    "company": "Studio Webdesign & Dev",
+    "phone": "+229 01 61 38 07 98",
     "createdAt": "2026-09-11T06:46:12.391Z"
+  },
+  {
+    "id": "usr_1789112384617_1aa5k",
+    "name": "Dr. Marc Dossou",
+    "email": "direction@cliniquesanteplus.com",
+    "passwordHash": "5a47ab1b2f0f80759fe695a8a29dbefe7564938dbca856daa7992d90e7969f9f",
+    "role": "client",
+    "company": "Clinique Santé Plus",
+    "phone": "",
+    "createdAt": "2026-09-11T07:39:44.618Z"
   }
 ]

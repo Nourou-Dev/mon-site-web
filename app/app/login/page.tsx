@@ -1,12 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Shield, Lock, Mail, User, Building, ArrowRight, Sparkles, CheckCircle2, AlertCircle } from "lucide-react";
+import { Shield, Lock, Mail, User, Building, ArrowRight, Sparkles, AlertCircle, KeyRound, Phone } from "lucide-react";
 
 export default function AppLoginPage() {
-  const router = useRouter();
   const [tab, setTab] = useState<"login" | "register">("login");
 
   // Login form state
@@ -34,7 +32,7 @@ export default function AppLoginPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           action: "login",
-          email: loginEmail,
+          email: loginEmail.trim(),
           password: loginPassword,
         }),
       });
@@ -44,10 +42,10 @@ export default function AppLoginPage() {
         throw new Error(data.error || "Échec de connexion.");
       }
 
-      router.push("/app");
+      // Rechargement complet pour hydrater le layout et les cookies sans cache stale
+      window.location.href = "/app";
     } catch (err: any) {
       setErrorMessage(err.message || "Erreur de connexion.");
-    } finally {
       setLoading(false);
     }
   };
@@ -63,10 +61,10 @@ export default function AppLoginPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           action: "register",
-          name: regName,
-          email: regEmail,
-          company: regCompany,
-          phone: regPhone,
+          name: regName.trim(),
+          email: regEmail.trim(),
+          company: regCompany.trim(),
+          phone: regPhone.trim(),
           password: regPassword,
         }),
       });
@@ -76,10 +74,9 @@ export default function AppLoginPage() {
         throw new Error(data.error || "Impossible de créer le compte.");
       }
 
-      router.push("/app");
+      window.location.href = "/app";
     } catch (err: any) {
       setErrorMessage(err.message || "Erreur d'inscription.");
-    } finally {
       setLoading(false);
     }
   };
@@ -118,12 +115,18 @@ export default function AppLoginPage() {
       if (!res.ok || !data.success) {
         throw new Error(data.error || "Connexion démo échouée.");
       }
-      router.push("/app");
+
+      window.location.href = "/app";
     } catch (err: any) {
       setErrorMessage(err.message);
-    } finally {
       setLoading(false);
     }
+  };
+
+  const fillAdminCredentials = () => {
+    setTab("login");
+    setLoginEmail("contact@nouroudineamandou.com");
+    setLoginPassword("admin123!");
   };
 
   return (
@@ -148,6 +151,28 @@ export default function AppLoginPage() {
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="rounded-[2rem] border border-[#171717]/10 bg-white p-6 shadow-[0_20px_50px_rgba(17,17,17,0.06)] sm:p-8">
+          {/* Bannière d'aide pour l'Admin */}
+          <div className="mb-5 rounded-2xl bg-emerald-50 border border-emerald-200 p-3 text-xs text-emerald-900">
+            <div className="flex items-center justify-between">
+              <span className="font-bold flex items-center gap-1.5 text-emerald-800">
+                <Shield className="h-4 w-4 text-emerald-600" />
+                Accès Administrateur
+              </span>
+              <button
+                type="button"
+                onClick={fillAdminCredentials}
+                className="text-[11px] font-bold text-emerald-700 underline hover:text-emerald-900"
+              >
+                Pré-remplir
+              </button>
+            </div>
+            <p className="mt-1 text-[11px] text-emerald-700">
+              E-mail : <code className="font-mono bg-white/80 px-1 py-0.5 rounded">contact@nouroudineamandou.com</code>
+              <br />
+              Mot de passe : <code className="font-mono bg-white/80 px-1 py-0.5 rounded">admin123!</code>
+            </p>
+          </div>
+
           {/* Onglets Connexion / Inscription */}
           <div className="mb-6 flex rounded-xl bg-[#f4f6f8] p-1 text-xs font-bold">
             <button
@@ -190,22 +215,24 @@ export default function AppLoginPage() {
               <div>
                 <label className="block text-xs font-bold text-[#171717]">Adresse E-mail</label>
                 <div className="relative mt-1">
-                  <Mail className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#4b4b4b]" />
+                  <Mail className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#7b7b7b]" />
                   <input
                     type="email"
                     required
                     value={loginEmail}
                     onChange={(e) => setLoginEmail(e.target.value)}
-                    placeholder="ex: client@entreprise.com ou contact@..."
+                    placeholder="contact@nouroudineamandou.com"
                     className="w-full rounded-xl border border-[#171717]/15 bg-[#f8f9fa] py-2.5 pl-10 pr-3 text-sm text-[#171717] focus:border-[#0060c3] focus:bg-white focus:outline-none"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-[#171717]">Mot de passe / Clé d'accès</label>
+                <div className="flex items-center justify-between">
+                  <label className="block text-xs font-bold text-[#171717]">Mot de passe / Clé d&apos;accès</label>
+                </div>
                 <div className="relative mt-1">
-                  <Lock className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#4b4b4b]" />
+                  <Lock className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#7b7b7b]" />
                   <input
                     type="password"
                     required
@@ -231,7 +258,7 @@ export default function AppLoginPage() {
               <div>
                 <label className="block text-xs font-bold text-[#171717]">Votre Nom &amp; Prénom *</label>
                 <div className="relative mt-1">
-                  <User className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#4b4b4b]" />
+                  <User className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#7b7b7b]" />
                   <input
                     type="text"
                     required
@@ -246,7 +273,7 @@ export default function AppLoginPage() {
               <div>
                 <label className="block text-xs font-bold text-[#171717]">Entreprise / Marque</label>
                 <div className="relative mt-1">
-                  <Building className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#4b4b4b]" />
+                  <Building className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#7b7b7b]" />
                   <input
                     type="text"
                     value={regCompany}
@@ -260,7 +287,7 @@ export default function AppLoginPage() {
               <div>
                 <label className="block text-xs font-bold text-[#171717]">Adresse E-mail *</label>
                 <div className="relative mt-1">
-                  <Mail className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#4b4b4b]" />
+                  <Mail className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#7b7b7b]" />
                   <input
                     type="email"
                     required
@@ -273,9 +300,23 @@ export default function AppLoginPage() {
               </div>
 
               <div>
+                <label className="block text-xs font-bold text-[#171717]">Téléphone / WhatsApp</label>
+                <div className="relative mt-1">
+                  <Phone className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#7b7b7b]" />
+                  <input
+                    type="tel"
+                    value={regPhone}
+                    onChange={(e) => setRegPhone(e.target.value)}
+                    placeholder="+229 01 00 00 00"
+                    className="w-full rounded-xl border border-[#171717]/15 bg-[#f8f9fa] py-2.5 pl-10 pr-3 text-sm text-[#171717] focus:border-[#0060c3] focus:bg-white focus:outline-none"
+                  />
+                </div>
+              </div>
+
+              <div>
                 <label className="block text-xs font-bold text-[#171717]">Mot de passe *</label>
                 <div className="relative mt-1">
-                  <Lock className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#4b4b4b]" />
+                  <Lock className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#7b7b7b]" />
                   <input
                     type="password"
                     required
@@ -307,18 +348,18 @@ export default function AppLoginPage() {
               <button
                 type="button"
                 onClick={() => quickDemoLogin("admin")}
-                className="flex items-center justify-center gap-1.5 rounded-xl border border-emerald-300 bg-emerald-50 px-3 py-2 text-xs font-bold text-emerald-800 hover:bg-emerald-100 transition-colors"
+                className="flex items-center justify-center gap-1.5 rounded-xl border border-emerald-300 bg-emerald-50 px-3 py-2 text-xs font-bold text-emerald-800 hover:bg-emerald-100 transition-colors shadow-sm"
               >
                 <Shield className="h-3.5 w-3.5 text-emerald-600" />
-                <span>Espace Admin</span>
+                <span>Connexion Admin</span>
               </button>
               <button
                 type="button"
                 onClick={() => quickDemoLogin("client")}
-                className="flex items-center justify-center gap-1.5 rounded-xl border border-blue-300 bg-blue-50 px-3 py-2 text-xs font-bold text-blue-800 hover:bg-blue-100 transition-colors"
+                className="flex items-center justify-center gap-1.5 rounded-xl border border-blue-300 bg-blue-50 px-3 py-2 text-xs font-bold text-blue-800 hover:bg-blue-100 transition-colors shadow-sm"
               >
                 <User className="h-3.5 w-3.5 text-blue-600" />
-                <span>Espace Client</span>
+                <span>Connexion Client</span>
               </button>
             </div>
           </div>

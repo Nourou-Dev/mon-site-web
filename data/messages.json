@@ -68,5 +68,35 @@
     "content": "Test direct : tout fonctionne parfaitement dans le nouveau tableau de bord et la messagerie !",
     "createdAt": "2026-09-11T07:32:42.548Z",
     "read": false
+  },
+  {
+    "id": "msg_1789112420126_pop2",
+    "projectId": "prj_demo_1",
+    "senderId": "usr_1789112384617_1aa5k",
+    "senderName": "Dr. Marc Dossou",
+    "senderRole": "client",
+    "content": "OK",
+    "createdAt": "2026-09-11T07:40:20.126Z",
+    "read": false
+  },
+  {
+    "id": "msg_1789113153209_98lw",
+    "projectId": "prj_demo_1",
+    "senderId": "usr_anonymous",
+    "senderName": "Nourou Dine AMANDOU",
+    "senderRole": "admin",
+    "content": "Test direct : validation de l'alignement des conversations et de la nouvelle page de paramètres !",
+    "createdAt": "2026-09-11T07:52:33.209Z",
+    "read": false
+  },
+  {
+    "id": "msg_1789113184822_upu3",
+    "projectId": "prj_demo_1",
+    "senderId": "usr_anonymous",
+    "senderName": "Nourou Dine AMANDOU",
+    "senderRole": "admin",
+    "content": "Test direct : validation de l'alignement des conversations et de la nouvelle page de paramètres !",
+    "createdAt": "2026-09-11T07:53:04.822Z",
+    "read": false
   }
 ]

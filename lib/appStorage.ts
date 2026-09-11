@@ -126,7 +126,6 @@ export async function getUsers(): Promise<AppUser[]> {
       id: "usr_admin_nourou",
       name: "Nourou Dine AMANDOU",
       email: "contact@nouroudineamandou.com",
-      // Mot de passe par défaut : admin123! (ou utilise ADMIN_SECRET_KEY)
       passwordHash: hashPassword("admin123!"),
       role: "admin",
       company: "Studio Webdesign",
@@ -143,6 +142,11 @@ export async function getUsers(): Promise<AppUser[]> {
 export async function findUserByEmail(email: string): Promise<AppUser | undefined> {
   const users = await getUsers();
   return users.find((u) => u.email.toLowerCase() === email.trim().toLowerCase());
+}
+
+export async function findUserById(id: string): Promise<AppUser | undefined> {
+  const users = await getUsers();
+  return users.find((u) => u.id === id);
 }
 
 export async function registerClientUser(data: {
@@ -172,6 +176,20 @@ export async function registerClientUser(data: {
   users.push(newUser);
   await writeJson(USERS_FILE, users);
   return newUser;
+}
+
+export async function updateUser(userId: string, updates: Partial<AppUser>): Promise<AppUser | null> {
+  const users = await getUsers();
+  const idx = users.findIndex((u) => u.id === userId);
+  if (idx < 0) return null;
+
+  users[idx] = {
+    ...users[idx],
+    ...updates,
+  };
+
+  await writeJson(USERS_FILE, users);
+  return users[idx];
 }
 
 // ==========================================
@@ -381,7 +399,6 @@ export async function getCookieStats(): Promise<{
 }> {
   const logs = await readJson<CookieConsentLog[]>(COOKIE_STATS_FILE, []);
 
-  // Démonstration si vide
   if (logs.length === 0) {
     const defaultStats: CookieConsentLog[] = [
       { id: "c1", choice: "accepted_all", analytics: true, experience: true, timestamp: new Date(Date.now() - 3600000 * 2).toISOString() },

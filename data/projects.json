@@ -7,7 +7,7 @@
     "clientEmail": "direction@cliniquesanteplus.com",
     "category": "Site Vitrine & Système de Devis",
     "status": "developpement",
-    "progress": 75,
+    "progress": 80,
     "budget": "450 000 FCFA",
     "paidAmount": "300 000 FCFA",
     "startDate": "2026-09-01",
@@ -35,7 +35,7 @@
       }
     ],
     "createdAt": "2026-09-11T06:46:13.161Z",
-    "updatedAt": "2026-09-11T07:32:42.301Z",
+    "updatedAt": "2026-09-11T07:53:04.797Z",
     "completed": false,
     "milestoneId": "m1"
   }

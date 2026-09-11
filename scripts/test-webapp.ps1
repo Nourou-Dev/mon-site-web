@@ -1,7 +1,7 @@
 $base = "http://localhost:3001"
 
 Write-Host "=== 1. Testing Page Endpoints ==="
-$pages = @("/app", "/app/login", "/app/leads", "/app/cookies", "/app/projets", "/app/messages")
+$pages = @("/app", "/app/login", "/app/leads", "/app/cookies", "/app/projets", "/app/messages", "/app/parametres")
 foreach ($page in $pages) {
     try {
         $res = Invoke-WebRequest -Uri ($base + $page) -UseBasicParsing -TimeoutSec 5
@@ -37,25 +37,44 @@ try {
     Write-Host "Auth error: $($_.Exception.Message)"
 }
 
-Write-Host "`n=== 4. Testing Leads & Cookies API (with Admin Session) ==="
+Write-Host "`n=== 4. Testing Profile & Settings API ==="
 try {
-    $leadsRes = Invoke-RestMethod -Uri ($base + "/api/app/leads") -Method Get -WebSession $webSession
-    Write-Host "CRM Inquiries Count: $($leadsRes.inquiries.Count) | Newsletter Subscribers: $($leadsRes.subscribers.Count)"
+    $getProfile = Invoke-RestMethod -Uri ($base + "/api/app/profile") -Method Get -WebSession $webSession
+    Write-Host "Profile Fetch Success: $($getProfile.success) | User: $($getProfile.user.name) | Phone: $($getProfile.user.phone)"
 
-    $consentPost = @{
-        choice = "accepted_all"
-        analytics = $true
-        experience = $true
+    $updateProfileBody = @{
+        name = "Nourou Dine AMANDOU"
+        company = "Studio Webdesign & Dev"
+        phone = "+229 01 61 38 07 98"
     } | ConvertTo-Json
-    $null = Invoke-RestMethod -Uri ($base + "/api/app/cookies") -Method Post -Body $consentPost -ContentType "application/json"
 
-    $cookieRes = Invoke-RestMethod -Uri ($base + "/api/app/cookies") -Method Get -WebSession $webSession
-    Write-Host "Cookie Logs Total: $($cookieRes.stats.total) | Accepted: $($cookieRes.stats.accepted) | Acceptance Rate: $($cookieRes.stats.acceptanceRate)%"
+    $patchProfile = Invoke-RestMethod -Uri ($base + "/api/app/profile") -Method Patch -Body $updateProfileBody -ContentType "application/json" -WebSession $webSession
+    Write-Host "Profile Update Success: $($patchProfile.success) | New Company: $($patchProfile.user.company)"
 } catch {
-    Write-Host "CRM/Cookies API error: $($_.Exception.Message)"
+    Write-Host "Profile API error: $($_.Exception.Message)"
 }
 
-Write-Host "`n=== 5. Testing Projects API & Milestones Update ==="
+Write-Host "`n=== 5. Testing Instant Role Switch (Admin <-> Client) ==="
+try {
+    $switchBody = @{
+        action = "switch_role"
+        targetRole = "client"
+    } | ConvertTo-Json
+    $switchRes = Invoke-RestMethod -Uri ($base + "/api/app/auth") -Method Post -Body $switchBody -ContentType "application/json" -WebSession $webSession
+    Write-Host "Switched to Client: $($switchRes.success) | User: $($switchRes.user.name) | Role: $($switchRes.user.role)"
+
+    # Switch back to Admin
+    $switchBackBody = @{
+        action = "switch_role"
+        targetRole = "admin"
+    } | ConvertTo-Json
+    $switchBackRes = Invoke-RestMethod -Uri ($base + "/api/app/auth") -Method Post -Body $switchBackBody -ContentType "application/json" -WebSession $webSession
+    Write-Host "Switched back to Admin: $($switchBackRes.success) | User: $($switchBackRes.user.name) | Role: $($switchBackRes.user.role)"
+} catch {
+    Write-Host "Role Switch error: $($_.Exception.Message)"
+}
+
+Write-Host "`n=== 6. Testing Projects API & Milestones Update ==="
 try {
     $projRes = Invoke-RestMethod -Uri ($base + "/api/app/projects") -Method Get -WebSession $webSession
     Write-Host "Projects Count: $($projRes.projects.Count)"
@@ -75,17 +94,17 @@ try {
                     completed = $true
                 }
             )
-            progress = 75
+            progress = 80
         } | ConvertTo-Json
 
         $patchRes = Invoke-RestMethod -Uri ($base + "/api/app/projects") -Method Patch -Body $patchBody -ContentType "application/json" -WebSession $webSession
         Write-Host "Milestone Toggle Success: $($patchRes.success) | New Project Progress: $($patchRes.project.progress)%"
     }
 
-    Write-Host "`n=== 6. Testing Messages API ==="
+    Write-Host "`n=== 7. Testing Messages API ==="
     $msgPost = @{
         projectId = $firstProj.id
-        content = "Test direct : tout fonctionne parfaitement dans le nouveau tableau de bord et la messagerie !"
+        content = "Test direct : validation de l'alignement des conversations et de la nouvelle page de paramètres !"
         senderName = "Nourou Dine AMANDOU"
         senderRole = "admin"
     } | ConvertTo-Json
