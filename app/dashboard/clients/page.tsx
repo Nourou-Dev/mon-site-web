@@ -23,6 +23,7 @@ import {
   X,
   AlertCircle,
   CheckCircle2,
+  Trash2,
 } from "lucide-react";
 
 interface AppAccount {
@@ -189,6 +190,31 @@ export default function AdminClientsPage() {
       setModalMessage({ type: "error", text: err.message || "Erreur création client." });
     } finally {
       setAddingClient(false);
+    }
+  };
+
+  const handleDeleteClient = async (id: string, name: string) => {
+    if (!window.confirm(`Êtes-vous sûr de vouloir supprimer définitivement le compte client "${name}" ?`)) {
+      return;
+    }
+    try {
+      const res = await fetch(`/api/app/users?id=${id}`, { method: "DELETE" });
+      const data = await res.json();
+      if (data.success) {
+        setAccounts((prev) => prev.filter((a) => a.id !== id));
+        try {
+          const rawLocal = localStorage.getItem("nd_registered_clients");
+          if (rawLocal) {
+            const parsed = JSON.parse(rawLocal);
+            const filtered = parsed.filter((c: any) => c.id !== id);
+            localStorage.setItem("nd_registered_clients", JSON.stringify(filtered));
+          }
+        } catch {}
+      } else {
+        alert(data.error || "Erreur lors de la suppression.");
+      }
+    } catch (err) {
+      alert("Erreur réseau lors de la suppression.");
     }
   };
 
@@ -413,6 +439,14 @@ export default function AdminClientsPage() {
                               <MessageCircle className="h-3.5 w-3.5" />
                               <span className="hidden sm:inline">Discuter</span>
                             </Link>
+                            <button
+                              onClick={() => handleDeleteClient(acc.id, acc.name)}
+                              className="inline-flex items-center gap-1 rounded-lg border border-red-200 bg-white px-2.5 py-1.5 text-xs font-bold text-red-600 shadow-sm hover:bg-red-50 hover:border-red-300 transition"
+                              title="Supprimer ce compte client"
+                            >
+                              <Trash2 className="h-3.5 w-3.5" />
+                              <span className="hidden sm:inline">Supprimer</span>
+                            </button>
                           </div>
                         )}
                       </td>

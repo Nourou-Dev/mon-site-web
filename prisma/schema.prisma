@@ -1,0 +1,163 @@
+// Prisma Schema pour PostgreSQL Serverless (Neon / Vercel Postgres)
+// Supporte le connection pooling natif (?pgbouncer=true) et les migrations relationnelles strictes.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL") // Connection pooled URL pour serverless Vercel
+  directUrl = env("POSTGRES_URL_NON_POOLING") // Direct connection URL pour migrations
+}
+
+// -----------------------------------------------------------------------------
+// 1. UTILISATEURS & AUTHENTIFICATION
+// -----------------------------------------------------------------------------
+model User {
+  id           String    @id @default(cuid())
+  name         String
+  email        String    @unique
+  passwordHash String
+  role         String    @default("client") // "admin" | "client"
+  company      String?
+  phone        String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  projects     Project[]
+  messages     Message[]
+
+  @@index([email])
+  @@index([role])
+}
+
+// -----------------------------------------------------------------------------
+// 2. PROJETS CLIENTS & ROADMAP
+// -----------------------------------------------------------------------------
+model Project {
+  id          String   @id @default(cuid())
+  title       String
+  clientId    String?
+  clientName  String
+  clientEmail String
+  category    String   @default("Site Vitrine")
+  status      String   @default("cadrage") // "cadrage" | "design" | "developpement" | "recette" | "en_ligne"
+  progress    Int      @default(0)
+  budget      String?
+  paidAmount  String?
+  startDate   String
+  targetDate  String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  client       User?                @relation(fields: [clientId], references: [id], onDelete: SetNull)
+  milestones   ProjectMilestone[]
+  deliverables ProjectDeliverable[]
+  messages     Message[]
+
+  @@index([clientId])
+  @@index([clientEmail])
+  @@index([status])
+}
+
+// -----------------------------------------------------------------------------
+// 3. JALONS DU PROJET (MILESTONES)
+// -----------------------------------------------------------------------------
+model ProjectMilestone {
+  id         String   @id @default(cuid())
+  projectId  String
+  title      String
+  targetDate String
+  completed  Boolean  @default(false)
+  createdAt  DateTime @default(now())
+
+  project    Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+}
+
+// -----------------------------------------------------------------------------
+// 4. LIVRABLES DU PROJET (DELIVERABLES)
+// -----------------------------------------------------------------------------
+model ProjectDeliverable {
+  id        String   @id @default(cuid())
+  projectId String
+  title     String
+  url       String
+  type      String   @default("preview") // "figma" | "preview" | "document" | "code"
+  createdAt DateTime @default(now())
+
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+}
+
+// -----------------------------------------------------------------------------
+// 5. MESSAGERIE DIRECTE PROJET
+// -----------------------------------------------------------------------------
+model Message {
+  id         String   @id @default(cuid())
+  projectId  String
+  senderId   String?
+  senderName String
+  senderRole String   @default("client") // "admin" | "client"
+  content    String
+  read       Boolean  @default(false)
+  createdAt  DateTime @default(now())
+
+  project    Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  sender     User?    @relation(fields: [senderId], references: [id], onDelete: SetNull)
+
+  @@index([projectId])
+  @@index([senderId])
+}
+
+// -----------------------------------------------------------------------------
+// 6. CRM : DEMANDES DE CONTACT & DEVIS
+// -----------------------------------------------------------------------------
+model Inquiry {
+  id          String   @id @default(cuid())
+  name        String
+  email       String
+  phone       String?
+  projectType String?  @default("site-vitrine")
+  budget      String?  @default("150k-350k")
+  message     String
+  status      String   @default("nouveau") // "nouveau" | "en_cours" | "traité"
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([email])
+  @@index([status])
+}
+
+// -----------------------------------------------------------------------------
+// 7. NEWSLETTER
+// -----------------------------------------------------------------------------
+model NewsletterSubscriber {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  status       String   @default("active") // "active" | "unsubscribed"
+  subscribedAt DateTime @default(now())
+
+  @@index([email])
+}
+
+// -----------------------------------------------------------------------------
+// 8. RGPD : STATISTIQUES ET CONSENTEMENT COOKIES
+// -----------------------------------------------------------------------------
+model CookieConsentLog {
+  id         String   @id @default(cuid())
+  choice     String   // "accepted_all" | "refused_all" | "customized"
+  analytics  Boolean  @default(false)
+  experience Boolean  @default(false)
+  ip         String?
+  country    String?
+  month      String?  // "YYYY-MM"
+  userAgent  String?
+  timestamp  DateTime @default(now())
+
+  @@index([month])
+  @@index([choice])
+}

@@ -14,6 +14,7 @@ import {
   Calendar,
   AlertCircle,
   RefreshCw,
+  Trash2,
 } from "lucide-react";
 import { InquiryRecord, NewsletterRecord } from "@/lib/storage";
 
@@ -60,6 +61,36 @@ export default function AdminLeadsCRMPage() {
       }
     } catch (e) {
       console.error(e);
+    }
+  };
+
+  const handleDeleteInquiry = async (id: string, name: string) => {
+    if (!window.confirm(`Supprimer définitivement la demande de devis de "${name}" ?`)) return;
+    try {
+      const res = await fetch(`/api/app/leads?id=${id}&type=inquiry`, { method: "DELETE" });
+      const data = await res.json();
+      if (data.success) {
+        setInquiries((prev) => prev.filter((i) => i.id !== id));
+      } else {
+        alert(data.error || "Erreur suppression.");
+      }
+    } catch {
+      alert("Erreur réseau.");
+    }
+  };
+
+  const handleDeleteSubscriber = async (id: string, email: string) => {
+    if (!window.confirm(`Supprimer l'abonné "${email}" de la newsletter ?`)) return;
+    try {
+      const res = await fetch(`/api/app/leads?id=${id}&type=newsletter`, { method: "DELETE" });
+      const data = await res.json();
+      if (data.success) {
+        setSubscribers((prev) => prev.filter((s) => s.id !== id));
+      } else {
+        alert(data.error || "Erreur suppression.");
+      }
+    } catch {
+      alert("Erreur réseau.");
     }
   };
 
@@ -286,13 +317,23 @@ export default function AdminLeadsCRMPage() {
                         </select>
                       </td>
                       <td className="py-4 px-4 sm:px-6 text-right">
-                        <a
-                          href={`mailto:${inq.email}?subject=Suite à votre demande de devis sur Nourou Dine AMANDOU`}
-                          className="inline-flex items-center gap-1 rounded-lg border border-[#cbd5e1] bg-white px-2.5 py-1.5 text-xs font-semibold text-[#0f172a] shadow-sm hover:bg-[#e0e7ff] hover:text-[#4338ca] transition"
-                        >
-                          <Mail className="h-3 w-3 text-[#4338ca]" />
-                          <span>Répondre</span>
-                        </a>
+                        <div className="flex items-center justify-end gap-2">
+                          <a
+                            href={`mailto:${inq.email}?subject=Suite à votre demande de devis sur Nourou Dine AMANDOU`}
+                            className="inline-flex items-center gap-1 rounded-lg border border-[#cbd5e1] bg-white px-2.5 py-1.5 text-xs font-semibold text-[#0f172a] shadow-sm hover:bg-[#e0e7ff] hover:text-[#4338ca] transition"
+                          >
+                            <Mail className="h-3 w-3 text-[#4338ca]" />
+                            <span>Répondre</span>
+                          </a>
+                          <button
+                            onClick={() => handleDeleteInquiry(inq.id, inq.name)}
+                            className="inline-flex items-center gap-1 rounded-lg border border-red-200 bg-white px-2 py-1.5 text-xs font-bold text-red-600 shadow-sm hover:bg-red-50 hover:border-red-300 transition"
+                            title="Supprimer cette demande"
+                          >
+                            <Trash2 className="h-3 w-3" />
+                            <span className="hidden sm:inline">Supprimer</span>
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))
@@ -311,18 +352,19 @@ export default function AdminLeadsCRMPage() {
                   <th scope="col" className="py-4 px-4 sm:px-6">Email de l&apos;Abonné</th>
                   <th scope="col" className="py-4 px-4 sm:px-6">Date d&apos;Inscription</th>
                   <th scope="col" className="py-4 px-4 sm:px-6">Statut</th>
+                  <th scope="col" className="py-4 px-4 sm:px-6 text-right">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#f1f5f9]">
                 {loading ? (
                   <tr>
-                    <td colSpan={3} className="py-12 text-center text-xs font-semibold text-[#64748b]">
+                    <td colSpan={4} className="py-12 text-center text-xs font-semibold text-[#64748b]">
                       Chargement des abonnés...
                     </td>
                   </tr>
                 ) : filteredSubscribers.length === 0 ? (
                   <tr>
-                    <td colSpan={3} className="py-12 text-center text-xs font-semibold text-[#64748b]">
+                    <td colSpan={4} className="py-12 text-center text-xs font-semibold text-[#64748b]">
                       Aucun abonné trouvé.
                     </td>
                   </tr>
@@ -338,6 +380,16 @@ export default function AdminLeadsCRMPage() {
                           <CheckCircle2 className="h-3 w-3" />
                           Actif
                         </span>
+                      </td>
+                      <td className="py-4 px-4 sm:px-6 text-right">
+                        <button
+                          onClick={() => handleDeleteSubscriber(s.id, s.email)}
+                          className="inline-flex items-center gap-1 rounded-lg border border-red-200 bg-white px-2 py-1.5 text-xs font-bold text-red-600 shadow-sm hover:bg-red-50 hover:border-red-300 transition"
+                          title="Supprimer cet abonné"
+                        >
+                          <Trash2 className="h-3 w-3" />
+                          <span className="hidden sm:inline">Supprimer</span>
+                        </button>
                       </td>
                     </tr>
                   ))

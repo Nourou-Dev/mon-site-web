@@ -3,6 +3,7 @@ import {
   getUsers,
   decodeSession,
   registerClientUser,
+  deleteUser,
   ADMIN_SESSION_COOKIE,
   LEGACY_SESSION_COOKIE,
   AppUser,
@@ -151,6 +152,45 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json({ success: false, error: "Action non reconnue" }, { status: 400 });
+  } catch (error: any) {
+    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+  }
+}
+
+export async function DELETE(request: Request) {
+  try {
+    const admin = getAdminSession(request);
+    if (!admin) {
+      return NextResponse.json(
+        { success: false, error: "Accès réservé exclusivement à l'administrateur." },
+        { status: 403 }
+      );
+    }
+
+    const { searchParams } = new URL(request.url);
+    const userId = searchParams.get("id");
+    if (!userId) {
+      return NextResponse.json(
+        { success: false, error: "Identifiant utilisateur requis." },
+        { status: 400 }
+      );
+    }
+
+    const users = await getUsers();
+    const target = users.find((u) => u.id === userId);
+    if (!target) {
+      return NextResponse.json({ success: false, error: "Utilisateur introuvable." }, { status: 404 });
+    }
+
+    if (target.role === "admin") {
+      return NextResponse.json(
+        { success: false, error: "Le compte administrateur ne peut pas être supprimé." },
+        { status: 400 }
+      );
+    }
+
+    const ok = await deleteUser(userId);
+    return NextResponse.json({ success: ok, message: "Compte client supprimé avec succès." });
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }

@@ -1,5 +1,14 @@
-import fs from "fs/promises";
-import path from "path";
+import {
+  dbGetInquiries,
+  dbSaveInquiry,
+  dbUpdateInquiryStatus,
+  dbDeleteInquiry,
+  dbGetNewsletterSubscribers,
+  dbSaveNewsletterSubscriber,
+  dbDeleteNewsletterSubscriber,
+  InquiryRecord,
+  NewsletterRecord,
+} from "./db";
 
 export interface InquiryInput {
   name: string;
@@ -10,34 +19,12 @@ export interface InquiryInput {
   message: string;
 }
 
-export interface InquiryRecord extends InquiryInput {
-  id: string;
-  createdAt: string;
-  status: "nouveau" | "en_cours" | "traité";
-}
-
-export interface NewsletterRecord {
-  id: string;
-  email: string;
-  subscribedAt: string;
-  status: "active" | "unsubscribed";
-}
-
-const DATA_DIR = path.join(process.cwd(), "data");
-const INQUIRIES_FILE = path.join(DATA_DIR, "inquiries.json");
-const NEWSLETTER_FILE = path.join(DATA_DIR, "newsletter.json");
-
-import { readJsonStorage, writeJsonStorage } from "./fsStorage";
-
-const readJsonFile = readJsonStorage;
-const writeJsonFile = writeJsonStorage;
+export type { InquiryRecord, NewsletterRecord };
 
 /**
- * Enregistre une nouvelle demande de devis/contact
+ * Enregistre une nouvelle demande de devis/contact (CRUD: Create)
  */
 export async function saveInquiry(input: InquiryInput): Promise<InquiryRecord> {
-  const inquiries = await readJsonFile<InquiryRecord[]>(INQUIRIES_FILE, []);
-
   const newRecord: InquiryRecord = {
     id: `inq_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
     name: input.name.trim(),
@@ -50,27 +37,32 @@ export async function saveInquiry(input: InquiryInput): Promise<InquiryRecord> {
     status: "nouveau",
   };
 
-  inquiries.unshift(newRecord);
-  await writeJsonFile(INQUIRIES_FILE, inquiries);
-
-  return newRecord;
+  return await dbSaveInquiry(newRecord);
 }
 
 /**
- * Récupère toutes les demandes
+ * Récupère toutes les demandes CRM (CRUD: Read)
  */
-export async function getInquiries(): Promise<InquiryRecord[]> {
-  return await readJsonFile<InquiryRecord[]>(INQUIRIES_FILE, []);
-}
+export const getInquiries = dbGetInquiries;
 
 /**
- * Enregistre un nouvel abonné à la newsletter (avec déduplication)
+ * Met à jour le statut d'une demande (CRUD: Update)
+ */
+export const updateInquiryStatus = dbUpdateInquiryStatus;
+
+/**
+ * Supprime une demande CRM (CRUD: Delete)
+ */
+export const deleteInquiry = dbDeleteInquiry;
+
+/**
+ * Enregistre un nouvel abonné à la newsletter (CRUD: Create / Read)
  */
 export async function saveNewsletterSubscriber(
   rawEmail: string
 ): Promise<{ success: boolean; isNew: boolean; subscriber: NewsletterRecord }> {
   const email = rawEmail.trim().toLowerCase();
-  const subscribers = await readJsonFile<NewsletterRecord[]>(NEWSLETTER_FILE, []);
+  const subscribers = await dbGetNewsletterSubscribers();
 
   const existing = subscribers.find((s) => s.email === email);
   if (existing) {
@@ -88,35 +80,20 @@ export async function saveNewsletterSubscriber(
     status: "active",
   };
 
-  subscribers.unshift(newSubscriber);
-  await writeJsonFile(NEWSLETTER_FILE, subscribers);
-
+  const saved = await dbSaveNewsletterSubscriber(newSubscriber);
   return {
     success: true,
     isNew: true,
-    subscriber: newSubscriber,
+    subscriber: saved,
   };
 }
 
 /**
- * Récupère tous les abonnés newsletter
+ * Récupère tous les abonnés newsletter (CRUD: Read)
  */
-export async function getNewsletterSubscribers(): Promise<NewsletterRecord[]> {
-  return await readJsonFile<NewsletterRecord[]>(NEWSLETTER_FILE, []);
-}
+export const getNewsletterSubscribers = dbGetNewsletterSubscribers;
 
 /**
- * Met à jour le statut d'une demande de devis
+ * Supprime un abonné newsletter (CRUD: Delete)
  */
-export async function updateInquiryStatus(
-  id: string,
-  status: InquiryRecord["status"]
-): Promise<InquiryRecord | null> {
-  const inquiries = await getInquiries();
-  const idx = inquiries.findIndex((inq) => inq.id === id);
-  if (idx < 0) return null;
-
-  inquiries[idx].status = status;
-  await writeJsonFile(INQUIRIES_FILE, inquiries);
-  return inquiries[idx];
-}
+export const deleteNewsletterSubscriber = dbDeleteNewsletterSubscriber;

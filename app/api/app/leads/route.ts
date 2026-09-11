@@ -1,5 +1,11 @@
 import { NextResponse } from "next/server";
-import { getInquiries, getNewsletterSubscribers, updateInquiryStatus } from "@/lib/storage";
+import {
+  getInquiries,
+  getNewsletterSubscribers,
+  updateInquiryStatus,
+  deleteInquiry,
+  deleteNewsletterSubscriber,
+} from "@/lib/storage";
 
 export async function GET() {
   try {
@@ -31,6 +37,28 @@ export async function PATCH(request: Request) {
     }
 
     return NextResponse.json({ success: true, inquiry: updated });
+  } catch (error: any) {
+    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+  }
+}
+
+export async function DELETE(request: Request) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get("id");
+    const type = searchParams.get("type"); // "inquiry" (défaut) | "newsletter"
+
+    if (!id) {
+      return NextResponse.json({ success: false, error: "Identifiant requis." }, { status: 400 });
+    }
+
+    if (type === "newsletter") {
+      const ok = await deleteNewsletterSubscriber(id);
+      return NextResponse.json({ success: ok, message: "Abonné supprimé avec succès." });
+    }
+
+    const ok = await deleteInquiry(id);
+    return NextResponse.json({ success: ok, message: "Demande supprimée avec succès." });
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }

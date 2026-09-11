@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getCookieStats, logCookieConsent } from "@/lib/appStorage";
+import { getCookieStats, logCookieConsent, clearCookieConsentLogs } from "@/lib/appStorage";
 
 export async function GET(request: Request) {
   try {
@@ -37,6 +37,15 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json({ success: true, ip });
+  } catch (error: any) {
+    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+  }
+}
+
+export async function DELETE() {
+  try {
+    const ok = await clearCookieConsentLogs();
+    return NextResponse.json({ success: ok, message: "Historique des cookies purgé." });
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }

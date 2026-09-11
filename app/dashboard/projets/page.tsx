@@ -16,6 +16,7 @@ import {
   X,
   ChevronRight,
   TrendingUp,
+  Trash2,
 } from "lucide-react";
 import { ProjectRecord, ProjectMilestone } from "@/lib/appStorage";
 
@@ -81,6 +82,25 @@ export default function AdminProjectsPage() {
       }
     } catch (e) {
       console.error("Erreur mise à jour jalon:", e);
+    }
+  };
+
+  const handleDeleteProject = async (projectId: string, title: string) => {
+    if (!window.confirm(`Êtes-vous sûr de vouloir supprimer définitivement le projet "${title}" ? Cette action est irréversible.`)) {
+      return;
+    }
+    try {
+      const res = await fetch(`/api/app/projects?id=${projectId}`, { method: "DELETE" });
+      const data = await res.json();
+      if (data.success) {
+        const remaining = projects.filter((p) => p.id !== projectId);
+        setProjects(remaining);
+        setSelectedProject(remaining.length > 0 ? remaining[0] : null);
+      } else {
+        alert(data.error || "Erreur lors de la suppression du projet.");
+      }
+    } catch (err) {
+      alert("Erreur réseau lors de la suppression.");
     }
   };
 
@@ -330,6 +350,14 @@ export default function AdminProjectsPage() {
                     <MessageSquare className="h-4 w-4 shrink-0" />
                     <span className="whitespace-nowrap">Messagerie du projet</span>
                   </Link>
+                  <button
+                    onClick={() => handleDeleteProject(selectedProject.id, selectedProject.title)}
+                    className="inline-flex items-center gap-1.5 rounded-xl border border-red-200 bg-white px-3 py-2.5 text-xs font-bold text-red-600 hover:bg-red-50 hover:border-red-300 transition-all shadow-xs shrink-0 active:scale-95"
+                    title="Supprimer ce projet"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                    <span className="hidden sm:inline">Supprimer</span>
+                  </button>
                 </div>
               </div>
 
