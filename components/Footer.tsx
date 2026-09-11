@@ -84,25 +84,30 @@ export default function Footer() {
           </div>
 
           <div>
-            <p className="font-semibold text-[#171717]">Contact</p>
-            <ul className="mt-4 space-y-3">
+            <p className="font-semibold text-[#171717]">Contact &amp; Localisation</p>
+            <ul className="mt-4 space-y-3 text-sm text-[#4b4b4b]">
               <li>
                 <a
-                  href={`tel:${site.phone.replace(/\s/g, "")}`}
-                  className="focus-ring flex items-center gap-2.5 rounded text-sm text-[#4b4b4b] hover:text-[#171717]"
+                  href={site.whatsapp}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="focus-ring flex items-center gap-2.5 rounded text-sm text-[#4b4b4b] hover:text-[#0060c3] transition-colors"
                 >
-                  <Phone className="h-4 w-4 text-[#0060c3]" />
-                  {site.phone}
+                  <span className="h-2 w-2 rounded-full bg-emerald-500 shrink-0" />
+                  WhatsApp direct : +229 01 61 38 07 98
                 </a>
               </li>
               <li>
                 <a
                   href={`mailto:${site.email}`}
-                  className="focus-ring flex items-center gap-2.5 rounded text-sm text-[#4b4b4b] hover:text-[#171717]"
+                  className="focus-ring flex items-center gap-2.5 rounded text-sm text-[#4b4b4b] hover:text-[#0060c3] transition-colors"
                 >
-                  <Mail className="h-4 w-4 text-[#0060c3]" />
+                  <Mail className="h-4 w-4 text-[#0060c3] shrink-0" />
                   {site.email}
                 </a>
+              </li>
+              <li className="text-xs text-[#4b4b4b]/80 pt-1">
+                Abomey-Calavi, Bénin &amp; Remote partout dans le monde
               </li>
             </ul>
           </div>
