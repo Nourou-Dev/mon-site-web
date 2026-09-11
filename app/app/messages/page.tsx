@@ -15,7 +15,6 @@ import {
   Clock,
   CheckCheck,
   Shield,
-  UserCheck,
 } from "lucide-react";
 import { ProjectRecord, MessageRecord } from "@/lib/appStorage";
 
@@ -36,7 +35,6 @@ export default function MessagesPage() {
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
-  const [switchingRole, setSwitchingRole] = useState(false);
   const [mobileViewChat, setMobileViewChat] = useState(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -157,25 +155,6 @@ export default function MessagesPage() {
     setContent(text);
   };
 
-  const handleSwitchRole = async (targetRole: "admin" | "client") => {
-    setSwitchingRole(true);
-    try {
-      const res = await fetch("/api/app/auth", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "switch_role", targetRole }),
-      });
-      const data = await res.json();
-      if (data.success) {
-        window.location.reload();
-      }
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setSwitchingRole(false);
-    }
-  };
-
   const selectedProject = projects.find((p) => p.id === selectedProjectId);
   const isAdmin = user?.role === "admin";
 
@@ -210,21 +189,6 @@ export default function MessagesPage() {
         </div>
 
         <div className="flex items-center gap-2">
-          {/* Basculeur rapide Admin / Client */}
-          <button
-            onClick={() => handleSwitchRole(isAdmin ? "client" : "admin")}
-            disabled={switchingRole}
-            className={`inline-flex items-center gap-1.5 rounded-xl border px-3 py-2 text-xs font-bold transition shadow-sm ${
-              isAdmin
-                ? "border-emerald-200 bg-emerald-50 text-emerald-800 hover:bg-emerald-100"
-                : "border-blue-200 bg-blue-50 text-blue-800 hover:bg-blue-100"
-            }`}
-            title="Basculer instantanément de rôle pour tester"
-          >
-            {isAdmin ? <Shield className="h-3.5 w-3.5 text-emerald-600" /> : <UserCheck className="h-3.5 w-3.5 text-blue-600" />}
-            <span>{isAdmin ? "Mode : Admin (Nourou Dine)" : "Mode : Client"}</span>
-          </button>
-
           <button
             onClick={() => fetchCurrentMessages(false)}
             disabled={refreshing}

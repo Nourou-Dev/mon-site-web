@@ -112,12 +112,19 @@ export default function Footer() {
           <p>
             © {new Date().getFullYear()} Nourou Dine AMANDOU — Tous droits réservés.
           </p>
-          <div className="flex gap-5">
+          <div className="flex flex-wrap items-center gap-4 text-xs sm:gap-5">
             <Link href="/mentions-legales" className="focus-ring rounded hover:text-[#0060c3] transition-colors">
               Mentions légales
             </Link>
             <Link href="/confidentialite" className="focus-ring rounded hover:text-[#0060c3] transition-colors">
               Confidentialité
+            </Link>
+            <span className="text-[#171717]/20">·</span>
+            <Link href="/app" className="focus-ring rounded hover:text-[#0060c3] transition-colors">
+              Espace Client
+            </Link>
+            <Link href="/admin" className="focus-ring rounded hover:text-[#0060c3] transition-colors font-semibold">
+              Administration
             </Link>
           </div>
         </div>

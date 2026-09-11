@@ -15,8 +15,6 @@ import {
   Sparkles,
   Settings,
   Shield,
-  UserCheck,
-  RefreshCw,
 } from "lucide-react";
 
 interface CurrentUser {
@@ -32,12 +30,11 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
   const [user, setUser] = useState<CurrentUser | null>(null);
   const [loading, setLoading] = useState(true);
-  const [switchingRole, setSwitchingRole] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Vérifier la session active
   useEffect(() => {
-    if (pathname.includes("/login")) {
+    if (pathname.includes("/login") || pathname.includes("/admin")) {
       setLoading(false);
       return;
     }
@@ -79,27 +76,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const handleSwitchRole = async (targetRole: "admin" | "client") => {
-    setSwitchingRole(true);
-    try {
-      const res = await fetch("/api/app/auth", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "switch_role", targetRole }),
-      });
-      const data = await res.json();
-      if (data.success) {
-        window.location.href = "/app";
-      }
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setSwitchingRole(false);
-    }
-  };
-
-  // Si on est sur la page de login, afficher sans le layout de dashboard
-  if (pathname.includes("/login")) {
+  // Si on est sur la page de login ou d'admin, afficher sans le layout de dashboard
+  if (pathname.includes("/login") || pathname.includes("/admin")) {
     return <>{children}</>;
   }
 
@@ -164,7 +142,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             <span>Nourou Dine</span> <span className="text-[#0060c3]">AMANDOU</span>
           </Link>
           <span className="rounded-full bg-[#0060c3]/10 px-2 py-0.5 text-[10px] font-bold text-[#0060c3]">
-            {isAdmin ? "Admin" : "Espace Client"}
+            {isAdmin ? "Espace Admin" : "Espace Client"}
           </span>
         </div>
         <button
@@ -196,7 +174,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                     {isAdmin ? "Espace Administrateur" : "Espace Client"}
                   </span>
                   {isAdmin && (
-                    <span className="rounded-full bg-emerald-50 border border-emerald-200 px-2 py-0.5 text-[10px] font-semibold text-emerald-700">
+                    <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 border border-emerald-200 px-2 py-0.5 text-[10px] font-bold text-emerald-700">
+                      <Shield className="h-2.5 w-2.5" />
                       Admin
                     </span>
                   )}
@@ -238,46 +217,18 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             </nav>
           </div>
 
-          {/* Footer de la Sidebar : Profil, Basculement de Rôle & Paramètres */}
+          {/* Footer de la Sidebar : Profil & Paramètres (Aucun bouton admin pour le client) */}
           <div className="border-t border-[#171717]/10 pt-4 space-y-2.5">
             {/* Widget utilisateur connecté */}
             {user && (
-              <div className="flex items-center justify-between gap-2 rounded-xl bg-[#f8f9fa] p-2.5 border border-[#171717]/5">
-                <div className="flex items-center gap-2.5 min-w-0">
-                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#0060c3] text-xs font-bold text-white">
-                    {user.name.charAt(0).toUpperCase()}
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate text-xs font-bold text-[#171717]">{user.name}</p>
-                    <p className="truncate text-[10px] text-[#4b4b4b]">{user.company || user.email}</p>
-                  </div>
+              <div className="flex items-center gap-2.5 rounded-xl bg-[#f8f9fa] p-2.5 border border-[#171717]/5">
+                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#0060c3] text-xs font-bold text-white">
+                  {user.name.charAt(0).toUpperCase()}
                 </div>
-
-                {/* Basculeur rapide Admin / Client en 1-clic pour tests faciles */}
-                <button
-                  onClick={() => handleSwitchRole(isAdmin ? "client" : "admin")}
-                  disabled={switchingRole}
-                  title={isAdmin ? "Tester la vue Client" : "Passer sur l'espace Administrateur"}
-                  className={`shrink-0 rounded-lg p-1.5 text-[10px] font-bold border transition ${
-                    isAdmin
-                      ? "border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-100"
-                      : "border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
-                  }`}
-                >
-                  {switchingRole ? (
-                    <RefreshCw className="h-3.5 w-3.5 animate-spin" />
-                  ) : isAdmin ? (
-                    <span className="flex items-center gap-1">
-                      <UserCheck className="h-3 w-3" />
-                      Client
-                    </span>
-                  ) : (
-                    <span className="flex items-center gap-1">
-                      <Shield className="h-3 w-3" />
-                      Admin
-                    </span>
-                  )}
-                </button>
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-xs font-bold text-[#171717]">{user.name}</p>
+                  <p className="truncate text-[10px] text-[#4b4b4b]">{user.company || user.email}</p>
+                </div>
               </div>
             )}
 

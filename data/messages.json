@@ -98,5 +98,35 @@
     "content": "Test direct : validation de l'alignement des conversations et de la nouvelle page de paramètres !",
     "createdAt": "2026-09-11T07:53:04.822Z",
     "read": false
+  },
+  {
+    "id": "msg_1789113300288_c852",
+    "projectId": "prj_demo_1",
+    "senderId": "usr_1789112384617_1aa5k",
+    "senderName": "Dr. Marc Dossou",
+    "senderRole": "client",
+    "content": "ok",
+    "createdAt": "2026-09-11T07:55:00.288Z",
+    "read": false
+  },
+  {
+    "id": "msg_1789113320177_cjch",
+    "projectId": "prj_demo_1",
+    "senderId": "usr_1789112384617_1aa5k",
+    "senderName": "Dr. Marc Dossou",
+    "senderRole": "client",
+    "content": "Bonjour, où en est le jalon en cours ?",
+    "createdAt": "2026-09-11T07:55:20.177Z",
+    "read": false
+  },
+  {
+    "id": "msg_1789113826251_7b3v",
+    "projectId": "prj_demo_1",
+    "senderId": "usr_anonymous",
+    "senderName": "Visiteur",
+    "senderRole": "client",
+    "content": "Message test direct administrateur sécurisé.",
+    "createdAt": "2026-09-11T08:03:46.251Z",
+    "read": false
   }
 ]

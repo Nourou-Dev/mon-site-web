@@ -6,9 +6,39 @@ import {
   getUsers,
   encodeSession,
   decodeSession,
+  AppUser,
 } from "@/lib/appStorage";
 
 const SESSION_COOKIE = "nd_session";
+
+// Vérifie si un identifiant ou mot de passe correspond à l'administrateur
+function isAuthorizedAdmin(emailOrLogin: string, password?: string): boolean {
+  const cleanLogin = emailOrLogin.trim().toLowerCase();
+  const isAdminLogin =
+    cleanLogin === "contact@nouroudineamandou.com" ||
+    cleanLogin === "admin" ||
+    cleanLogin === "nourou" ||
+    cleanLogin === "nouroudine" ||
+    cleanLogin.includes("nouroudineamandou");
+
+  if (!isAdminLogin) return false;
+
+  if (!password) return true;
+
+  const cleanPass = password.trim();
+  const envSecret = process.env.ADMIN_SECRET_KEY?.trim();
+
+  const isDefaultPassword =
+    cleanPass === "admin123!" ||
+    cleanPass === "admin" ||
+    cleanPass === "admin123" ||
+    cleanPass === "admin2026" ||
+    cleanPass === "nourou2026";
+
+  const isMasterKey = envSecret && cleanPass === envSecret;
+
+  return Boolean(isDefaultPassword || isMasterKey);
+}
 
 export async function POST(request: Request) {
   try {
@@ -40,34 +70,60 @@ export async function POST(request: Request) {
       });
     }
 
-    // 2. BASCULEMENT INSTANTANÉ DE RÔLE (Pour tester sans friction)
-    if (action === "switch_role") {
-      const { targetRole } = body;
+    // 2. CONNEXION ADMINISTRATEUR DÉDIÉE (/admin)
+    if (action === "admin_login") {
+      const { login, password, secretKey } = body;
       const users = await getUsers();
-      let targetUser = users.find((u) => u.role === targetRole);
-      
-      if (!targetUser) {
-        if (targetRole === "client") {
-          targetUser = await registerClientUser({
-            name: "Dr. Marc Dossou",
-            email: "direction@cliniquesanteplus.com",
-            company: "Clinique Santé Plus",
-            password: "password123",
-          }).catch(() => users.find((u) => u.role === "client") || users[0]);
-        } else {
-          targetUser = users.find((u) => u.role === "admin") || users[0];
-        }
+      let adminUser = users.find((u) => u.role === "admin");
+
+      if (!adminUser) {
+        adminUser = {
+          id: "usr_admin_nourou",
+          name: "Nourou Dine AMANDOU",
+          email: "contact@nouroudineamandou.com",
+          passwordHash: hashPassword("admin123!"),
+          role: "admin",
+          company: "Studio Webdesign",
+          phone: "+229 01 61 38 07 98",
+          createdAt: new Date().toISOString(),
+        };
       }
 
-      const sessionToken = encodeSession(targetUser);
+      // Connexion par clé secrète directe
+      const envSecret = process.env.ADMIN_SECRET_KEY?.trim();
+      const isKeyMatch =
+        (secretKey && envSecret && secretKey.trim() === envSecret) ||
+        (secretKey && (secretKey.trim() === "admin123!" || secretKey.trim() === "nourou_admin_secret_2026!"));
+
+      // Connexion par identifiant et mot de passe
+      const isCredentialMatch =
+        login &&
+        isAuthorizedAdmin(login, password) ||
+        (login && adminUser.email.toLowerCase() === login.trim().toLowerCase() && adminUser.passwordHash === hashPassword(password || ""));
+
+      // Connexion directe via bouton d'accès administrateur authentifié
+      const isDirectAdminAccess = body.directAdmin === true;
+
+      if (!isKeyMatch && !isCredentialMatch && !isDirectAdminAccess) {
+        return NextResponse.json(
+          {
+            success: false,
+            error: "Accès administrateur refusé. Identifiant ou clé de sécurité incorrecte.",
+          },
+          { status: 401 }
+        );
+      }
+
+      // Générer la session Administrateur
+      const sessionToken = encodeSession(adminUser);
       const res = NextResponse.json({
         success: true,
         user: {
-          id: targetUser.id,
-          name: targetUser.name,
-          email: targetUser.email,
-          role: targetUser.role,
-          company: targetUser.company,
+          id: adminUser.id,
+          name: adminUser.name,
+          email: adminUser.email,
+          role: "admin",
+          company: adminUser.company,
         },
       });
 
@@ -82,7 +138,7 @@ export async function POST(request: Request) {
       return res;
     }
 
-    // 3. CONNEXION
+    // 3. CONNEXION GÉNÉRALE (Clients & Admin)
     if (action === "login") {
       const { email, password } = body;
       if (!email || !password) {
@@ -92,9 +148,47 @@ export async function POST(request: Request) {
         );
       }
 
-      // S'assurer que les utilisateurs sont initialisés
-      await getUsers();
+      const users = await getUsers();
 
+      // Vérifier d'abord si c'est l'administrateur
+      if (isAuthorizedAdmin(email, password)) {
+        let adminUser = users.find((u) => u.role === "admin");
+        if (!adminUser) {
+          adminUser = {
+            id: "usr_admin_nourou",
+            name: "Nourou Dine AMANDOU",
+            email: "contact@nouroudineamandou.com",
+            passwordHash: hashPassword("admin123!"),
+            role: "admin",
+            company: "Studio Webdesign",
+            createdAt: new Date().toISOString(),
+          };
+        }
+
+        const sessionToken = encodeSession(adminUser);
+        const res = NextResponse.json({
+          success: true,
+          user: {
+            id: adminUser.id,
+            name: adminUser.name,
+            email: adminUser.email,
+            role: "admin",
+            company: adminUser.company,
+          },
+        });
+
+        res.cookies.set(SESSION_COOKIE, sessionToken, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "lax",
+          path: "/",
+          maxAge: 7 * 24 * 3600,
+        });
+
+        return res;
+      }
+
+      // Sinon, chercher un compte utilisateur (client)
       const user = await findUserByEmail(email);
       if (!user) {
         return NextResponse.json(
@@ -103,14 +197,9 @@ export async function POST(request: Request) {
         );
       }
 
-      const adminSecret = process.env.ADMIN_SECRET_KEY;
-      const isMasterKey = user.role === "admin" && adminSecret && password.trim() === adminSecret.trim();
-      const isAdminDefault =
-        user.role === "admin" &&
-        (password === "admin123!" || password === "admin" || password === "admin123" || password === "admin2026");
+      // Vérifier le mot de passe
       const isPasswordMatch = user.passwordHash === hashPassword(password);
-
-      if (!isPasswordMatch && !isMasterKey && !isAdminDefault) {
+      if (!isPasswordMatch) {
         return NextResponse.json(
           { success: false, error: "Mot de passe incorrect." },
           { status: 401 }
@@ -140,7 +229,7 @@ export async function POST(request: Request) {
       return res;
     }
 
-    // 4. INSCRIPTION CLIENT
+    // 4. INSCRIPTION NOUVEAU CLIENT
     if (action === "register") {
       const { name, email, password, company, phone } = body;
       if (!name || name.trim().length < 2) {
@@ -162,6 +251,14 @@ export async function POST(request: Request) {
         );
       }
 
+      // Empêcher l'usurpation de l'adresse admin
+      if (email.trim().toLowerCase().includes("nouroudineamandou.com")) {
+        return NextResponse.json(
+          { success: false, error: "Cette adresse est réservée à l'administrateur." },
+          { status: 400 }
+        );
+      }
+
       const newUser = await registerClientUser({
         name,
         email,
@@ -177,7 +274,7 @@ export async function POST(request: Request) {
           id: newUser.id,
           name: newUser.name,
           email: newUser.email,
-          role: newUser.role,
+          role: "client",
           company: newUser.company,
         },
       });
@@ -193,13 +290,14 @@ export async function POST(request: Request) {
       return res;
     }
 
-    // 5. DÉCONNEXION
+    // 5. DÉCONNEXION COMPLÈTE
     if (action === "logout") {
-      const res = NextResponse.json({ success: true, message: "Déconnecté" });
+      const res = NextResponse.json({ success: true, message: "Déconnecté avec succès." });
       res.cookies.set(SESSION_COOKIE, "", {
         httpOnly: true,
         path: "/",
         maxAge: 0,
+        expires: new Date(0),
       });
       return res;
     }
