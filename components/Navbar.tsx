@@ -92,7 +92,7 @@ export default function Navbar() {
             aria-label={open ? "Fermer le menu" : "Ouvrir le menu"}
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[#171717]/10 bg-white p-2 text-[#171717] transition-all hover:bg-[#f4f6f8] active:scale-95 lg:hidden"
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-[#171717]/10 bg-white p-2 text-[#171717] transition-all hover:bg-[#f4f6f8] active:scale-95 focus:outline-none focus:ring-2 focus:ring-[#0060c3] lg:hidden"
           >
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
@@ -116,7 +116,7 @@ export default function Navbar() {
             : "max-h-0 opacity-0 pointer-events-none"
         }`}
       >
-        <nav className="flex flex-col gap-1.5 p-5 pb-6">
+        <nav className="flex flex-col gap-1.5 p-5 pb-6" aria-label="Menu mobile">
           {navLinks.map((link) => {
             const isActive =
               pathname === link.href ||
@@ -127,7 +127,7 @@ export default function Navbar() {
                 key={link.href}
                 href={link.href}
                 onClick={() => setOpen(false)}
-                className={`rounded-xl px-4 py-3 text-[0.84rem] uppercase tracking-[0.14em] text-[#171717] transition-all ${
+                className={`min-h-[44px] flex items-center rounded-xl px-4 py-3 text-[0.84rem] uppercase tracking-[0.14em] text-[#171717] transition-all focus:outline-none focus:ring-2 focus:ring-[#0060c3] ${
                   isActive
                     ? "bg-[#f4f6f8] font-extrabold shadow-sm border border-[#171717]/5"
                     : "font-semibold hover:bg-[#f4f6f8]"
@@ -137,10 +137,20 @@ export default function Navbar() {
               </Link>
             );
           })}
+
+          <Link
+            href="/app"
+            onClick={() => setOpen(false)}
+            className="min-h-[44px] flex items-center justify-between rounded-xl px-4 py-3 text-[0.84rem] uppercase tracking-[0.14em] text-[#0060c3] font-bold bg-[#0060c3]/5 border border-[#0060c3]/15 transition-all hover:bg-[#0060c3]/10"
+          >
+            <span>Espace Client</span>
+            <span className="text-[10px] rounded-full bg-[#0060c3] text-white px-2 py-0.5">Accès</span>
+          </Link>
+
           <Link
             href="/contact"
             onClick={() => setOpen(false)}
-            className="mt-3 inline-flex items-center justify-center gap-2 rounded-full bg-[#0060c3] px-6 py-3.5 text-[0.95rem] font-semibold text-white shadow-md shadow-[#0060c3]/20 transition-transform active:scale-95 hover:bg-[#0050a5]"
+            className="mt-2 inline-flex min-h-[48px] items-center justify-center gap-2 rounded-full bg-[#0060c3] px-6 py-3.5 text-[0.95rem] font-semibold text-white shadow-md shadow-[#0060c3]/20 transition-transform active:scale-95 hover:bg-[#0050a5] focus:outline-none focus:ring-2 focus:ring-[#0060c3]"
           >
             Discutons de votre projet
             <ArrowUpRight className="h-4 w-4" strokeWidth={2.5} />

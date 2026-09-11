@@ -355,18 +355,18 @@ export default function ProjectsPage() {
                   />
                 </div>
 
-                <div className="mt-4 grid grid-cols-3 gap-2 text-center text-xs">
-                  <div className="rounded-xl bg-white p-2.5 border border-[#171717]/5">
-                    <p className="text-[10px] uppercase font-semibold text-[#4b4b4b]">Budget</p>
-                    <p className="font-bold text-[#171717] mt-0.5">{selectedProject.budget || "Sur devis"}</p>
+                <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-center text-xs">
+                  <div className="rounded-xl bg-white p-3 border border-[#171717]/5 shadow-xs">
+                    <p className="text-[10px] uppercase font-bold text-[#7b7b7b]">Budget</p>
+                    <p className="font-extrabold text-[#171717] mt-1 truncate">{selectedProject.budget || "Sur devis"}</p>
                   </div>
-                  <div className="rounded-xl bg-white p-2.5 border border-[#171717]/5">
-                    <p className="text-[10px] uppercase font-semibold text-[#4b4b4b]">Acompte réglé</p>
-                    <p className="font-bold text-emerald-700 mt-0.5">{selectedProject.paidAmount || "0 FCFA"}</p>
+                  <div className="rounded-xl bg-white p-3 border border-[#171717]/5 shadow-xs">
+                    <p className="text-[10px] uppercase font-bold text-[#7b7b7b]">Acompte réglé</p>
+                    <p className="font-extrabold text-emerald-700 mt-1 truncate">{selectedProject.paidAmount || "0 FCFA"}</p>
                   </div>
-                  <div className="rounded-xl bg-white p-2.5 border border-[#171717]/5">
-                    <p className="text-[10px] uppercase font-semibold text-[#4b4b4b]">Démarrage</p>
-                    <p className="font-bold text-[#171717] mt-0.5">{selectedProject.startDate}</p>
+                  <div className="rounded-xl bg-white p-3 border border-[#171717]/5 shadow-xs">
+                    <p className="text-[10px] uppercase font-bold text-[#7b7b7b]">Démarrage</p>
+                    <p className="font-extrabold text-[#171717] mt-1 truncate">{selectedProject.startDate}</p>
                   </div>
                 </div>
               </div>

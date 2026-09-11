@@ -284,46 +284,48 @@ export default function LeadsCRMPage() {
           </div>
         </div>
       ) : (
-        /* Contenu Tableau Newsletter */
+        /* Contenu Tableau Newsletter avec défilement horizontal garanti */
         <div className="overflow-hidden rounded-[2rem] border border-[#171717]/10 bg-white shadow-sm">
-          <table className="w-full text-left text-xs">
-            <thead className="border-b border-[#171717]/10 bg-[#f8f9fa] text-[11px] font-bold uppercase tracking-wider text-[#4b4b4b]">
-              <tr>
-                <th className="px-6 py-4">Adresse E-mail</th>
-                <th className="px-6 py-4">Date d'Inscription</th>
-                <th className="px-6 py-4">Statut</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-[#171717]/10">
-              {filteredSubscribers.length === 0 ? (
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs">
+              <thead className="border-b border-[#171717]/10 bg-[#f8f9fa] text-[11px] font-bold uppercase tracking-wider text-[#4b4b4b]">
                 <tr>
-                  <td colSpan={3} className="p-8 text-center text-[#4b4b4b]">
-                    Aucun abonné pour le moment.
-                  </td>
+                  <th className="px-6 py-4">Adresse E-mail</th>
+                  <th className="px-6 py-4">Date d'Inscription</th>
+                  <th className="px-6 py-4">Statut</th>
                 </tr>
-              ) : (
-                filteredSubscribers.map((sub) => (
-                  <tr key={sub.id} className="hover:bg-[#f8f9fa]/50 transition-colors">
-                    <td className="px-6 py-4 font-bold text-[#171717]">{sub.email}</td>
-                    <td className="px-6 py-4 text-[#4b4b4b]">
-                      {new Date(sub.subscribedAt).toLocaleDateString("fr-FR", {
-                        day: "numeric",
-                        month: "long",
-                        year: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
-                    </td>
-                    <td className="px-6 py-4">
-                      <span className="rounded-full bg-emerald-100 px-2.5 py-0.5 text-[10px] font-bold text-emerald-800">
-                        Actif
-                      </span>
+              </thead>
+              <tbody className="divide-y divide-[#171717]/10">
+                {filteredSubscribers.length === 0 ? (
+                  <tr>
+                    <td colSpan={3} className="p-8 text-center text-[#4b4b4b]">
+                      Aucun abonné pour le moment.
                     </td>
                   </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+                ) : (
+                  filteredSubscribers.map((sub) => (
+                    <tr key={sub.id} className="hover:bg-[#f8f9fa]/50 transition-colors">
+                      <td className="px-6 py-4 font-bold text-[#171717]">{sub.email}</td>
+                      <td className="px-6 py-4 text-[#4b4b4b]">
+                        {new Date(sub.subscribedAt).toLocaleDateString("fr-FR", {
+                          day: "numeric",
+                          month: "long",
+                          year: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </td>
+                      <td className="px-6 py-4">
+                        <span className="rounded-full bg-emerald-100 px-2.5 py-0.5 text-[10px] font-bold text-emerald-800">
+                          Actif
+                        </span>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
     </div>

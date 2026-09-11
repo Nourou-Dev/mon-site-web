@@ -227,7 +227,7 @@ export default function MessagesPage() {
         </div>
       ) : (
         /* Conteneur principal de Messagerie : Sidebar Projets + Chat */
-        <div className="grid grid-cols-1 overflow-hidden rounded-3xl border border-[#171717]/10 bg-white shadow-sm lg:grid-cols-12 min-h-[640px] max-h-[820px]">
+        <div className="grid grid-cols-1 overflow-hidden rounded-3xl border border-[#171717]/10 bg-white shadow-sm lg:grid-cols-12 min-h-[500px] h-[calc(100dvh-13rem)] max-h-[820px]">
           {/* COLONNE GAUCHE : Sélecteur de projets */}
           <div
             className={`border-b border-[#171717]/10 bg-[#fafafa] p-4 lg:col-span-4 lg:border-b-0 lg:border-r lg:block ${
@@ -243,7 +243,7 @@ export default function MessagesPage() {
               </span>
             </div>
 
-            <div className="space-y-2 overflow-y-auto max-h-[680px] pr-1">
+            <div className="space-y-2 overflow-y-auto max-h-[calc(100dvh-18rem)] lg:max-h-[680px] pr-1">
               {projects.map((proj) => {
                 const isSelected = proj.id === selectedProjectId;
                 return (
@@ -298,12 +298,13 @@ export default function MessagesPage() {
           >
             {/* Header du Chat */}
             {selectedProject ? (
-              <div className="flex items-center justify-between border-b border-[#171717]/10 bg-white px-5 py-3.5">
+              <div className="flex items-center justify-between border-b border-[#171717]/10 bg-white px-4 sm:px-5 py-3.5">
                 <div className="flex items-center gap-3">
                   <button
                     onClick={() => setMobileViewChat(false)}
-                    className="inline-flex rounded-lg p-1 text-[#4b4b4b] hover:bg-[#f8f9fa] lg:hidden"
+                    className="flex h-11 w-11 items-center justify-center rounded-xl p-2 text-[#4b4b4b] hover:bg-[#f8f9fa] active:scale-95 transition-all lg:hidden"
                     title="Retour aux projets"
+                    aria-label="Retourner à la liste des projets"
                   >
                     <ArrowLeft className="h-5 w-5" />
                   </button>
@@ -334,7 +335,7 @@ export default function MessagesPage() {
             ) : null}
 
             {/* Corps des messages avec distinction claire droite / gauche */}
-            <div className="flex-1 overflow-y-auto bg-[#fdfdfd] p-5 space-y-4 max-h-[520px]">
+            <div className="flex-1 overflow-y-auto bg-[#fdfdfd] p-4 sm:p-5 space-y-4">
               {messages.length === 0 ? (
                 <div className="flex h-full flex-col items-center justify-center text-center py-12">
                   <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#0060c3]/10 text-[#0060c3]">

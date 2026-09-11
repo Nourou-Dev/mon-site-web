@@ -164,8 +164,8 @@ export default function Hero() {
           </div>
         </div>
 
-        <div className="relative mt-8 w-full border-t-0 bg-white">
-          <div className="overflow-hidden">
+        <div className="relative mt-8 w-full max-w-full overflow-hidden border-t-0 bg-white">
+          <div className="w-full max-w-full overflow-hidden">
             <div className="brand-marquee flex min-w-max items-center gap-14 py-8 sm:gap-16 sm:py-9">
               {[...brands, ...brands, ...brands, ...brands].map((brand, index) => (
                 <div key={`${brand.name}-${index}`} className="flex items-center justify-center opacity-80">

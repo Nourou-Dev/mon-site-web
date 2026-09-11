@@ -17,6 +17,8 @@ import {
   ExternalLink,
   Lock,
   UserPlus,
+  Copy,
+  Check,
 } from "lucide-react";
 
 interface AppAccount {
@@ -34,6 +36,15 @@ export default function AdminClientsPage() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [roleFilter, setRoleFilter] = useState<string>("all");
+  const [copiedEmailId, setCopiedEmailId] = useState<string | null>(null);
+
+  const handleCopyEmail = (id: string, email: string) => {
+    if (typeof navigator !== "undefined" && navigator.clipboard) {
+      navigator.clipboard.writeText(email);
+      setCopiedEmailId(id);
+      setTimeout(() => setCopiedEmailId(null), 2000);
+    }
+  };
 
   const loadAccounts = async () => {
     setLoading(true);
@@ -217,120 +228,259 @@ export default function AdminClientsPage() {
             Aucun compte ne correspond à votre recherche.
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead className="border-b border-[#171717]/10 bg-[#f8f9fa] text-[11px] font-bold uppercase tracking-wider text-[#4b4b4b]">
-                <tr>
-                  <th className="px-4 py-3 rounded-l-xl">Client / Nom</th>
-                  <th className="px-4 py-3">Email (Identifiant Login)</th>
-                  <th className="px-4 py-3">Entreprise / Marque</th>
-                  <th className="px-4 py-3">Téléphone / WhatsApp</th>
-                  <th className="px-4 py-3">Rôle</th>
-                  <th className="px-4 py-3">Date de création</th>
-                  <th className="px-4 py-3 text-right rounded-r-xl">Actions directes</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-[#171717]/5 font-medium text-[#171717]">
-                {filteredAccounts.map((account) => {
-                  const d = new Date(account.createdAt);
-                  const formattedDate = isNaN(d.getTime())
-                    ? account.createdAt
-                    : d.toLocaleDateString("fr-FR", {
-                        day: "2-digit",
-                        month: "short",
-                        year: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      });
+          <>
+            {/* VUE MOBILE : Cartes profil complètes et interactives */}
+            <div className="space-y-3.5 md:hidden">
+              {filteredAccounts.map((account) => {
+                const d = new Date(account.createdAt);
+                const formattedDate = isNaN(d.getTime())
+                  ? account.createdAt
+                  : d.toLocaleDateString("fr-FR", {
+                      day: "2-digit",
+                      month: "short",
+                      year: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    });
 
-                  const cleanPhone = account.phone ? account.phone.replace(/[^0-9]/g, "") : "";
+                const cleanPhone = account.phone ? account.phone.replace(/[^0-9]/g, "") : "";
+                const isCopied = copiedEmailId === account.id;
 
-                  return (
-                    <tr key={account.id} className="hover:bg-[#f8f9fa]/80 transition-colors">
-                      <td className="px-4 py-3.5 whitespace-nowrap">
-                        <div className="flex items-center gap-2.5">
-                          <div
-                            className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white ${
-                              account.role === "admin" ? "bg-[#0060c3]" : "bg-slate-700"
-                            }`}
-                          >
-                            {account.name.charAt(0).toUpperCase()}
-                          </div>
-                          <div>
-                            <p className="font-bold text-[#171717]">{account.name}</p>
-                            <p className="text-[10px] text-[#4b4b4b] font-mono">{account.id}</p>
-                          </div>
+                return (
+                  <div
+                    key={account.id}
+                    className="rounded-2xl border border-[#171717]/10 bg-[#fbfbfb] p-4.5 shadow-sm space-y-3"
+                  >
+                    {/* En-tête de carte : Avatar + Nom + Badge de rôle */}
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex items-center gap-3">
+                        <div
+                          className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-sm font-black text-white shadow-sm ${
+                            account.role === "admin" ? "bg-[#0060c3]" : "bg-slate-700"
+                          }`}
+                        >
+                          {account.name.charAt(0).toUpperCase()}
                         </div>
-                      </td>
+                        <div>
+                          <h3 className="font-extrabold text-[#171717] text-sm leading-tight">{account.name}</h3>
+                          <p className="text-[10px] text-[#7b7b7b] font-mono mt-0.5">{account.id}</p>
+                        </div>
+                      </div>
 
-                      <td className="px-4 py-3.5 whitespace-nowrap">
-                        <span className="font-mono text-xs font-semibold text-[#171717] bg-[#f8f9fa] px-2 py-1 rounded border border-[#171717]/10">
+                      {account.role === "admin" ? (
+                        <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-0.5 text-[10px] font-bold text-emerald-700 border border-emerald-200">
+                          <Shield className="h-3 w-3" />
+                          Admin
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center gap-1 rounded-full bg-blue-50 px-2.5 py-0.5 text-[10px] font-bold text-blue-700 border border-blue-200">
+                          <UserCheck className="h-3 w-3" />
+                          Client
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Email de connexion avec bouton copie 1-clic */}
+                    <div className="flex items-center justify-between gap-2 rounded-xl bg-white p-2.5 border border-[#171717]/10">
+                      <div className="min-w-0 flex-1">
+                        <span className="text-[10px] uppercase font-bold text-[#7b7b7b] block">Email de connexion</span>
+                        <span className="font-mono text-xs font-semibold text-[#171717] truncate block mt-0.5">
                           {account.email}
                         </span>
-                      </td>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => handleCopyEmail(account.id, account.email)}
+                        aria-label="Copier l'adresse e-mail"
+                        className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border transition-all active:scale-95 ${
+                          isCopied
+                            ? "border-emerald-300 bg-emerald-50 text-emerald-700"
+                            : "border-[#171717]/10 bg-[#f8f9fa] text-[#4b4b4b] hover:bg-[#0060c3] hover:text-white"
+                        }`}
+                      >
+                        {isCopied ? <Check className="h-4 w-4 text-emerald-600" /> : <Copy className="h-4 w-4" />}
+                      </button>
+                    </div>
 
-                      <td className="px-4 py-3.5 whitespace-nowrap text-[#4b4b4b]">
-                        <div className="flex items-center gap-1.5">
-                          <Building className="h-3.5 w-3.5 text-[#7b7b7b]" />
-                          <span>{account.company || "Non renseigné"}</span>
-                        </div>
-                      </td>
+                    {/* Entreprise, Téléphone et Date */}
+                    <div className="grid grid-cols-2 gap-2 text-xs">
+                      <div className="rounded-xl bg-white p-2.5 border border-[#171717]/5">
+                        <span className="text-[10px] uppercase font-bold text-[#7b7b7b] block">Entreprise</span>
+                        <span className="font-medium text-[#171717] truncate block mt-0.5">
+                          {account.company || "Non renseigné"}
+                        </span>
+                      </div>
+                      <div className="rounded-xl bg-white p-2.5 border border-[#171717]/5">
+                        <span className="text-[10px] uppercase font-bold text-[#7b7b7b] block">Création</span>
+                        <span className="font-medium text-[#171717] truncate block mt-0.5">
+                          {formattedDate}
+                        </span>
+                      </div>
+                    </div>
 
-                      <td className="px-4 py-3.5 whitespace-nowrap">
-                        {account.phone ? (
-                          <span className="text-xs font-semibold text-[#171717]">{account.phone}</span>
-                        ) : (
-                          <span className="text-xs text-[#7b7b7b] italic">Aucun numéro</span>
-                        )}
-                      </td>
+                    {/* Actions directes Mobile avec Touch Target >= 44px */}
+                    <div className="flex items-center gap-2 pt-1">
+                      <a
+                        href={`mailto:${account.email}`}
+                        className="flex min-h-[44px] flex-1 items-center justify-center gap-2 rounded-xl border border-[#171717]/10 bg-white text-xs font-bold text-[#171717] hover:bg-[#0060c3] hover:text-white hover:border-[#0060c3] transition-colors active:scale-95"
+                      >
+                        <Mail className="h-4 w-4 text-[#0060c3]" />
+                        <span>Envoyer un email</span>
+                      </a>
 
-                      <td className="px-4 py-3.5 whitespace-nowrap">
-                        {account.role === "admin" ? (
-                          <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-0.5 text-[11px] font-bold text-emerald-700 border border-emerald-200">
-                            <Shield className="h-3 w-3" />
-                            Administrateur
-                          </span>
-                        ) : (
-                          <span className="inline-flex items-center gap-1 rounded-full bg-blue-50 px-2.5 py-0.5 text-[11px] font-bold text-blue-700 border border-blue-200">
-                            <UserCheck className="h-3 w-3" />
-                            Client
-                          </span>
-                        )}
-                      </td>
+                      {cleanPhone ? (
+                        <a
+                          href={`https://wa.me/${cleanPhone}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex min-h-[44px] flex-1 items-center justify-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 text-xs font-bold text-emerald-700 hover:bg-emerald-600 hover:text-white transition-colors active:scale-95"
+                        >
+                          <MessageCircle className="h-4 w-4 text-emerald-600" />
+                          <span>WhatsApp</span>
+                        </a>
+                      ) : (
+                        <span className="flex min-h-[44px] flex-1 items-center justify-center rounded-xl bg-gray-50 text-[11px] text-[#7b7b7b] italic border border-gray-200/50">
+                          Pas de WhatsApp
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
 
-                      <td className="px-4 py-3.5 whitespace-nowrap text-[#4b4b4b] font-mono text-[11px]">
-                        {formattedDate}
-                      </td>
+            {/* VUE TABLETTE / DESKTOP : Tableau complet et aéré */}
+            <div className="hidden md:block overflow-x-auto">
+              <table className="w-full text-left text-xs">
+                <thead className="border-b border-[#171717]/10 bg-[#f8f9fa] text-[11px] font-bold uppercase tracking-wider text-[#4b4b4b]">
+                  <tr>
+                    <th className="px-4 py-3.5 rounded-l-xl">Client / Nom</th>
+                    <th className="px-4 py-3.5">Email (Identifiant Login)</th>
+                    <th className="px-4 py-3.5">Entreprise / Marque</th>
+                    <th className="px-4 py-3.5">Téléphone / WhatsApp</th>
+                    <th className="px-4 py-3.5">Rôle</th>
+                    <th className="px-4 py-3.5">Date de création</th>
+                    <th className="px-4 py-3.5 text-right rounded-r-xl">Actions directes</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[#171717]/5 font-medium text-[#171717]">
+                  {filteredAccounts.map((account) => {
+                    const d = new Date(account.createdAt);
+                    const formattedDate = isNaN(d.getTime())
+                      ? account.createdAt
+                      : d.toLocaleDateString("fr-FR", {
+                          day: "2-digit",
+                          month: "short",
+                          year: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        });
 
-                      <td className="px-4 py-3.5 whitespace-nowrap text-right">
-                        <div className="flex items-center justify-end gap-1.5">
-                          <a
-                            href={`mailto:${account.email}`}
-                            title="Envoyer un e-mail"
-                            className="flex h-7 w-7 items-center justify-center rounded-lg border border-[#171717]/10 bg-white text-[#4b4b4b] hover:bg-[#0060c3] hover:text-white hover:border-[#0060c3] transition-colors"
-                          >
-                            <Mail className="h-3.5 w-3.5" />
-                          </a>
+                    const cleanPhone = account.phone ? account.phone.replace(/[^0-9]/g, "") : "";
+                    const isCopied = copiedEmailId === account.id;
 
-                          {cleanPhone && (
-                            <a
-                              href={`https://wa.me/${cleanPhone}`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              title="Ouvrir la discussion WhatsApp"
-                              className="flex h-7 w-7 items-center justify-center rounded-lg border border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-600 hover:text-white hover:border-emerald-600 transition-colors"
+                    return (
+                      <tr key={account.id} className="hover:bg-[#f8f9fa]/80 transition-colors">
+                        <td className="px-4 py-3.5 whitespace-nowrap">
+                          <div className="flex items-center gap-2.5">
+                            <div
+                              className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white ${
+                                account.role === "admin" ? "bg-[#0060c3]" : "bg-slate-700"
+                              }`}
                             >
-                              <MessageCircle className="h-3.5 w-3.5" />
-                            </a>
+                              {account.name.charAt(0).toUpperCase()}
+                            </div>
+                            <div>
+                              <p className="font-bold text-[#171717]">{account.name}</p>
+                              <p className="text-[10px] text-[#4b4b4b] font-mono">{account.id}</p>
+                            </div>
+                          </div>
+                        </td>
+
+                        <td className="px-4 py-3.5 whitespace-nowrap">
+                          <div className="inline-flex items-center gap-1.5 bg-[#f8f9fa] px-2.5 py-1 rounded-lg border border-[#171717]/10">
+                            <span className="font-mono text-xs font-semibold text-[#171717]">
+                              {account.email}
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => handleCopyEmail(account.id, account.email)}
+                              title="Copier l'email"
+                              aria-label="Copier l'adresse e-mail"
+                              className="text-[#7b7b7b] hover:text-[#0060c3] p-0.5 rounded transition-colors"
+                            >
+                              {isCopied ? (
+                                <Check className="h-3 w-3 text-emerald-600" />
+                              ) : (
+                                <Copy className="h-3 w-3" />
+                              )}
+                            </button>
+                          </div>
+                        </td>
+
+                        <td className="px-4 py-3.5 whitespace-nowrap text-[#4b4b4b]">
+                          <div className="flex items-center gap-1.5">
+                            <Building className="h-3.5 w-3.5 text-[#7b7b7b]" />
+                            <span>{account.company || "Non renseigné"}</span>
+                          </div>
+                        </td>
+
+                        <td className="px-4 py-3.5 whitespace-nowrap">
+                          {account.phone ? (
+                            <span className="text-xs font-semibold text-[#171717]">{account.phone}</span>
+                          ) : (
+                            <span className="text-xs text-[#7b7b7b] italic">Aucun numéro</span>
                           )}
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
+                        </td>
+
+                        <td className="px-4 py-3.5 whitespace-nowrap">
+                          {account.role === "admin" ? (
+                            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-0.5 text-[11px] font-bold text-emerald-700 border border-emerald-200">
+                              <Shield className="h-3 w-3" />
+                              Administrateur
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1 rounded-full bg-blue-50 px-2.5 py-0.5 text-[11px] font-bold text-blue-700 border border-blue-200">
+                              <UserCheck className="h-3 w-3" />
+                              Client
+                            </span>
+                          )}
+                        </td>
+
+                        <td className="px-4 py-3.5 whitespace-nowrap text-[#4b4b4b] font-mono text-[11px]">
+                          {formattedDate}
+                        </td>
+
+                        <td className="px-4 py-3.5 whitespace-nowrap text-right">
+                          <div className="flex items-center justify-end gap-2">
+                            <a
+                              href={`mailto:${account.email}`}
+                              title="Envoyer un e-mail"
+                              className="flex h-8 w-8 items-center justify-center rounded-lg border border-[#171717]/10 bg-white text-[#4b4b4b] hover:bg-[#0060c3] hover:text-white hover:border-[#0060c3] transition-colors"
+                            >
+                              <Mail className="h-4 w-4" />
+                            </a>
+
+                            {cleanPhone && (
+                              <a
+                                href={`https://wa.me/${cleanPhone}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                title="Ouvrir la discussion WhatsApp"
+                                className="flex h-8 w-8 items-center justify-center rounded-lg border border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-600 hover:text-white hover:border-emerald-600 transition-colors"
+                              >
+                                <MessageCircle className="h-4 w-4" />
+                              </a>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </>
         )}
       </div>
     </div>

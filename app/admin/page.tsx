@@ -84,14 +84,14 @@ export default function AdminPortalPage() {
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="rounded-[2rem] border border-slate-800 bg-[#161b22] p-6 shadow-2xl sm:p-8">
           {errorMessage && (
-            <div className="mb-5 flex items-start gap-2 rounded-xl border border-red-500/30 bg-red-950/50 p-3 text-xs font-semibold text-red-400">
+            <div role="alert" aria-live="polite" className="mb-5 flex items-start gap-2 rounded-xl border border-red-500/30 bg-red-950/50 p-3 text-xs font-semibold text-red-400">
               <AlertCircle className="h-4 w-4 shrink-0 text-red-400" />
               <span>{errorMessage}</span>
             </div>
           )}
 
           {successMessage && (
-            <div className="mb-5 flex items-start gap-2 rounded-xl border border-emerald-500/30 bg-emerald-950/50 p-3 text-xs font-semibold text-emerald-400">
+            <div role="status" aria-live="polite" className="mb-5 flex items-start gap-2 rounded-xl border border-emerald-500/30 bg-emerald-950/50 p-3 text-xs font-semibold text-emerald-400">
               <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-400" />
               <span>{successMessage}</span>
             </div>
@@ -99,31 +99,39 @@ export default function AdminPortalPage() {
 
           <form onSubmit={handleAdminAuth} className="space-y-4">
             <div>
-              <label className="block text-xs font-bold text-slate-300">Adresse E-mail ou Identifiant Admin *</label>
+              <label htmlFor="admin-login" className="block text-xs font-bold text-slate-300">
+                Adresse E-mail ou Identifiant Admin *
+              </label>
               <div className="relative mt-1">
-                <Mail className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
+                <Mail className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
                 <input
+                  id="admin-login"
                   type="text"
                   required
+                  autoComplete="username"
                   value={login}
                   onChange={(e) => setLogin(e.target.value)}
                   placeholder="contact@nouroudineamandou.com"
-                  className="w-full rounded-xl border border-slate-700 bg-slate-900 py-2.5 pl-10 pr-3 text-sm text-white placeholder-slate-500 focus:border-sky-500 focus:outline-none"
+                  className="w-full rounded-xl border border-slate-700 bg-slate-900 py-3 pl-11 pr-3 text-sm text-white placeholder-slate-500 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/30"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-300">Mot de passe Administrateur *</label>
+              <label htmlFor="admin-password" className="block text-xs font-bold text-slate-300">
+                Mot de passe Administrateur *
+              </label>
               <div className="relative mt-1">
-                <Lock className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
+                <Lock className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
                 <input
+                  id="admin-password"
                   type="password"
                   required
+                  autoComplete="current-password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full rounded-xl border border-slate-700 bg-slate-900 py-2.5 pl-10 pr-3 text-sm text-white placeholder-slate-500 focus:border-sky-500 focus:outline-none"
+                  className="w-full rounded-xl border border-slate-700 bg-slate-900 py-3 pl-11 pr-3 text-sm text-white placeholder-slate-500 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/30"
                 />
               </div>
             </div>
@@ -131,7 +139,7 @@ export default function AdminPortalPage() {
             <button
               type="submit"
               disabled={loading}
-              className="mt-4 flex w-full items-center justify-center gap-2 rounded-full bg-sky-500 py-3 text-sm font-bold text-slate-950 shadow-lg shadow-sky-500/25 transition-all hover:bg-sky-400 active:scale-95 disabled:opacity-70"
+              className="mt-4 flex min-h-[48px] w-full items-center justify-center gap-2 rounded-full bg-sky-500 py-3 text-sm font-bold text-slate-950 shadow-lg shadow-sky-500/25 transition-all hover:bg-sky-400 active:scale-95 disabled:opacity-70 focus:outline-none focus:ring-2 focus:ring-sky-300"
             >
               <Lock className="h-4 w-4" />
               <span>{loading ? "Vérification en cours..." : "Se connecter"}</span>

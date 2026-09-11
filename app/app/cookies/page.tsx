@@ -267,51 +267,36 @@ export default function CookiesAnalyticsPage() {
             Aucun enregistrement de consentement trouvé pour cette sélection.
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead className="border-b border-[#171717]/10 bg-[#f8f9fa] text-[11px] font-bold uppercase tracking-wider text-[#4b4b4b]">
-                <tr>
-                  <th className="px-4 py-3 rounded-l-xl">Date &amp; Heure</th>
-                  <th className="px-4 py-3">Adresse IP</th>
-                  <th className="px-4 py-3">Pays</th>
-                  <th className="px-4 py-3">Choix</th>
-                  <th className="px-4 py-3">Analytiques</th>
-                  <th className="px-4 py-3">Expérience</th>
-                  <th className="px-4 py-3 rounded-r-xl">Navigateur / User-Agent</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-[#171717]/5 font-medium text-[#171717]">
-                {filteredLogs.map((log) => {
-                  const d = new Date(log.timestamp);
-                  const formattedDate = isNaN(d.getTime())
-                    ? log.timestamp
-                    : d.toLocaleDateString("fr-FR", {
-                        day: "2-digit",
-                        month: "short",
-                        year: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                        second: "2-digit",
-                      });
+          <>
+            {/* VUE MOBILE : Cartes logs RGPD fluides */}
+            <div className="space-y-3 md:hidden">
+              {filteredLogs.map((log) => {
+                const d = new Date(log.timestamp);
+                const formattedDate = isNaN(d.getTime())
+                  ? log.timestamp
+                  : d.toLocaleDateString("fr-FR", {
+                      day: "2-digit",
+                      month: "short",
+                      year: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    });
 
-                  return (
-                    <tr key={log.id} className="hover:bg-[#f8f9fa]/80 transition-colors">
-                      <td className="px-4 py-3.5 font-mono text-[11px] text-[#4b4b4b] whitespace-nowrap">
-                        {formattedDate}
-                      </td>
+                return (
+                  <div
+                    key={log.id}
+                    className="rounded-2xl border border-[#171717]/10 bg-[#fbfbfb] p-4 shadow-sm space-y-2.5"
+                  >
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="inline-flex items-center gap-1 font-mono text-xs font-bold bg-slate-100 text-slate-800 px-2 py-0.5 rounded-md border border-slate-200">
+                        <Globe className="h-3 w-3 text-[#0060c3]" />
+                        {log.ip || "127.0.0.1"}
+                      </span>
+                      <span className="font-mono text-[11px] text-[#4b4b4b]">{formattedDate}</span>
+                    </div>
 
-                      <td className="px-4 py-3.5 whitespace-nowrap">
-                        <span className="inline-flex items-center gap-1 font-mono font-bold bg-slate-100 text-slate-800 px-2 py-0.5 rounded-md border border-slate-200">
-                          <Globe className="h-3 w-3 text-[#0060c3]" />
-                          {log.ip || "127.0.0.1"}
-                        </span>
-                      </td>
-
-                      <td className="px-4 py-3.5 text-[#4b4b4b]">
-                        {log.country || "Non déterminé"}
-                      </td>
-
-                      <td className="px-4 py-3.5">
+                    <div className="flex items-center justify-between gap-2 pt-0.5">
+                      <div>
                         {log.choice === "accepted_all" && (
                           <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-0.5 text-[11px] font-bold text-emerald-700 border border-emerald-200">
                             <CheckCircle2 className="h-3 w-3" />
@@ -330,9 +315,17 @@ export default function CookiesAnalyticsPage() {
                             Personnalisé
                           </span>
                         )}
-                      </td>
+                      </div>
 
-                      <td className="px-4 py-3.5">
+                      <div className="flex items-center gap-2 text-[11px]">
+                        <span className="text-[#4b4b4b]">Pays :</span>
+                        <strong className="text-[#171717]">{log.country || "Non déterminé"}</strong>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2 text-xs pt-1">
+                      <div className="rounded-xl bg-white p-2 border border-[#171717]/5 flex items-center justify-between">
+                        <span className="text-[10px] uppercase font-bold text-[#7b7b7b]">Analytiques</span>
                         <span
                           className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${
                             log.analytics ? "bg-emerald-100 text-emerald-800" : "bg-red-100 text-red-800"
@@ -340,9 +333,9 @@ export default function CookiesAnalyticsPage() {
                         >
                           {log.analytics ? "Oui" : "Non"}
                         </span>
-                      </td>
-
-                      <td className="px-4 py-3.5">
+                      </div>
+                      <div className="rounded-xl bg-white p-2 border border-[#171717]/5 flex items-center justify-between">
+                        <span className="text-[10px] uppercase font-bold text-[#7b7b7b]">Expérience</span>
                         <span
                           className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${
                             log.experience ? "bg-emerald-100 text-emerald-800" : "bg-red-100 text-red-800"
@@ -350,20 +343,119 @@ export default function CookiesAnalyticsPage() {
                         >
                           {log.experience ? "Oui" : "Non"}
                         </span>
-                      </td>
+                      </div>
+                    </div>
 
-                      <td className="px-4 py-3.5 text-[#4b4b4b] max-w-xs truncate" title={log.userAgent}>
-                        <span className="flex items-center gap-1.5 truncate">
-                          <Monitor className="h-3 w-3 shrink-0 text-[#7b7b7b]" />
-                          <span className="truncate text-[11px]">{log.userAgent || "Navigateur inconnu"}</span>
-                        </span>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
+                    {log.userAgent && (
+                      <p className="text-[10px] text-[#7b7b7b] truncate flex items-center gap-1 pt-0.5">
+                        <Monitor className="h-3 w-3 shrink-0" />
+                        <span className="truncate">{log.userAgent}</span>
+                      </p>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* VUE TABLETTE & DESKTOP */}
+            <div className="hidden md:block overflow-x-auto">
+              <table className="w-full text-left text-xs">
+                <thead className="border-b border-[#171717]/10 bg-[#f8f9fa] text-[11px] font-bold uppercase tracking-wider text-[#4b4b4b]">
+                  <tr>
+                    <th className="px-4 py-3 rounded-l-xl">Date &amp; Heure</th>
+                    <th className="px-4 py-3">Adresse IP</th>
+                    <th className="px-4 py-3">Pays</th>
+                    <th className="px-4 py-3">Choix</th>
+                    <th className="px-4 py-3">Analytiques</th>
+                    <th className="px-4 py-3">Expérience</th>
+                    <th className="px-4 py-3 rounded-r-xl">Navigateur / User-Agent</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[#171717]/5 font-medium text-[#171717]">
+                  {filteredLogs.map((log) => {
+                    const d = new Date(log.timestamp);
+                    const formattedDate = isNaN(d.getTime())
+                      ? log.timestamp
+                      : d.toLocaleDateString("fr-FR", {
+                          day: "2-digit",
+                          month: "short",
+                          year: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                          second: "2-digit",
+                        });
+
+                    return (
+                      <tr key={log.id} className="hover:bg-[#f8f9fa]/80 transition-colors">
+                        <td className="px-4 py-3.5 font-mono text-[11px] text-[#4b4b4b] whitespace-nowrap">
+                          {formattedDate}
+                        </td>
+
+                        <td className="px-4 py-3.5 whitespace-nowrap">
+                          <span className="inline-flex items-center gap-1 font-mono font-bold bg-slate-100 text-slate-800 px-2 py-0.5 rounded-md border border-slate-200">
+                            <Globe className="h-3 w-3 text-[#0060c3]" />
+                            {log.ip || "127.0.0.1"}
+                          </span>
+                        </td>
+
+                        <td className="px-4 py-3.5 text-[#4b4b4b]">
+                          {log.country || "Non déterminé"}
+                        </td>
+
+                        <td className="px-4 py-3.5">
+                          {log.choice === "accepted_all" && (
+                            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-0.5 text-[11px] font-bold text-emerald-700 border border-emerald-200">
+                              <CheckCircle2 className="h-3 w-3" />
+                              Tout Accepté
+                            </span>
+                          )}
+                          {log.choice === "refused_all" && (
+                            <span className="inline-flex items-center gap-1 rounded-full bg-red-50 px-2.5 py-0.5 text-[11px] font-bold text-red-700 border border-red-200">
+                              <XCircle className="h-3 w-3" />
+                              Tout Refusé
+                            </span>
+                          )}
+                          {log.choice === "customized" && (
+                            <span className="inline-flex items-center gap-1 rounded-full bg-blue-50 px-2.5 py-0.5 text-[11px] font-bold text-blue-700 border border-blue-200">
+                              <Sliders className="h-3 w-3" />
+                              Personnalisé
+                            </span>
+                          )}
+                        </td>
+
+                        <td className="px-4 py-3.5">
+                          <span
+                            className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${
+                              log.analytics ? "bg-emerald-100 text-emerald-800" : "bg-red-100 text-red-800"
+                            }`}
+                          >
+                            {log.analytics ? "Oui" : "Non"}
+                          </span>
+                        </td>
+
+                        <td className="px-4 py-3.5">
+                          <span
+                            className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${
+                              log.experience ? "bg-emerald-100 text-emerald-800" : "bg-red-100 text-red-800"
+                            }`}
+                          >
+                            {log.experience ? "Oui" : "Non"}
+                          </span>
+                        </td>
+
+                        <td className="px-4 py-3.5 text-[#4b4b4b] max-w-xs truncate" title={log.userAgent}>
+                          <span className="flex items-center gap-1.5 truncate">
+                            <Monitor className="h-3 w-3 shrink-0 text-[#7b7b7b]" />
+                            <span className="truncate text-[11px]">{log.userAgent || "Navigateur inconnu"}</span>
+                          </span>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </>
         )}
       </div>
     </div>

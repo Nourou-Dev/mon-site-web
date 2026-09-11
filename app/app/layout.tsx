@@ -210,50 +210,59 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         </div>
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="rounded-lg p-2 text-[#171717] hover:bg-[#171717]/5"
-          aria-label="Menu de navigation"
+          className="flex h-11 w-11 items-center justify-center rounded-xl p-2 text-[#171717] hover:bg-[#171717]/5 active:scale-95 transition-all"
+          aria-label={mobileMenuOpen ? "Fermer le menu de navigation" : "Ouvrir le menu de navigation"}
+          aria-expanded={mobileMenuOpen}
         >
           {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
         </button>
       </header>
 
+      {/* Arrière-plan sombre fermant le menu mobile au tap extérieur */}
+      {mobileMenuOpen && (
+        <div
+          onClick={() => setMobileMenuOpen(false)}
+          className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm lg:hidden transition-opacity"
+          aria-hidden="true"
+        />
+      )}
+
       <div className="flex">
-        {/* Sidebar Desktop */}
+        {/* Sidebar Desktop & Tiroir Mobile */}
         <aside
-          className={`fixed inset-y-0 left-0 z-50 flex w-72 flex-col justify-between border-r border-[#171717]/10 bg-white p-5 transition-transform duration-300 lg:static lg:translate-x-0 ${
-            mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
+          className={`fixed inset-y-0 left-0 z-50 flex w-72 flex-col justify-between border-r border-[#171717]/10 bg-white p-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] transition-transform duration-300 ease-out lg:static lg:translate-x-0 ${
+            mobileMenuOpen ? "translate-x-0 shadow-2xl" : "-translate-x-full"
           }`}
         >
           <div>
             {/* Header de la Sidebar */}
             <div className="flex items-center justify-between">
               <div>
-                <Link href="/app" className="text-lg font-extrabold tracking-tight text-[#171717]">
+                <Link
+                  href="/app"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-lg font-extrabold tracking-tight text-[#171717]"
+                >
                   <span>Nourou Dine</span> <span className="text-[#0060c3]">AMANDOU</span>
                 </Link>
-                <div className="mt-1 flex items-center gap-2">
-                  <span className="inline-flex items-center gap-1 rounded-full bg-[#0060c3]/10 px-2.5 py-0.5 text-[11px] font-bold text-[#0060c3]">
+                <div className="mt-1.5 flex items-center gap-2">
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-[#0060c3]/10 px-2.5 py-0.5 text-[11px] font-bold text-[#0060c3]">
                     <Sparkles className="h-3 w-3" />
                     {isAdmin ? "Espace Administrateur" : "Espace Client"}
                   </span>
-                  {isAdmin && (
-                    <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 border border-emerald-200 px-2 py-0.5 text-[10px] font-bold text-emerald-700">
-                      <Shield className="h-2.5 w-2.5" />
-                      Admin
-                    </span>
-                  )}
                 </div>
               </div>
               <button
                 onClick={() => setMobileMenuOpen(false)}
-                className="rounded-lg p-1 text-[#4b4b4b] lg:hidden"
+                className="flex h-11 w-11 items-center justify-center rounded-xl p-2 text-[#4b4b4b] hover:bg-[#171717]/5 active:scale-95 transition-all lg:hidden"
+                aria-label="Fermer le menu de navigation"
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
 
             {/* Navigation */}
-            <nav className="mt-8 space-y-1.5">
+            <nav className="mt-7 space-y-1.5" aria-label="Navigation principale de l'application">
               {navItems.map((item) => {
                 if (item.adminOnly && !isAdmin) return null;
                 const isActive =
@@ -266,7 +275,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                     key={item.href}
                     href={item.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className={`flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-semibold transition-all ${
+                    className={`flex min-h-[44px] items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-semibold transition-all ${
                       isActive
                         ? "bg-[#0060c3] text-white shadow-md shadow-[#0060c3]/25"
                         : "text-[#4b4b4b] hover:bg-[#171717]/5 hover:text-[#171717]"
@@ -280,7 +289,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             </nav>
           </div>
 
-          {/* Footer de la Sidebar : Profil & Paramètres (Aucun bouton admin pour le client) */}
+          {/* Footer de la Sidebar : Profil & Paramètres */}
           <div className="border-t border-[#171717]/10 pt-4 space-y-2.5">
             {/* Widget utilisateur connecté */}
             {user && (
@@ -300,18 +309,19 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               <Link
                 href="/app/parametres"
                 onClick={() => setMobileMenuOpen(false)}
-                className="flex flex-1 items-center justify-center gap-1.5 rounded-xl border border-[#171717]/10 bg-white py-2 text-xs font-bold text-[#171717] transition-colors hover:bg-[#f8f9fa] hover:border-[#0060c3]"
+                className="flex min-h-[44px] flex-1 items-center justify-center gap-2 rounded-xl border border-[#171717]/10 bg-white py-2.5 px-3 text-xs font-bold text-[#171717] transition-colors hover:bg-[#f8f9fa] hover:border-[#0060c3] active:scale-95"
               >
-                <Settings className="h-3.5 w-3.5 text-[#0060c3]" />
+                <Settings className="h-4 w-4 text-[#0060c3]" />
                 <span>Paramètres</span>
               </Link>
 
               <button
                 onClick={handleLogout}
-                title="Se déconnecter"
-                className="flex h-8 w-8 items-center justify-center rounded-xl border border-red-200 bg-red-50 text-red-600 transition-colors hover:bg-red-100 shrink-0"
+                title="Se déconnecter de la session"
+                aria-label="Se déconnecter"
+                className="flex h-11 w-11 items-center justify-center rounded-xl border border-red-200 bg-red-50 text-red-600 transition-colors hover:bg-red-100 shrink-0 active:scale-95"
               >
-                <LogOut className="h-3.5 w-3.5" />
+                <LogOut className="h-4 w-4" />
               </button>
             </div>
           </div>
